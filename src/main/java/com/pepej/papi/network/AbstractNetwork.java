@@ -5,6 +5,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonElement;
 import com.pepej.papi.Schedulers;
 import com.pepej.papi.cooldown.Cooldown;
+import com.pepej.papi.eventbus.EventBus;
+import com.pepej.papi.eventbus.EventSubscriber;
+import com.pepej.papi.eventbus.PostResult;
+import com.pepej.papi.eventbus.SimpleEventBus;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.messaging.Channel;
 import com.pepej.papi.messaging.InstanceData;
@@ -19,12 +23,7 @@ import com.pepej.papi.network.metadata.TpsMetadataProvider;
 import com.pepej.papi.profiles.Profile;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.utils.Players;
-import net.kyori.event.EventBus;
-import net.kyori.event.EventSubscriber;
-import net.kyori.event.PostResult;
-import net.kyori.event.SimpleEventBus;
 import org.bukkit.Bukkit;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -48,7 +47,7 @@ public class AbstractNetwork implements Network {
 
         /*
          * Handle connect / disconnect messages.
-         * These "events" are sent via the 'hnet-events' channel.
+         * These "events" are sent via the 'pnet-events' channel.
          */
 
         Channel<EventMessage> eventsChannel = messenger.getChannel("pnet-events", EventMessage.class);
@@ -69,7 +68,7 @@ public class AbstractNetwork implements Network {
         // outgoing (disconnect)
         EventSubscriber<ServerDisconnectEvent> disconnectListener = new EventSubscriber<ServerDisconnectEvent>() {
             @Override
-            public void invoke(@NonNull ServerDisconnectEvent event) {
+            public void invoke(@Nonnull ServerDisconnectEvent event) {
                 if (!event.getId().equals(instanceData.getId())) {
                     return;
                 }

@@ -1,8 +1,6 @@
 package com.pepej.papi.plugin.ap;
 
 
-import org.bukkit.plugin.PluginLoadOrder;
-
 import javax.annotation.Nonnull;
 import java.lang.annotation.*;
 
@@ -37,14 +35,6 @@ public @interface Plugin {
      */
     @Nonnull
     String description() default "";
-
-    /**
-     * The load order of the plugin
-     *
-     * @return the load order of the plugin
-     */
-    @Nonnull
-    PluginLoadOrder load() default PluginLoadOrder.POSTWORLD;
 
     /**
      * The api version of the plugin

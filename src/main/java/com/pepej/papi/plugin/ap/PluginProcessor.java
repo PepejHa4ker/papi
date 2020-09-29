@@ -1,6 +1,5 @@
 package com.pepej.papi.plugin.ap;
 
-import org.bukkit.plugin.PluginLoadOrder;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -63,11 +62,6 @@ public class PluginProcessor extends AbstractProcessor {
         String description = annotation.description();
         if (!description.isEmpty()) {
             data.put("description", description);
-        }
-
-        PluginLoadOrder order = annotation.load();
-        if (order != PluginLoadOrder.POSTWORLD) {
-            data.put("load", order.name());
         }
 
         String apiVersion = annotation.apiVersion();

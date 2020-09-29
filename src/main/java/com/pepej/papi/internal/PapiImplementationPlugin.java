@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to mark a helper implementation plugin.
+ * Used to mark papi implementation plugin.
  *
  * <p>For internal use only.</p>
  */

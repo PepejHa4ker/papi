@@ -1,9 +1,6 @@
 package com.pepej.papi.eventbus;
 
 import com.pepej.papi.terminable.Terminable;
-import net.kyori.event.EventBus;
-import net.kyori.event.EventSubscriber;
-
 import javax.annotation.Nonnull;
 
 /**

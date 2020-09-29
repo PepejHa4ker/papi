@@ -1,5 +1,7 @@
 package com.pepej.papi.messaging.conversation;
 
+import com.pepej.papi.messaging.codec.Codec;
+
 import javax.annotation.Nonnull;
 import java.util.UUID;
 

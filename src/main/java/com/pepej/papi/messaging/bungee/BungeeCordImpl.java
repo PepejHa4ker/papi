@@ -15,6 +15,7 @@ import com.pepej.papi.utils.Players;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.util.*;
@@ -213,31 +214,31 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public void connect(Player player, String serverName) {
+    public void connect(@Nonnull Player player, @Nonnull String serverName) {
         sendMessage(new ConnectAgent(player, serverName));
     }
 
     @Override
-    public void connectOther(String playerName, String serverName) {
+    public void connectOther(@Nonnull String playerName, @Nonnull String serverName) {
         sendMessage(new ConnectOtherAgent(playerName, serverName));
     }
 
     @Override
-    public Promise<Map.Entry<String, Integer>> ip(Player player) {
+    public Promise<Map.Entry<String, Integer>> ip(@Nonnull Player player) {
         Promise<Map.Entry<String, Integer>> fut = Promise.empty();
         sendMessage(new IPAgent(player, fut));
         return fut;
     }
 
     @Override
-    public Promise<Integer> playerCount(String serverName) {
+    public Promise<Integer> playerCount(@Nonnull String serverName) {
         Promise<Integer> fut = Promise.empty();
         sendMessage(new PlayerCountAgent(serverName, fut));
         return fut;
     }
 
     @Override
-    public Promise<List<String>> playerList(String serverName) {
+    public Promise<List<String>> playerList(@Nonnull String serverName) {
         Promise<List<String>> fut = Promise.empty();
         sendMessage(new PlayerListAgent(serverName, fut));
         return fut;
@@ -251,7 +252,7 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public void message(String playerName, String message) {
+    public void message(@Nonnull String playerName, @Nonnull String message) {
         sendMessage(new PlayerMessageAgent(playerName, message));
     }
 
@@ -263,59 +264,59 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public Promise<UUID> uuid(Player player) {
+    public Promise<UUID> uuid(@Nonnull Player player) {
         Promise<UUID> fut = Promise.empty();
         sendMessage(new UUIDAgent(player, fut));
         return fut;
     }
 
     @Override
-    public Promise<UUID> uuidOther(String playerName) {
+    public Promise<UUID> uuidOther(@Nonnull String playerName) {
         Promise<UUID> fut = Promise.empty();
         sendMessage(new UUIDOtherAgent(playerName, fut));
         return fut;
     }
 
     @Override
-    public Promise<Map.Entry<String, Integer>> serverIp(String serverName) {
+    public Promise<Map.Entry<String, Integer>> serverIp(@Nonnull String serverName) {
         Promise<Map.Entry<String, Integer>> fut = Promise.empty();
         sendMessage(new ServerIPAgent(serverName, fut));
         return fut;
     }
 
     @Override
-    public void kickPlayer(String playerName, String reason) {
+    public void kickPlayer(@Nonnull String playerName, @Nonnull String reason) {
         sendMessage(new KickPlayerAgent(playerName, reason));
     }
 
     @Override
-    public void forward(String serverName, String channelName, byte[] data) {
+    public void forward(@Nonnull String serverName, @Nonnull String channelName, @Nonnull byte[] data) {
         sendMessage(new ForwardAgent(serverName, channelName, data));
     }
 
     @Override
-    public void forward(String serverName, String channelName, ByteArrayDataOutput data) {
+    public void forward(@Nonnull String serverName, @Nonnull String channelName, @Nonnull ByteArrayDataOutput data) {
         sendMessage(new ForwardAgent(serverName, channelName, data));
     }
 
     @Override
-    public void forwardToPlayer(String playerName, String channelName, byte[] data) {
+    public void forwardToPlayer(@Nonnull String playerName, @Nonnull String channelName, @Nonnull byte[] data) {
         sendMessage(new ForwardToPlayerAgent(playerName, channelName, data));
     }
 
     @Override
-    public void forwardToPlayer(String playerName, String channelName, ByteArrayDataOutput data) {
+    public void forwardToPlayer(@Nonnull String playerName, @Nonnull String channelName, @Nonnull ByteArrayDataOutput data) {
         sendMessage(new ForwardToPlayerAgent(playerName, channelName, data));
     }
 
     @Override
-    public void registerForwardCallbackRaw(String channelName, Predicate<byte[]> callback) {
+    public void registerForwardCallbackRaw(@Nonnull String channelName, @Nonnull Predicate<byte[]> callback) {
         ForwardCustomCallback customCallback = new ForwardCustomCallback(channelName, callback);
         registerCallback(customCallback);
     }
 
     @Override
-    public void registerForwardCallback(String channelName, Predicate<ByteArrayDataInput> callback) {
+    public void registerForwardCallback(@Nonnull String channelName, @Nonnull Predicate<ByteArrayDataInput> callback) {
         final Predicate<ByteArrayDataInput> cb = Objects.requireNonNull(callback, "callback");
         ForwardCustomCallback customCallback = new ForwardCustomCallback(channelName, bytes -> cb.test(ByteStreams.newDataInput(bytes)));
         registerCallback(customCallback);

@@ -1,5 +1,6 @@
 package com.pepej.papi.network.modules;
 
+import com.pepej.papi.eventbus.EventBus;
 import com.pepej.papi.eventbus.Subscribers;
 import com.pepej.papi.network.Network;
 import com.pepej.papi.network.event.NetworkEvent;
@@ -8,7 +9,6 @@ import com.pepej.papi.network.event.ServerDisconnectEvent;
 import com.pepej.papi.terminable.TerminableConsumer;
 import com.pepej.papi.terminable.module.TerminableModule;
 import com.pepej.papi.utils.Players;
-import net.kyori.event.EventBus;
 
 import javax.annotation.Nonnull;
 

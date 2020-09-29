@@ -6,7 +6,6 @@ import com.pepej.papi.command.argument.SimpleArgument;
 import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class ImmutableCommandContext<T extends CommandSender> implements CommandContext<T> {
     private final T sender;
@@ -37,11 +36,11 @@ public class ImmutableCommandContext<T extends CommandSender> implements Command
         return new SimpleArgument(index, rawArg(index));
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public String rawArg(int index) {
         if (index < 0 || index >= this.args.size()) {
-            return null;
+            throw new IllegalArgumentException();
         }
         return this.args.get(index);
     }
