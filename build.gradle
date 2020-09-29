@@ -41,6 +41,3 @@ dependencies {
 
 }
 
-shadowJar {
-    destinationDir = file("C:\\Users\\pepej\\Desktop\\locahost\\plugins")
-}
