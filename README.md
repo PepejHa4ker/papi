@@ -43,6 +43,6 @@ Commands.create()
     })
     .registerAndBind(registry, "shutdown", "stop", "off");	
 ```
-#####it's just a javascript file than loaded from init.js
+##### It's just a javascript file than loaded from init.js
 
 
