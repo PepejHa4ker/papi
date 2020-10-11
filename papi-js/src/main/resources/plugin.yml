@@ -1,0 +1,6 @@
+name: papi-js
+version: ${project.version}
+main: com.pepej.js.PapiJsPlugin
+description: JavaScript plugins powered by papi.
+depend:
+  - papi

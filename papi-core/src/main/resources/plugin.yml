@@ -1,0 +1,10 @@
+name: papi
+author: pepej
+version: 1.0.0
+description: simple spigot api library
+main: com.pepej.papi.internal.StandalonePlugin
+load: STARTUP
+depend:
+  - ProtocolLib
+  - Citizens
+  - Vault

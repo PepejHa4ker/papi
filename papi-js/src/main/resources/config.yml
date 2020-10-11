@@ -1,0 +1,13 @@
+# papi-js config
+
+# Where the root script directory is located
+#
+# This directory can either be defined as an absolute path,
+# or as a path relative to the root server directory.
+script-directory: 'plugins/papi-js/scripts/'
+
+# The name of the init script
+init-script: init.js
+
+# How often to poll for script changes
+poll-interval: 20
