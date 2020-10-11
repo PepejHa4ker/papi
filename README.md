@@ -6,7 +6,7 @@ A collection of utilities and extended APIs to support the rapid and easy develo
 ##### [`papi-kotlin`](https://github.com/PepejHa4ker/papi-core/tree/master/papi): The kotlin papi module 
 ##### [`papi-groovy`](https://github.com/PepejHa4ker/papi-core/tree/master/papi): The groovy papi module (Not implemented yet)
 
-##Events:
+## Events:
 ```
     Events.subscribe("player:join")
         .handler(e -> {
