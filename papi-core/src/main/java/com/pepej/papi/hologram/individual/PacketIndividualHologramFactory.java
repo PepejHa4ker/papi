@@ -217,7 +217,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
         }
 
         @Override
-        public void despawn() {
+        public void delete() {
             this.spawnedEntities.forEach(e -> e.getArmorStand().remove());
             this.spawnedEntities.clear();
             this.spawned = false;
@@ -266,7 +266,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
             }
 
             this.position = position;
-            despawn();
+            delete();
             spawn();
         }
 
@@ -394,7 +394,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
 
         @Override
         public void close() {
-            despawn();
+            delete();
         }
 
         @Override

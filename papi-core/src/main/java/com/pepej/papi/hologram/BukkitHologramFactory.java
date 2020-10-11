@@ -178,7 +178,7 @@ public class BukkitHologramFactory implements HologramFactory {
         }
 
         @Override
-        public void despawn() {
+        public void delete() {
             this.spawnedEntities.forEach(Entity::remove);
             this.spawnedEntities.clear();
             this.spawned = false;
@@ -227,7 +227,7 @@ public class BukkitHologramFactory implements HologramFactory {
             }
 
             this.position = position;
-            despawn();
+            delete();
             spawn();
         }
 
@@ -331,7 +331,7 @@ public class BukkitHologramFactory implements HologramFactory {
 
         @Override
         public void close() {
-            despawn();
+            delete();
         }
 
         @Override

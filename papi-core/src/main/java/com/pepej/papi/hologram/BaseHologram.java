@@ -21,9 +21,9 @@ public interface BaseHologram extends Terminable {
     void spawn();
 
     /**
-     * Despawns the hologram
+     * delete the hologram
      */
-    void despawn();
+    void delete();
 
     /**
      * Check if the hologram is currently spawned
