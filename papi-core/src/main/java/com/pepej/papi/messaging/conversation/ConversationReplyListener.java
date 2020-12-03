@@ -1,6 +1,7 @@
 package com.pepej.papi.messaging.conversation;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -13,14 +14,14 @@ public interface ConversationReplyListener<R extends ConversationMessage> {
 
     static <R extends ConversationMessage> ConversationReplyListener<R> of(Function<? super R, RegistrationAction> onReply) {
         return new ConversationReplyListener<R>() {
-            @Nonnull
+            @NonNull
             @Override
-            public RegistrationAction onReply(@Nonnull R reply) {
+            public RegistrationAction onReply(@NonNull R reply) {
                 return onReply.apply(reply);
             }
 
             @Override
-            public void onTimeout(@Nonnull List<R> replies) {
+            public void onTimeout(@NonNull List<R> replies) {
 
             }
         };
@@ -34,8 +35,8 @@ public interface ConversationReplyListener<R extends ConversationMessage> {
      * @param reply the reply message
      * @return the action to take
      */
-    @Nonnull
-    RegistrationAction onReply(@Nonnull R reply);
+    @NonNull
+    RegistrationAction onReply(@NonNull R reply);
 
     /**
      * Called when the listener times out.
@@ -49,7 +50,7 @@ public interface ConversationReplyListener<R extends ConversationMessage> {
      *
      * @param replies the replies which have been received
      */
-    void onTimeout(@Nonnull List<R> replies);
+    void onTimeout(@NonNull List<R> replies);
 
     /**
      * Defines the actions to take after receiving a reply in a {@link ConversationReplyListener}.

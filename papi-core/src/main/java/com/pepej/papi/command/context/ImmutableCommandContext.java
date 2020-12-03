@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.pepej.papi.command.argument.Argument;
 import com.pepej.papi.command.argument.SimpleArgument;
 import org.bukkit.command.CommandSender;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 public class ImmutableCommandContext<T extends CommandSender> implements CommandContext<T> {
     private final T sender;
@@ -18,25 +18,25 @@ public class ImmutableCommandContext<T extends CommandSender> implements Command
         this.args = ImmutableList.copyOf(args);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public T sender() {
         return this.sender;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ImmutableList<String> args() {
         return this.args;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Argument arg(int index) {
         return new SimpleArgument(index, rawArg(index));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String rawArg(int index) {
         if (index < 0 || index >= this.args.size()) {
@@ -45,7 +45,7 @@ public class ImmutableCommandContext<T extends CommandSender> implements Command
         return this.args.get(index);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String label() {
         return this.label;

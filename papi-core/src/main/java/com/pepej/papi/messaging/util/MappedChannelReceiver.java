@@ -5,9 +5,9 @@ import com.google.common.cache.CacheBuilder;
 import com.pepej.papi.messaging.Channel;
 import com.pepej.papi.messaging.ChannelAgent;
 import com.pepej.papi.terminable.Terminable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -36,8 +36,8 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
      * @param <V> the value type
      * @return a new mapped channel receiver
      */
-    @Nonnull
-    public static <T, K, V> MappedChannelReceiver<T, K, V> createExpiring(@Nonnull Channel<T> channel, @Nonnull Function<? super T, ? extends K> keyMapper, @Nonnull Function<? super T, ? extends V> valueMapper, long expiryDuration, @Nonnull TimeUnit unit) {
+    @NonNull
+    public static <T, K, V> MappedChannelReceiver<T, K, V> createExpiring(@NonNull Channel<T> channel, @NonNull Function<? super T, ? extends K> keyMapper, @NonNull Function<? super T, ? extends V> valueMapper, long expiryDuration, @NonNull TimeUnit unit) {
         Objects.requireNonNull(channel, "channel");
         Objects.requireNonNull(keyMapper, "keyMapper");
         Objects.requireNonNull(unit, "unit");
@@ -56,8 +56,8 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
      * @param <K> the key type
      * @return a new mapped channel receiver
      */
-    @Nonnull
-    public static <T, K> MappedChannelReceiver<T, K, T> createExpiring(@Nonnull Channel<T> channel, @Nonnull Function<? super T, ? extends K> keyMapper, long expiryDuration, @Nonnull TimeUnit unit) {
+    @NonNull
+    public static <T, K> MappedChannelReceiver<T, K, T> createExpiring(@NonNull Channel<T> channel, @NonNull Function<? super T, ? extends K> keyMapper, long expiryDuration, @NonNull TimeUnit unit) {
         return new MappedChannelReceiver<>(channel, keyMapper, Function.identity(), new CacheMessageStore<>(expiryDuration, unit));
     }
 
@@ -73,8 +73,8 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
      * @param <V> the value type
      * @return a new mapped channel receiver
      */
-    @Nonnull
-    public static <T, K, V> MappedChannelReceiver<T, K, V> create(@Nonnull Channel<T> channel, @Nonnull Function<? super T, ? extends K> keyMapper, @Nonnull Function<? super T, ? extends V> valueMapper, Map<K, V> map) {
+    @NonNull
+    public static <T, K, V> MappedChannelReceiver<T, K, V> create(@NonNull Channel<T> channel, @NonNull Function<? super T, ? extends K> keyMapper, @NonNull Function<? super T, ? extends V> valueMapper, Map<K, V> map) {
         Objects.requireNonNull(channel, "channel");
         Objects.requireNonNull(keyMapper, "keyMapper");
         Objects.requireNonNull(valueMapper, "valueMapper");
@@ -93,8 +93,8 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
      * @param <K> the key type
      * @return a new mapped channel receiver
      */
-    @Nonnull
-    public static <T, K> MappedChannelReceiver<T, K, T> create(@Nonnull Channel<T> channel, @Nonnull Function<? super T, ? extends K> keyMapper, Map<K, T> map) {
+    @NonNull
+    public static <T, K> MappedChannelReceiver<T, K, T> create(@NonNull Channel<T> channel, @NonNull Function<? super T, ? extends K> keyMapper, Map<K, T> map) {
         return create(channel, keyMapper, Function.identity(), map);
     }
 
@@ -123,7 +123,7 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
      *
      * @return the data
      */
-    @Nonnull
+    @NonNull
     public Map<K, V> asMap() {
         return this.messageStore.asMap();
     }
@@ -135,7 +135,7 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
      * @return the value, if present
      */
     @Nullable
-    public V getValue(@Nonnull K key) {
+    public V getValue(@NonNull K key) {
         return this.messageStore.getValue(key);
     }
 
@@ -144,7 +144,7 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
      *
      * @param key the key
      */
-    public void invalidateEntry(@Nonnull K key) {
+    public void invalidateEntry(@NonNull K key) {
         this.messageStore.invalidateEntry(key);
     }
 

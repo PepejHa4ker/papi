@@ -3,8 +3,8 @@ package com.pepej.papi.messaging.conversation;
 import com.pepej.papi.messaging.Channel;
 import com.pepej.papi.promise.Promise;
 import com.pepej.papi.terminable.Terminable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,7 +20,7 @@ public interface ConversationChannel<T extends ConversationMessage, R extends Co
      *
      * @return the channel name
      */
-    @Nonnull
+    @NonNull
     String getName();
 
     /**
@@ -28,7 +28,7 @@ public interface ConversationChannel<T extends ConversationMessage, R extends Co
      *
      * @return the outgoing channel
      */
-    @Nonnull
+    @NonNull
     Channel<T> getOutgoingChannel();
 
     /**
@@ -36,7 +36,7 @@ public interface ConversationChannel<T extends ConversationMessage, R extends Co
      *
      * @return the reply channel
      */
-    @Nonnull
+    @NonNull
     Channel<R> getReplyChannel();
 
     /**
@@ -44,7 +44,7 @@ public interface ConversationChannel<T extends ConversationMessage, R extends Co
      *
      * @return a new channel agent.
      */
-    @Nonnull
+    @NonNull
     ConversationChannelAgent<T, R> newAgent();
 
     /**
@@ -54,7 +54,7 @@ public interface ConversationChannel<T extends ConversationMessage, R extends Co
      * @param listener the listener to register
      * @return the resultant agent
      */
-    @Nonnull
+    @NonNull
     default ConversationChannelAgent<T, R> newAgent(ConversationChannelListener<T, R> listener) {
         ConversationChannelAgent<T, R> agent = newAgent();
         agent.addListener(listener);
@@ -73,8 +73,8 @@ public interface ConversationChannel<T extends ConversationMessage, R extends Co
      * @param unit the unit of timeoutDuration
      * @return a promise which will complete when the message has sent.
      */
-    @Nonnull
-    Promise<Void> sendMessage(@Nonnull T message, @Nonnull ConversationReplyListener<R> replyListener, long timeoutDuration, @Nonnull TimeUnit unit);
+    @NonNull
+    Promise<Void> sendMessage(@NonNull T message, @NonNull ConversationReplyListener<R> replyListener, long timeoutDuration, @NonNull TimeUnit unit);
 
     @Override
     void close();

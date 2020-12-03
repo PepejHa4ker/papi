@@ -4,6 +4,8 @@ package com.pepej.papi;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
+import com.pepej.papi.ap.Plugin;
+import com.pepej.papi.ap.PluginDependency;
 import com.pepej.papi.environment.script.Script;
 import com.pepej.papi.environment.settings.EnvironmentSettings;
 import com.pepej.papi.internal.LoaderUtils;
@@ -16,7 +18,8 @@ import com.pepej.papi.logging.SystemLogger;
 import com.pepej.papi.menu.scheme.MenuScheme;
 import com.pepej.papi.menu.scheme.SchemeMapping;
 import com.pepej.papi.metadata.MetadataKey;
-import com.pepej.papi.plugin.PapiBukkitPlugin;
+import com.pepej.papi.plugin.PapiJavaPlugin;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.scheduler.Ticks;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.text.Text;
@@ -43,8 +46,8 @@ import java.util.stream.Collectors;
  * Uses {@link ScriptController} and papi to provide a javascript plugin environment for Bukkit.
  */
 @PapiImplementationPlugin
-public class PapiJsPlugin extends PapiBukkitPlugin implements PapiJs {
-
+@Plugin(name = "papi-js", version = "1.1", description = "JavaScript plugins powered by papi", depends = @PluginDependency("papi"))
+public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
     private static final String[] DEFAULT_IMPORT_INCLUDES = new String[]{
             // include all of the packages in papi
             "com.pepej.papi",
@@ -63,7 +66,7 @@ public class PapiJsPlugin extends PapiBukkitPlugin implements PapiJs {
     private ScriptEnvironment environment;
 
     @Override
-        protected void enable() {
+    public void onPluginEnable() {
         // load config
         getLogger().info("Loading configuration...");
         YamlConfiguration config = loadConfig("config.yml");
@@ -118,7 +121,7 @@ public class PapiJsPlugin extends PapiBukkitPlugin implements PapiJs {
     }
 
     @Override
-    protected void disable() {
+    public void onPluginDisable() {
         this.controller.shutdown();
     }
 

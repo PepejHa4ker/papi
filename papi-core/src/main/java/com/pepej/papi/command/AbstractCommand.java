@@ -6,9 +6,9 @@ import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.utils.CommandMapUtil;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * An abstract implementation of {@link Command} and {@link CommandExecutor}
@@ -16,13 +16,12 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractCommand implements Command, CommandExecutor {
 
-    protected @Nullable
-    String permission;
+    protected @Nullable String permission;
     protected @Nullable String permissionMessage;
     protected @Nullable String description;
 
     @Override
-    public void register(@Nonnull String... aliases) {
+    public void register(@NonNull String... aliases) {
         LoaderUtils.getPlugin().registerCommand(this, permission, permissionMessage, description, aliases);
     }
 

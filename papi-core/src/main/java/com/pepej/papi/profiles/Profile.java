@@ -1,9 +1,9 @@
 package com.pepej.papi.profiles;
 
 import org.bukkit.entity.HumanEntity;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,8 +19,8 @@ public interface Profile {
      * @param name the username
      * @return the profile
      */
-    @Nonnull
-    static Profile create(@Nonnull UUID uniqueId, @Nullable String name) {
+    @NonNull
+    static Profile create(@NonNull UUID uniqueId, @Nullable String name) {
         return new SimpleProfile(uniqueId, name);
     }
 
@@ -30,7 +30,7 @@ public interface Profile {
      * @param player the player to create a profile for
      * @return the profile
      */
-    @Nonnull
+    @NonNull
     static Profile create(HumanEntity player) {
         return new SimpleProfile(player.getUniqueId(), player.getName());
     }
@@ -40,7 +40,7 @@ public interface Profile {
      *
      * @return the unique id
      */
-    @Nonnull
+    @NonNull
     UUID getUniqueId();
 
     /**
@@ -48,7 +48,7 @@ public interface Profile {
      *
      * @return the username
      */
-    @Nonnull
+    @NonNull
     Optional<String> getName();
 
     /**

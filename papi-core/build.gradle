@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 
@@ -12,29 +12,41 @@ repositories {
 
 dependencies {
     testCompile("junit:junit:4.12")
+    //spigot core
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
+    //protocols
     compileOnly("com.comphenix.protocol:ProtocolLib:4.5.0")
+    //npcs
     compileOnly("net.citizensnpcs:citizens:2.0.22-SNAPSHOT")
     compileOnly("org.bstats:bstats-bukkit:1.7")
-    compileOnly("com.google.code.findbugs:jsr305:3.0.0")
-    compileOnly("com.flowpowered:flow-math:1.0.0")
-    compileOnly("net.kyori:text-serializer-gson:3.0.4")
-    compileOnly("net.kyori:text-serializer-legacy:3.0.4")
-    compileOnly("net.kyori:text-adapter-bukkit:3.0.5")
-    compileOnly("ninja.leaping.configurate:configurate-yaml:3.3")
-    compileOnly("ninja.leaping.configurate:configurate-json:3.3")
-    compileOnly("ninja.leaping.configurate:configurate-gson:3.3")
-    compileOnly("ninja.leaping.configurate:configurate-hocon:3.3")
+    //checkerfw
+    compileOnly("org.checkerframework:checker:3.7.0")
+
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    //math
+    compile("com.flowpowered:flow-math:1.0.0")
+
+    //text
+    compile("net.kyori:text-serializer-gson:3.0.4")
+    compile("net.kyori:text-serializer-legacy:3.0.4")
+    compile("net.kyori:text-adapter-bukkit:3.0.5")
+
+    //config
+    compile("ninja.leaping.configurate:configurate-yaml:3.3")
+    compile("ninja.leaping.configurate:configurate-json:3.3")
+    compile("ninja.leaping.configurate:configurate-gson:3.3")
+    compile("ninja.leaping.configurate:configurate-hocon:3.3")
 
 }
 
 shadowJar {
+    destinationDir = file("C:\\Users\\pepej\\Desktop\\locahost\\plugins")
     archiveName = "Papi-Core-1.4.jar"
 }
 
-artifacts {
-    archives shadowJar
-}
 
 
 

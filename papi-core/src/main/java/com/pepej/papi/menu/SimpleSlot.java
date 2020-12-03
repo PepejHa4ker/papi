@@ -3,9 +3,9 @@ package com.pepej.papi.menu;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -24,23 +24,20 @@ public class SimpleSlot implements Slot {
     // the click handlers for this slot
     protected final Map<ClickType, Set<Consumer<InventoryClickEvent>>> handlers;
 
-    public SimpleSlot(@Nonnull Gui gui, int id) {
+    public SimpleSlot(@NonNull Gui gui, int id) {
         this.gui = gui;
         this.id = id;
         this.handlers = Collections.synchronizedMap(new EnumMap<>(ClickType.class));
     }
 
-    public void handle(@Nonnull InventoryClickEvent event) {
+    public void handle(@NonNull InventoryClickEvent event) {
         Set<Consumer<InventoryClickEvent>> handlers = this.handlers.get(event.getClick());
         if (handlers == null) {
             return;
         }
+
         for (Consumer<InventoryClickEvent> handler : handlers) {
-            try {
-                handler.accept(event);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            handler.accept(event);
         }
     }
 
@@ -49,7 +46,7 @@ public class SimpleSlot implements Slot {
      *
      * @return the parent gui
      */
-    @Nonnull
+    @NonNull
     @Override
     public Gui gui() {
         return this.gui;
@@ -107,9 +104,9 @@ public class SimpleSlot implements Slot {
      * @param item the new item
      * @return this slot
      */
-    @Nonnull
+    @NonNull
     @Override
-    public Slot setItem(@Nonnull ItemStack item) {
+    public Slot setItem(@NonNull ItemStack item) {
         Objects.requireNonNull(item, "item");
         this.gui.getHandle().setItem(this.id, item);
         return this;
@@ -132,7 +129,7 @@ public class SimpleSlot implements Slot {
      *
      * @return this slot
      */
-    @Nonnull
+    @NonNull
     @Override
     public Slot clearItem() {
         this.gui.getHandle().clear(this.id);
@@ -144,7 +141,7 @@ public class SimpleSlot implements Slot {
      *
      * @return this slot
      */
-    @Nonnull
+    @NonNull
     @Override
     public Slot clearBindings() {
         this.handlers.clear();
@@ -156,52 +153,52 @@ public class SimpleSlot implements Slot {
      *
      * @return this slot
      */
-    @Nonnull
+    @NonNull
     @Override
     public Slot clearBindings(ClickType type) {
         this.handlers.remove(type);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot bind(@Nonnull ClickType type, @Nonnull Consumer<InventoryClickEvent> handler) {
+    public Slot bind(@NonNull ClickType type, @NonNull Consumer<InventoryClickEvent> handler) {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(handler, "handler");
         this.handlers.computeIfAbsent(type, t -> ConcurrentHashMap.newKeySet()).add(handler);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot bind(@Nonnull ClickType type, @Nonnull Runnable handler) {
+    public Slot bind(@NonNull ClickType type, @NonNull Runnable handler) {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(handler, "handler");
         this.handlers.computeIfAbsent(type, t -> ConcurrentHashMap.newKeySet()).add(Item.transformRunnable(handler));
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot bind(@Nonnull Consumer<InventoryClickEvent> handler, @Nonnull ClickType... types) {
+    public Slot bind(@NonNull Consumer<InventoryClickEvent> handler, @NonNull ClickType... types) {
         for (ClickType type : types) {
             bind(type, handler);
         }
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot bind(@Nonnull Runnable handler, @Nonnull ClickType... types) {
+    public Slot bind(@NonNull Runnable handler, @NonNull ClickType... types) {
         for (ClickType type : types) {
             bind(type, handler);
         }
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T extends Runnable> Slot bindAllRunnables(@Nonnull Iterable<Map.Entry<ClickType, T>> handlers) {
+    public <T extends Runnable> Slot bindAllRunnables(@NonNull Iterable<Map.Entry<ClickType, T>> handlers) {
         Objects.requireNonNull(handlers, "handlers");
         for (Map.Entry<ClickType, T> handler : handlers) {
             bind(handler.getKey(), handler.getValue());
@@ -209,9 +206,9 @@ public class SimpleSlot implements Slot {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@Nonnull Iterable<Map.Entry<ClickType, T>> handlers) {
+    public <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers) {
         Objects.requireNonNull(handlers, "handlers");
         for (Map.Entry<ClickType, T> handler : handlers) {
             bind(handler.getKey(), handler.getValue());

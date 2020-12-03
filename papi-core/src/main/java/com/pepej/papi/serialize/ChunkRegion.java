@@ -5,8 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /**
@@ -77,7 +77,7 @@ public final class ChunkRegion implements GsonSerializable {
         return this.depth;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonObject serialize() {
         return JsonBuilder.object()

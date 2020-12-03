@@ -3,11 +3,14 @@ package com.pepej.papi.serialize;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.pepej.papi.Papi;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /**
@@ -41,6 +44,9 @@ public final class Region implements GsonSerializable {
     private final Position min;
     private final Position max;
 
+    @Nullable
+    private final World world;
+
     private final double width;
     private final double height;
     private final double depth;
@@ -49,9 +55,15 @@ public final class Region implements GsonSerializable {
         this.min = Position.of(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()), a.getWorld());
         this.max = Position.of(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()), a.getWorld());
 
+        this.world = Papi.worldNullable(this.getMin().getWorld());
+
         this.width = this.max.getX() - this.min.getX();
         this.height = this.max.getY() - this.min.getY();
         this.depth = this.max.getZ() - this.min.getZ();
+    }
+
+    public double getVolume() {
+        return this.width * this.depth * this.height;
     }
 
     public boolean inRegion(Position pos) {
@@ -78,6 +90,11 @@ public final class Region implements GsonSerializable {
         return this.max;
     }
 
+    @Nullable
+    public World getWorld() {
+        return world;
+    }
+
     public double getWidth() {
         return this.width;
     }
@@ -90,7 +107,7 @@ public final class Region implements GsonSerializable {
         return this.depth;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonObject serialize() {
         return JsonBuilder.object()
@@ -101,8 +118,12 @@ public final class Region implements GsonSerializable {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof Region)) return false;
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Region)) {
+            return false;
+        }
         final Region other = (Region) o;
         return this.getMin().equals(other.getMin()) && this.getMax().equals(other.getMax());
     }
@@ -120,5 +141,4 @@ public final class Region implements GsonSerializable {
     public String toString() {
         return "Region(min=" + this.getMin() + ", max=" + this.getMax() + ")";
     }
-
 }

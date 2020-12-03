@@ -1,7 +1,8 @@
 package com.pepej.papi.reflect;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Locale;
@@ -213,7 +214,7 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
      *
      * @return a normal version string.
      */
-    @Nonnull
+    @NonNull
     public String getVersion() {
         if (getDevelopmentStage() == null) {
             return String.format("%s.%s.%s", getMajor(), getMinor(), getBuild());

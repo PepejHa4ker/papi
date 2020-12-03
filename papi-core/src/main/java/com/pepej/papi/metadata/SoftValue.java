@@ -1,6 +1,7 @@
 package com.pepej.papi.metadata;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.lang.ref.SoftReference;
 import java.util.Objects;
 import java.util.function.Supplier;

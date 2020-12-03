@@ -1,8 +1,8 @@
 package com.pepej.papi.gson;
 
 import com.google.gson.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiConsumer;

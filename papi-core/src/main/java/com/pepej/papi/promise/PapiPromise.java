@@ -8,9 +8,9 @@ import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.scheduler.PapiExecutors;
 import com.pepej.papi.scheduler.Ticks;
 import org.bukkit.Bukkit;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,23 +26,23 @@ import java.util.function.Supplier;
 final class PapiPromise<V> implements Promise<V> {
     private static final Consumer<Throwable> EXCEPTION_CONSUMER = Throwable::printStackTrace;
 
-    @Nonnull
+    @NonNull
     static <U> PapiPromise<U> empty() {
         return new PapiPromise<>();
     }
 
-    @Nonnull
+    @NonNull
     static <U> PapiPromise<U> completed(@Nullable U value) {
         return new PapiPromise<>(value);
     }
 
-    @Nonnull
-    static <U> PapiPromise<U> exceptionally(@Nonnull Throwable t) {
+    @NonNull
+    static <U> PapiPromise<U> exceptionally(@NonNull Throwable t) {
         return new PapiPromise<>(t);
     }
 
-    @Nonnull
-    static <U> Promise<U> wrapFuture(@Nonnull Future<U> future) {
+    @NonNull
+    static <U> Promise<U> wrapFuture(@NonNull Future<U> future) {
         if (future instanceof CompletableFuture<?>) {
             return new PapiPromise<>(((CompletableFuture<U>) future).thenApply(Function.identity()));
 
@@ -63,7 +63,7 @@ final class PapiPromise<V> implements Promise<V> {
                 }
 
                 @Override
-                public void onFailure(@Nonnull Throwable t) {
+                public void onFailure(@NonNull Throwable t) {
                     promise.completeExceptionally(t);
                 }
             });
@@ -98,7 +98,7 @@ final class PapiPromise<V> implements Promise<V> {
     /**
      * The completable future backing this promise
      */
-    @Nonnull
+    @NonNull
     private final CompletableFuture<V> fut;
 
     private PapiPromise() {
@@ -110,12 +110,12 @@ final class PapiPromise<V> implements Promise<V> {
         this.supplied.set(true);
     }
 
-    private PapiPromise(@Nonnull Throwable t) {
+    private PapiPromise(@NonNull Throwable t) {
         (this.fut = new CompletableFuture<>()).completeExceptionally(t);
         this.supplied.set(true);
     }
 
-    private PapiPromise(@Nonnull CompletableFuture<V> fut) {
+    private PapiPromise(@NonNull CompletableFuture<V> fut) {
         this.fut = Objects.requireNonNull(fut, "future");
         this.supplied.set(true);
         this.cancelled.set(fut.isCancelled());
@@ -123,7 +123,7 @@ final class PapiPromise<V> implements Promise<V> {
 
     /* utility methods */
 
-    private void executeSync(@Nonnull Runnable runnable) {
+    private void executeSync(@NonNull Runnable runnable) {
         if (ThreadContext.forCurrentThread() == ThreadContext.SYNC) {
             PapiExecutors.wrapRunnable(runnable).run();
         } else {
@@ -131,11 +131,11 @@ final class PapiPromise<V> implements Promise<V> {
         }
     }
 
-    private void executeAsync(@Nonnull Runnable runnable) {
+    private void executeAsync(@NonNull Runnable runnable) {
         PapiExecutors.asyncPapi().execute(runnable);
     }
 
-    private void executeDelayedSync(@Nonnull Runnable runnable, long delayTicks) {
+    private void executeDelayedSync(@NonNull Runnable runnable, long delayTicks) {
         if (delayTicks <= 0) {
             executeSync(runnable);
         } else {
@@ -143,7 +143,7 @@ final class PapiPromise<V> implements Promise<V> {
         }
     }
 
-    private void executeDelayedAsync(@Nonnull Runnable runnable, long delayTicks) {
+    private void executeDelayedAsync(@NonNull Runnable runnable, long delayTicks) {
         if (delayTicks <= 0) {
             executeAsync(runnable);
         } else {
@@ -151,7 +151,7 @@ final class PapiPromise<V> implements Promise<V> {
         }
     }
 
-    private void executeDelayedSync(@Nonnull Runnable runnable, long delay, TimeUnit unit) {
+    private void executeDelayedSync(@NonNull Runnable runnable, long delay, TimeUnit unit) {
         if (delay <= 0) {
             executeSync(runnable);
         } else {
@@ -159,7 +159,7 @@ final class PapiPromise<V> implements Promise<V> {
         }
     }
 
-    private void executeDelayedAsync(@Nonnull Runnable runnable, long delay, TimeUnit unit) {
+    private void executeDelayedAsync(@NonNull Runnable runnable, long delay, TimeUnit unit) {
         if (delay <= 0) {
             executeAsync(runnable);
         } else {
@@ -171,7 +171,7 @@ final class PapiPromise<V> implements Promise<V> {
         return !this.cancelled.get() && this.fut.complete(value);
     }
 
-    private boolean completeExceptionally(@Nonnull Throwable t) {
+    private boolean completeExceptionally(@NonNull Throwable t) {
         return !this.cancelled.get() && this.fut.completeExceptionally(t);
     }
 
@@ -205,7 +205,7 @@ final class PapiPromise<V> implements Promise<V> {
     }
 
     @Override
-    public V get(long timeout, @Nonnull TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public V get(long timeout, @NonNull TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return this.fut.get(timeout, unit);
     }
 
@@ -236,7 +236,7 @@ final class PapiPromise<V> implements Promise<V> {
 
     /* implementation */
 
-    @Nonnull
+    @NonNull
     @Override
     public Promise<V> supply(@Nullable V value) {
         markAsSupplied();
@@ -244,113 +244,113 @@ final class PapiPromise<V> implements Promise<V> {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyException(@Nonnull Throwable exception) {
+    public Promise<V> supplyException(@NonNull Throwable exception) {
         markAsSupplied();
         completeExceptionally(exception);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplySync(@Nonnull Supplier<V> supplier) {
+    public Promise<V> supplySync(@NonNull Supplier<V> supplier) {
         markAsSupplied();
         executeSync(new SupplyRunnable(supplier));
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyAsync(@Nonnull Supplier<V> supplier) {
+    public Promise<V> supplyAsync(@NonNull Supplier<V> supplier) {
         markAsSupplied();
         executeAsync(new SupplyRunnable(supplier));
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyDelayedSync(@Nonnull Supplier<V> supplier, long delayTicks) {
+    public Promise<V> supplyDelayedSync(@NonNull Supplier<V> supplier, long delayTicks) {
         markAsSupplied();
         executeDelayedSync(new SupplyRunnable(supplier), delayTicks);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyDelayedSync(@Nonnull Supplier<V> supplier, long delay, @Nonnull TimeUnit unit) {
+    public Promise<V> supplyDelayedSync(@NonNull Supplier<V> supplier, long delay, @NonNull TimeUnit unit) {
         markAsSupplied();
         executeDelayedSync(new SupplyRunnable(supplier), delay, unit);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyDelayedAsync(@Nonnull Supplier<V> supplier, long delayTicks) {
+    public Promise<V> supplyDelayedAsync(@NonNull Supplier<V> supplier, long delayTicks) {
         markAsSupplied();
         executeDelayedAsync(new SupplyRunnable(supplier), delayTicks);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyDelayedAsync(@Nonnull Supplier<V> supplier, long delay, @Nonnull TimeUnit unit) {
+    public Promise<V> supplyDelayedAsync(@NonNull Supplier<V> supplier, long delay, @NonNull TimeUnit unit) {
         markAsSupplied();
         executeDelayedAsync(new SupplyRunnable(supplier), delay, unit);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyExceptionallySync(@Nonnull Callable<V> callable) {
+    public Promise<V> supplyExceptionallySync(@NonNull Callable<V> callable) {
         markAsSupplied();
         executeSync(new ThrowingSupplyRunnable(callable));
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyExceptionallyAsync(@Nonnull Callable<V> callable) {
+    public Promise<V> supplyExceptionallyAsync(@NonNull Callable<V> callable) {
         markAsSupplied();
         executeAsync(new ThrowingSupplyRunnable(callable));
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyExceptionallyDelayedSync(@Nonnull Callable<V> callable, long delayTicks) {
+    public Promise<V> supplyExceptionallyDelayedSync(@NonNull Callable<V> callable, long delayTicks) {
         markAsSupplied();
         executeDelayedSync(new ThrowingSupplyRunnable(callable), delayTicks);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyExceptionallyDelayedSync(@Nonnull Callable<V> callable, long delay, @Nonnull TimeUnit unit) {
+    public Promise<V> supplyExceptionallyDelayedSync(@NonNull Callable<V> callable, long delay, @NonNull TimeUnit unit) {
         markAsSupplied();
         executeDelayedSync(new ThrowingSupplyRunnable(callable), delay, unit);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyExceptionallyDelayedAsync(@Nonnull Callable<V> callable, long delayTicks) {
+    public Promise<V> supplyExceptionallyDelayedAsync(@NonNull Callable<V> callable, long delayTicks) {
         markAsSupplied();
         executeDelayedAsync(new ThrowingSupplyRunnable(callable), delayTicks);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> supplyExceptionallyDelayedAsync(@Nonnull Callable<V> callable, long delay, @Nonnull TimeUnit unit) {
+    public Promise<V> supplyExceptionallyDelayedAsync(@NonNull Callable<V> callable, long delay, @NonNull TimeUnit unit) {
         markAsSupplied();
         executeDelayedAsync(new ThrowingSupplyRunnable(callable), delay, unit);
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenApplySync(@Nonnull Function<? super V, ? extends U> fn) {
+    public <U> Promise<U> thenApplySync(@NonNull Function<? super V, ? extends U> fn) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -362,9 +362,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenApplyAsync(@Nonnull Function<? super V, ? extends U> fn) {
+    public <U> Promise<U> thenApplyAsync(@NonNull Function<? super V, ? extends U> fn) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -376,9 +376,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenApplyDelayedSync(@Nonnull Function<? super V, ? extends U> fn, long delayTicks) {
+    public <U> Promise<U> thenApplyDelayedSync(@NonNull Function<? super V, ? extends U> fn, long delayTicks) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -390,9 +390,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenApplyDelayedSync(@Nonnull Function<? super V, ? extends U> fn, long delay, @Nonnull TimeUnit unit) {
+    public <U> Promise<U> thenApplyDelayedSync(@NonNull Function<? super V, ? extends U> fn, long delay, @NonNull TimeUnit unit) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -404,9 +404,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenApplyDelayedAsync(@Nonnull Function<? super V, ? extends U> fn, long delayTicks) {
+    public <U> Promise<U> thenApplyDelayedAsync(@NonNull Function<? super V, ? extends U> fn, long delayTicks) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -418,9 +418,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenApplyDelayedAsync(@Nonnull Function<? super V, ? extends U> fn, long delay, @Nonnull TimeUnit unit) {
+    public <U> Promise<U> thenApplyDelayedAsync(@NonNull Function<? super V, ? extends U> fn, long delay, @NonNull TimeUnit unit) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -432,9 +432,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenComposeSync(@Nonnull Function<? super V, ? extends Promise<U>> fn) {
+    public <U> Promise<U> thenComposeSync(@NonNull Function<? super V, ? extends Promise<U>> fn) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -446,9 +446,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenComposeAsync(@Nonnull Function<? super V, ? extends Promise<U>> fn) {
+    public <U> Promise<U> thenComposeAsync(@NonNull Function<? super V, ? extends Promise<U>> fn) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -460,9 +460,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenComposeDelayedSync(@Nonnull Function<? super V, ? extends Promise<U>> fn, long delayTicks) {
+    public <U> Promise<U> thenComposeDelayedSync(@NonNull Function<? super V, ? extends Promise<U>> fn, long delayTicks) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -474,9 +474,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenComposeDelayedSync(@Nonnull Function<? super V, ? extends Promise<U>> fn, long delay, @Nonnull TimeUnit unit) {
+    public <U> Promise<U> thenComposeDelayedSync(@NonNull Function<? super V, ? extends Promise<U>> fn, long delay, @NonNull TimeUnit unit) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -488,9 +488,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenComposeDelayedAsync(@Nonnull Function<? super V, ? extends Promise<U>> fn, long delayTicks) {
+    public <U> Promise<U> thenComposeDelayedAsync(@NonNull Function<? super V, ? extends Promise<U>> fn, long delayTicks) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -502,9 +502,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <U> Promise<U> thenComposeDelayedAsync(@Nonnull Function<? super V, ? extends Promise<U>> fn, long delay, @Nonnull TimeUnit unit) {
+    public <U> Promise<U> thenComposeDelayedAsync(@NonNull Function<? super V, ? extends Promise<U>> fn, long delay, @NonNull TimeUnit unit) {
         PapiPromise<U> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t != null) {
@@ -516,9 +516,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> exceptionallySync(@Nonnull Function<Throwable, ? extends V> fn) {
+    public Promise<V> exceptionallySync(@NonNull Function<Throwable, ? extends V> fn) {
         PapiPromise<V> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t == null) {
@@ -530,9 +530,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> exceptionallyAsync(@Nonnull Function<Throwable, ? extends V> fn) {
+    public Promise<V> exceptionallyAsync(@NonNull Function<Throwable, ? extends V> fn) {
         PapiPromise<V> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t == null) {
@@ -544,9 +544,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> exceptionallyDelayedSync(@Nonnull Function<Throwable, ? extends V> fn, long delayTicks) {
+    public Promise<V> exceptionallyDelayedSync(@NonNull Function<Throwable, ? extends V> fn, long delayTicks) {
         PapiPromise<V> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t == null) {
@@ -558,9 +558,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> exceptionallyDelayedSync(@Nonnull Function<Throwable, ? extends V> fn, long delay, @Nonnull TimeUnit unit) {
+    public Promise<V> exceptionallyDelayedSync(@NonNull Function<Throwable, ? extends V> fn, long delay, @NonNull TimeUnit unit) {
         PapiPromise<V> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t == null) {
@@ -572,9 +572,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> exceptionallyDelayedAsync(@Nonnull Function<Throwable, ? extends V> fn, long delayTicks) {
+    public Promise<V> exceptionallyDelayedAsync(@NonNull Function<Throwable, ? extends V> fn, long delayTicks) {
         PapiPromise<V> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t == null) {
@@ -586,9 +586,9 @@ final class PapiPromise<V> implements Promise<V> {
         return promise;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Promise<V> exceptionallyDelayedAsync(@Nonnull Function<Throwable, ? extends V> fn, long delay, @Nonnull TimeUnit unit) {
+    public Promise<V> exceptionallyDelayedAsync(@NonNull Function<Throwable, ? extends V> fn, long delay, @NonNull TimeUnit unit) {
         PapiPromise<V> promise = empty();
         this.fut.whenComplete((value, t) -> {
             if (t == null) {

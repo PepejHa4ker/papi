@@ -1,6 +1,7 @@
 package com.pepej.papi.metadata;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.Optional;
 
 /**
@@ -16,8 +17,8 @@ public interface MetadataRegistry<T> {
      * @param id the object
      * @return a metadata map
      */
-    @Nonnull
-    MetadataMap provide(@Nonnull T id);
+    @NonNull
+    MetadataMap provide(@NonNull T id);
 
     /**
      * Gets a {@link MetadataMap} for the given object, if one already exists and has
@@ -26,8 +27,8 @@ public interface MetadataRegistry<T> {
      * @param id the object
      * @return a metadata map, if present
      */
-    @Nonnull
-    Optional<MetadataMap> get(@Nonnull T id);
+    @NonNull
+    Optional<MetadataMap> get(@NonNull T id);
 
     /**
      * Deletes the {@link MetadataMap} and all contained {@link MetadataKey}s for
@@ -35,7 +36,7 @@ public interface MetadataRegistry<T> {
      *
      * @param id the object
      */
-    void remove(@Nonnull T id);
+    void remove(@NonNull T id);
 
     /**
      * Performs cache maintenance to remove empty map instances and expired transient values.

@@ -1,13 +1,15 @@
 package com.pepej.papi.metadata;
 
-import javax.annotation.Nullable;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Represents a value in a {@link MetadataMap} which will automatically expire at some point.
  *
  * @param <T> the type of the underlying value
  */
-public interface TransientValue<T> {
+public interface
+ TransientValue<T> {
 
     /**
      * Returns the underlying value, or null if it has expired

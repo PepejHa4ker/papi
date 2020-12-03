@@ -1,8 +1,8 @@
 package com.pepej.papi.event;
 
 import org.bukkit.event.Event;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -17,7 +17,7 @@ public interface MergedSubscription<T> extends Subscription {
      *
      * @return the handled class
      */
-    @Nonnull
+    @NonNull
     Class<? super T> getHandledClass();
 
     /**
@@ -25,7 +25,7 @@ public interface MergedSubscription<T> extends Subscription {
      *
      * @return the individual classes
      */
-    @Nonnull
+    @NonNull
     Set<Class<? extends Event>> getEventClasses();
 
 }

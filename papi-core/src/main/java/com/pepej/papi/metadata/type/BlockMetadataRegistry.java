@@ -5,8 +5,8 @@ import com.pepej.papi.metadata.MetadataMap;
 import com.pepej.papi.metadata.MetadataRegistry;
 import com.pepej.papi.serialize.BlockPosition;
 import org.bukkit.block.Block;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,8 +21,8 @@ public interface BlockMetadataRegistry extends MetadataRegistry<BlockPosition> {
      * @param block the block
      * @return a metadata map
      */
-    @Nonnull
-    MetadataMap provide(@Nonnull Block block);
+    @NonNull
+    MetadataMap provide(@NonNull Block block);
 
     /**
      * Gets a {@link MetadataMap} for the given block, if one already exists and has
@@ -31,8 +31,8 @@ public interface BlockMetadataRegistry extends MetadataRegistry<BlockPosition> {
      * @param block the block
      * @return a metadata map, if present
      */
-    @Nonnull
-    Optional<MetadataMap> get(@Nonnull Block block);
+    @NonNull
+    Optional<MetadataMap> get(@NonNull Block block);
 
     /**
      * Gets a map of the blocks with a given metadata key
@@ -41,7 +41,7 @@ public interface BlockMetadataRegistry extends MetadataRegistry<BlockPosition> {
      * @param <K> the key type
      * @return an immutable map of blocks to key value
      */
-    @Nonnull
-    <K> Map<BlockPosition, K> getAllWithKey(@Nonnull MetadataKey<K> key);
+    @NonNull
+    <K> Map<BlockPosition, K> getAllWithKey(@NonNull MetadataKey<K> key);
 
 }

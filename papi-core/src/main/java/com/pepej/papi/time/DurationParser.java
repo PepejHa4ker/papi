@@ -2,8 +2,8 @@ package com.pepej.papi.time;
 
 
 import com.google.common.collect.ImmutableMap;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -77,7 +77,7 @@ public final class DurationParser {
      * @param input the input string
      * @return an Optional Duration
      */
-    @Nonnull
+    @NonNull
     public static Optional<Duration> parseSafely(String input) {
         try {
             return Optional.of(parse(input));

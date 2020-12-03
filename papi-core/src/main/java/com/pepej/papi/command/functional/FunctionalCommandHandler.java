@@ -16,8 +16,8 @@ public interface FunctionalCommandHandler<T extends CommandSender>  {
     /**
      * Executes the handler using the given command context
      *
-     * @param c the command context
+     * @param context the command context
      */
-    void handle(CommandContext<T> c) throws CommandInterruptException;
+    void handle(CommandContext<T> context) throws CommandInterruptException;
 
 }

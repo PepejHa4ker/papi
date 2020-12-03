@@ -2,8 +2,8 @@ package com.pepej.papi.menu.scheme;
 
 import com.google.common.collect.ImmutableList;
 import com.pepej.papi.menu.Gui;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;

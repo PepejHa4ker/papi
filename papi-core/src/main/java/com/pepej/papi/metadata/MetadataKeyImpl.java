@@ -1,8 +1,8 @@
 package com.pepej.papi.metadata;
 
 import com.google.common.reflect.TypeToken;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 final class MetadataKeyImpl<T> implements MetadataKey<T> {
@@ -20,7 +20,7 @@ final class MetadataKeyImpl<T> implements MetadataKey<T> {
         return this.id;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public TypeToken<T> getType() {
         return this.type;

@@ -7,4 +7,3 @@ load: STARTUP
 depend:
   - ProtocolLib
   - Citizens
-  - Vault

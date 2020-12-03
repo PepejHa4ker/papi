@@ -2,8 +2,8 @@ package com.pepej.papi.scheduler.builder;
 
 import com.pepej.papi.promise.ThreadContext;
 import com.pepej.papi.scheduler.Scheduler;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,7 +16,7 @@ public interface TaskBuilder {
      *
      * @return a task builder instance
      */
-    @Nonnull
+    @NonNull
     static TaskBuilder newBuilder() {
         return TaskBuilderImpl.INSTANCE;
     }
@@ -28,8 +28,8 @@ public interface TaskBuilder {
      * @param context the context to run the task in
      * @return a contextual builder
      */
-    @Nonnull
-    default TaskBuilder.ThreadContextual on(@Nonnull ThreadContext context) {
+    @NonNull
+    default ThreadContextual on(@NonNull ThreadContext context) {
         switch (context) {
             case SYNC:
                 return sync();
@@ -46,8 +46,8 @@ public interface TaskBuilder {
      *
      * @return a "sync" contextual builder
      */
-    @Nonnull
-    TaskBuilder.ThreadContextual sync();
+    @NonNull
+    ThreadContextual sync();
 
     /**
      * Marks that the new task should run async,
@@ -55,8 +55,8 @@ public interface TaskBuilder {
      *
      * @return an "async" contextual builder
      */
-    @Nonnull
-    TaskBuilder.ThreadContextual async();
+    @NonNull
+    ThreadContextual async();
 
     /**
      * The next builder in the task chain, which already has a defined task context.
@@ -69,7 +69,7 @@ public interface TaskBuilder {
          *
          * @return an "instant" promise builder
          */
-        @Nonnull
+        @NonNull
         ContextualPromiseBuilder now();
 
         /**
@@ -79,8 +79,8 @@ public interface TaskBuilder {
          * @param ticks the number of ticks to delay execution by
          * @return a delayed builder
          */
-        @Nonnull
-        TaskBuilder.DelayedTick after(long ticks);
+        @NonNull
+        DelayedTick after(long ticks);
 
         /**
          * Marks that the new task should run after the specified delay,
@@ -90,8 +90,8 @@ public interface TaskBuilder {
          * @param unit the units of the duration
          * @return a delayed builder
          */
-        @Nonnull
-        TaskBuilder.DelayedTime after(long duration, @Nonnull TimeUnit unit);
+        @NonNull
+        DelayedTime after(long duration, @NonNull TimeUnit unit);
 
         /**
          * Marks that the new task should run after the specified delay,
@@ -100,7 +100,7 @@ public interface TaskBuilder {
          * @param ticks the number of ticks to delay execution by
          * @return a delayed builder
          */
-        @Nonnull
+        @NonNull
         ContextualTaskBuilder afterAndEvery(long ticks);
 
         /**
@@ -111,8 +111,8 @@ public interface TaskBuilder {
          * @param unit the units of the duration
          * @return a delayed builder
          */
-        @Nonnull
-        ContextualTaskBuilder afterAndEvery(long duration, @Nonnull TimeUnit unit);
+        @NonNull
+        ContextualTaskBuilder afterAndEvery(long duration, @NonNull TimeUnit unit);
 
         /**
          * Marks that the new task should start running instantly, but repeat on the specified interval,
@@ -121,7 +121,7 @@ public interface TaskBuilder {
          * @param ticks the number of ticks to wait between executions
          * @return a delayed builder
          */
-        @Nonnull
+        @NonNull
         ContextualTaskBuilder every(long ticks);
 
         /**
@@ -132,8 +132,8 @@ public interface TaskBuilder {
          * @param unit the units of the duration
          * @return a delayed builder
          */
-        @Nonnull
-        ContextualTaskBuilder every(long duration, @Nonnull TimeUnit unit);
+        @NonNull
+        ContextualTaskBuilder every(long duration, @NonNull TimeUnit unit);
 
     }
 
@@ -156,7 +156,7 @@ public interface TaskBuilder {
          * @param ticks the number of ticks to wait between executions
          * @return a delayed builder
          */
-        @Nonnull
+        @NonNull
         ContextualTaskBuilder every(long ticks);
 
     }
@@ -171,7 +171,7 @@ public interface TaskBuilder {
          * @param unit the units of the duration
          * @return a delayed builder
          */
-        @Nonnull
+        @NonNull
         ContextualTaskBuilder every(long duration, TimeUnit unit);
 
     }

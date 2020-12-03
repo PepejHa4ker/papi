@@ -2,9 +2,9 @@ package com.pepej.papi.menu.scheme;
 
 import com.google.common.collect.ImmutableMap;
 import com.pepej.papi.menu.Item;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
@@ -14,12 +14,12 @@ import java.util.Objects;
 public class AbstractSchemeMapping implements SchemeMapping {
     private final Map<Integer, Item> mapping;
 
-    @Nonnull
-    public static SchemeMapping of(@Nonnull Map<Integer, Item> mapping) {
+    @NonNull
+    public static SchemeMapping of(@NonNull Map<Integer, Item> mapping) {
         return new AbstractSchemeMapping(mapping);
     }
 
-    private AbstractSchemeMapping(@Nonnull Map<Integer, Item> mapping) {
+    private AbstractSchemeMapping(@NonNull Map<Integer, Item> mapping) {
         Objects.requireNonNull(mapping, "mapping");
         this.mapping = ImmutableMap.copyOf(mapping);
     }
@@ -35,7 +35,7 @@ public class AbstractSchemeMapping implements SchemeMapping {
         return this.mapping.containsKey(key);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public SchemeMapping copy() {
         return this; // no need to make a copy, the backing data is immutable

@@ -1,5 +1,6 @@
 package com.pepej.papi.bossbar;
 
+
 /**
  * Represents the style of a {@link BossBar}.
  */

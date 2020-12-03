@@ -5,14 +5,14 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.nbt.NbtCompound;
 import com.comphenix.protocol.wrappers.nbt.NbtFactory;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.protocol.Protocol;
 import com.pepej.papi.utils.Players;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PacketSignPromptFactory implements SignPromptFactory {
 
     @Override
-    public void openPrompt(@Nonnull Player player, @Nonnull List<String> lines, @Nonnull ResponseHandler responseHandler) {
+    public void openPrompt(@NonNull Player player, @NonNull List<String> lines, @NonNull ResponseHandler responseHandler) {
         Location location = player.getLocation().clone();
         location.setY(255);
         Players.sendBlockChange(player, location, Material.WALL_SIGN);

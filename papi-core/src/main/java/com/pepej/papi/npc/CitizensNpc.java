@@ -2,8 +2,7 @@ package com.pepej.papi.npc;
 
 
 import net.citizensnpcs.api.npc.NPC;
-
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A special implementation of {@link Npc} using Citizens.
@@ -15,7 +14,7 @@ public interface CitizensNpc extends Npc {
      *
      * @return the npc
      */
-    @Nonnull
+    @NonNull
     NPC getNpc();
 
 }

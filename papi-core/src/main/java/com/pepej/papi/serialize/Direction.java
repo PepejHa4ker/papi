@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
 import org.bukkit.Location;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /**
@@ -54,7 +54,7 @@ public final class Direction implements GsonSerializable {
         return this.pitch;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonObject serialize() {
         return JsonBuilder.object()

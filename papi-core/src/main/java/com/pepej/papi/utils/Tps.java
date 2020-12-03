@@ -6,8 +6,8 @@ import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Supplier;
@@ -119,7 +119,7 @@ public final class Tps implements GsonSerializable {
         return sb.toString();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonElement serialize() {
         return JsonBuilder.object()

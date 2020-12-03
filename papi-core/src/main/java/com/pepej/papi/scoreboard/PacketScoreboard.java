@@ -2,7 +2,7 @@ package com.pepej.papi.scoreboard;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Preconditions;
-import com.pepej.papi.Events;
+import com.pepej.papi.events.Events;
 import com.pepej.papi.plugin.PapiPlugin;
 import com.pepej.papi.text.Text;
 import com.pepej.papi.utils.Players;
@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class PacketScoreboard implements Scoreboard {
     private final Map<UUID, Map<String, PacketScoreboardTeam>> playerTeams = Collections.synchronizedMap(new HashMap<>());
     private final Map<UUID, Map<String, PacketScoreboardObjective>> playerObjectives = Collections.synchronizedMap(new HashMap<>());
 
-    public PacketScoreboard(@Nonnull PapiPlugin plugin) {
+    public PacketScoreboard(@NonNull PapiPlugin plugin) {
         Events.subscribe(PlayerJoinEvent.class).handler(this::handlePlayerJoin).bindWith(plugin);
         Events.subscribe(PlayerQuitEvent.class).handler(this::handlePlayerQuit).bindWith(plugin);
     }

@@ -1,8 +1,8 @@
 package com.pepej.papi.event.filter;
 
 import org.bukkit.event.Cancellable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**
@@ -20,7 +20,7 @@ public final class EventHandlers {
      * @param <T> the event type
      * @return a consumer which cancels the event
      */
-    @Nonnull
+    @NonNull
     public static <T extends Cancellable> Consumer<T> cancel() {
         return (Consumer<T>) SET_CANCELLED;
     }
@@ -31,7 +31,7 @@ public final class EventHandlers {
      * @param <T> the event type
      * @return a consumer which un-cancels the event
      */
-    @Nonnull
+    @NonNull
     public static <T extends Cancellable> Consumer<T> uncancel() {
         return (Consumer<T>) UNSET_CANCELLED;
     }

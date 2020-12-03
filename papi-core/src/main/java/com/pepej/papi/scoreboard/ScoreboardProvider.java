@@ -1,6 +1,6 @@
 package com.pepej.papi.scoreboard;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * An object which provides {@link Scoreboard} instances.
@@ -12,7 +12,7 @@ public interface ScoreboardProvider {
      *
      * @return the scoreboard
      */
-    @Nonnull
+    @NonNull
     Scoreboard getScoreboard();
 
 }

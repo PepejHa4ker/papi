@@ -1,12 +1,12 @@
 package com.pepej.papi.scheduler.builder;
 
 
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.promise.Promise;
 import com.pepej.papi.promise.ThreadContext;
 import com.pepej.papi.scheduler.Task;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -15,23 +15,22 @@ import java.util.function.Supplier;
 class TaskBuilderImpl implements TaskBuilder {
     static final TaskBuilder INSTANCE = new TaskBuilderImpl();
 
-    private final TaskBuilder.ThreadContextual sync;
-    private final ThreadContextual async;
+    private final ThreadContextual sync, async;
 
     private TaskBuilderImpl() {
         this.sync = new ThreadContextualBuilder(ThreadContext.SYNC);
         this.async = new ThreadContextualBuilder(ThreadContext.ASYNC);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public TaskBuilder.ThreadContextual sync() {
+    public ThreadContextual sync() {
         return this.sync;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public TaskBuilder.ThreadContextual async() {
+    public ThreadContextual async() {
         return this.async;
     }
 
@@ -44,45 +43,45 @@ class TaskBuilderImpl implements TaskBuilder {
             this.instant = new ContextualPromiseBuilderImpl(context);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public ContextualPromiseBuilder now() {
             return this.instant;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public DelayedTick after(long ticks) {
             return new DelayedTickBuilder(this.context, ticks);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public DelayedTime after(long duration, @Nonnull TimeUnit unit) {
+        public DelayedTime after(long duration, @NonNull TimeUnit unit) {
             return new DelayedTimeBuilder(this.context, duration, unit);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public ContextualTaskBuilder afterAndEvery(long ticks) {
             return new ContextualTaskBuilderTickImpl(this.context, ticks, ticks);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public ContextualTaskBuilder afterAndEvery(long duration, @Nonnull TimeUnit unit) {
+        public ContextualTaskBuilder afterAndEvery(long duration, @NonNull TimeUnit unit) {
             return new ContextualTaskBuilderTimeImpl(this.context, duration, unit, duration, unit);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public ContextualTaskBuilder every(long ticks) {
             return new ContextualTaskBuilderTickImpl(this.context, 0, ticks);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public ContextualTaskBuilder every(long duration, @Nonnull TimeUnit unit) {
+        public ContextualTaskBuilder every(long duration, @NonNull TimeUnit unit) {
             return new ContextualTaskBuilderTimeImpl(this.context, 0, TimeUnit.NANOSECONDS, duration, unit);
         }
     }
@@ -96,25 +95,25 @@ class TaskBuilderImpl implements TaskBuilder {
             this.delay = delay;
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public <T> Promise<T> supply(@Nonnull Supplier<T> supplier) {
+        public <T> Promise<T> supply(@NonNull Supplier<T> supplier) {
             return Schedulers.get(this.context).supplyLater(supplier, this.delay);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public <T> Promise<T> call(@Nonnull Callable<T> callable) {
+        public <T> Promise<T> call(@NonNull Callable<T> callable) {
             return Schedulers.get(this.context).callLater(callable, this.delay);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public Promise<Void> run(@Nonnull Runnable runnable) {
+        public Promise<Void> run(@NonNull Runnable runnable) {
             return Schedulers.get(this.context).runLater(runnable, this.delay);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public ContextualTaskBuilder every(long ticks) {
             return new ContextualTaskBuilderTickImpl(this.context, this.delay, ticks);
@@ -132,25 +131,25 @@ class TaskBuilderImpl implements TaskBuilder {
             this.delayUnit = delayUnit;
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public <T> Promise<T> supply(@Nonnull Supplier<T> supplier) {
+        public <T> Promise<T> supply(@NonNull Supplier<T> supplier) {
             return Schedulers.get(this.context).supplyLater(supplier, this.delay, this.delayUnit);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public <T> Promise<T> call(@Nonnull Callable<T> callable) {
+        public <T> Promise<T> call(@NonNull Callable<T> callable) {
             return Schedulers.get(this.context).callLater(callable, this.delay, this.delayUnit);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public Promise<Void> run(@Nonnull Runnable runnable) {
+        public Promise<Void> run(@NonNull Runnable runnable) {
             return Schedulers.get(this.context).runLater(runnable, this.delay, this.delayUnit);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public ContextualTaskBuilder every(long duration, TimeUnit unit) {
             return new ContextualTaskBuilderTimeImpl(this.context, this.delay, this.delayUnit, duration, unit);
@@ -164,21 +163,21 @@ class TaskBuilderImpl implements TaskBuilder {
             this.context = context;
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public <T> Promise<T> supply(@Nonnull Supplier<T> supplier) {
+        public <T> Promise<T> supply(@NonNull Supplier<T> supplier) {
             return Schedulers.get(this.context).supply(supplier);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public <T> Promise<T> call(@Nonnull Callable<T> callable) {
+        public <T> Promise<T> call(@NonNull Callable<T> callable) {
             return Schedulers.get(this.context).call(callable);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public Promise<Void> run(@Nonnull Runnable runnable) {
+        public Promise<Void> run(@NonNull Runnable runnable) {
             return Schedulers.get(this.context).run(runnable);
         }
     }
@@ -194,15 +193,15 @@ class TaskBuilderImpl implements TaskBuilder {
             this.interval = interval;
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public Task consume(@Nonnull Consumer<Task> consumer) {
+        public Task consume(@NonNull Consumer<Task> consumer) {
             return Schedulers.get(this.context).runRepeating(consumer, this.delay, this.interval);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public Task run(@Nonnull Runnable runnable) {
+        public Task run(@NonNull Runnable runnable) {
             return Schedulers.get(this.context).runRepeating(runnable, this.delay, this.interval);
         }
     }
@@ -222,15 +221,15 @@ class TaskBuilderImpl implements TaskBuilder {
             this.intervalUnit = intervalUnit;
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public Task consume(@Nonnull Consumer<Task> consumer) {
+        public Task consume(@NonNull Consumer<Task> consumer) {
             return Schedulers.get(this.context).runRepeating(consumer, this.delay, this.delayUnit, this.interval, this.intervalUnit);
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public Task run(@Nonnull Runnable runnable) {
+        public Task run(@NonNull Runnable runnable) {
             return Schedulers.get(this.context).runRepeating(runnable, this.delay, this.delayUnit, this.interval, this.intervalUnit);
         }
     }

@@ -1,5 +1,4 @@
 package com.pepej.papi.utils.entityspawner;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 

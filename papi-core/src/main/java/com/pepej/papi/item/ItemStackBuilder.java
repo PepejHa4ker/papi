@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +100,7 @@ public final class ItemStackBuilder {
     }
 
     public ItemStackBuilder clearLore() {
-        return transformMeta(meta -> meta.setLore(new ArrayList<>()));
+        return transformMeta(meta -> meta.getLore().clear());
     }
 
     public ItemStackBuilder durability(int durability) {

@@ -1,9 +1,9 @@
 package com.pepej.papi.gson;
 
 import com.google.gson.JsonElement;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -25,8 +25,8 @@ public interface GsonSerializable {
      * @return the deserialized object
      * @throws IllegalStateException if the clazz does not have a deserialization method
      */
-    @Nonnull
-    static <T extends GsonSerializable> T deserialize(@Nonnull Class<T> clazz, @Nonnull JsonElement element) {
+    @NonNull
+    static <T extends GsonSerializable> T deserialize(@NonNull Class<T> clazz, @NonNull JsonElement element) {
         Method deserializeMethod = getDeserializeMethod(clazz);
         if (deserializeMethod == null) {
             throw new IllegalStateException("Class does not have a deserialize method accessible.");
@@ -48,8 +48,8 @@ public interface GsonSerializable {
      * @return the deserialized object
      * @throws IllegalStateException if the clazz does not have a deserialization method
      */
-    @Nonnull
-    static GsonSerializable deserializeRaw(@Nonnull Class<?> clazz, @Nonnull JsonElement element) {
+    @NonNull
+    static GsonSerializable deserializeRaw(@NonNull Class<?> clazz, @NonNull JsonElement element) {
         Class<? extends GsonSerializable> typeCastedClass = clazz.asSubclass(GsonSerializable.class);
         return deserialize(typeCastedClass, element);
     }
@@ -61,14 +61,13 @@ public interface GsonSerializable {
      * @return the deserialization method, if the class has one
      */
     @Nullable
-    static Method getDeserializeMethod(@Nonnull Class<?> clazz) {
+    static Method getDeserializeMethod(@NonNull Class<?> clazz) {
         if (!GsonSerializable.class.isAssignableFrom(clazz)) {
             return null;
         }
 
         Method deserializeMethod;
         try {
-            //noinspection JavaReflectionMemberAccess
             deserializeMethod = clazz.getDeclaredMethod("deserialize", JsonElement.class);
             deserializeMethod.setAccessible(true);
         } catch (Exception e) {
@@ -87,7 +86,7 @@ public interface GsonSerializable {
      *
      * @return a json form of this object
      */
-    @Nonnull
+    @NonNull
     JsonElement serialize();
 
 }

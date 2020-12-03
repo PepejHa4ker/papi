@@ -9,8 +9,8 @@ import com.pepej.papi.event.ProtocolSubscription;
 import com.pepej.papi.event.functional.ExpiryTestStage;
 import com.pepej.papi.event.functional.SubscriptionBuilder;
 import com.pepej.papi.utils.Delegates;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -29,8 +29,8 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
      * @param packets the packets to handle
      * @return a {@link ProtocolSubscriptionBuilder} to construct the event handler
      */
-    @Nonnull
-    static ProtocolSubscriptionBuilder newBuilder(@Nonnull PacketType... packets) {
+    @NonNull
+    static ProtocolSubscriptionBuilder newBuilder(@NonNull PacketType... packets) {
         return newBuilder(ListenerPriority.NORMAL, packets);
     }
 
@@ -41,8 +41,8 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
      * @param packets the packets to handle
      * @return a {@link ProtocolSubscriptionBuilder} to construct the event handler
      */
-    @Nonnull
-    static ProtocolSubscriptionBuilder newBuilder(@Nonnull ListenerPriority priority, @Nonnull PacketType... packets) {
+    @NonNull
+    static ProtocolSubscriptionBuilder newBuilder(@NonNull ListenerPriority priority, @NonNull PacketType... packets) {
         Objects.requireNonNull(priority, "priority");
         Objects.requireNonNull(packets, "packets");
         return new ProtocolSubscriptionBuilderImpl(ImmutableSet.copyOf(packets), priority);
@@ -50,31 +50,31 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
 
     // override return type - we return SingleSubscriptionBuilder, not SubscriptionBuilder
 
-    @Nonnull
+    @NonNull
     @Override
-    default ProtocolSubscriptionBuilder expireIf(@Nonnull Predicate<PacketEvent> predicate) {
+    default ProtocolSubscriptionBuilder expireIf(@NonNull Predicate<PacketEvent> predicate) {
         return expireIf(Delegates.predicateToBiPredicateSecond(predicate), ExpiryTestStage.PRE, ExpiryTestStage.POST_HANDLE);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    default ProtocolSubscriptionBuilder expireAfter(long duration, @Nonnull TimeUnit unit) {
+    default ProtocolSubscriptionBuilder expireAfter(long duration, @NonNull TimeUnit unit) {
         Objects.requireNonNull(unit, "unit");
         Preconditions.checkArgument(duration >= 1, "duration < 1");
         long expiry = Math.addExact(System.currentTimeMillis(), unit.toMillis(duration));
         return expireIf((handler, event) -> System.currentTimeMillis() > expiry, ExpiryTestStage.PRE);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     default ProtocolSubscriptionBuilder expireAfter(long maxCalls) {
         Preconditions.checkArgument(maxCalls >= 1, "maxCalls < 1");
         return expireIf((handler, event) -> handler.getCallCounter() >= maxCalls, ExpiryTestStage.PRE, ExpiryTestStage.POST_HANDLE);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    ProtocolSubscriptionBuilder filter(@Nonnull Predicate<PacketEvent> predicate);
+    ProtocolSubscriptionBuilder filter(@NonNull Predicate<PacketEvent> predicate);
 
     /**
      * Add a expiry predicate.
@@ -83,8 +83,8 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
      * @param testPoints when to test the expiry predicate
      * @return ths builder instance
      */
-    @Nonnull
-    ProtocolSubscriptionBuilder expireIf(@Nonnull BiPredicate<ProtocolSubscription, PacketEvent> predicate, @Nonnull ExpiryTestStage... testPoints);
+    @NonNull
+    ProtocolSubscriptionBuilder expireIf(@NonNull BiPredicate<ProtocolSubscription, PacketEvent> predicate, @NonNull ExpiryTestStage... testPoints);
 
     /**
      * Sets the exception consumer for the handler.
@@ -95,15 +95,15 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
      * @return the builder instance
      * @throws NullPointerException if the consumer is null
      */
-    @Nonnull
-    ProtocolSubscriptionBuilder exceptionConsumer(@Nonnull BiConsumer<? super PacketEvent, Throwable> consumer);
+    @NonNull
+    ProtocolSubscriptionBuilder exceptionConsumer(@NonNull BiConsumer<? super PacketEvent, Throwable> consumer);
 
     /**
      * Return the handler list builder to append handlers for the event.
      *
      * @return the handler list
      */
-    @Nonnull
+    @NonNull
     ProtocolHandlerList handlers();
 
     /**
@@ -113,8 +113,8 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
      * @return a registered {@link ProtocolSubscription} instance.
      * @throws NullPointerException if the handler is null
      */
-    @Nonnull
-    default ProtocolSubscription handler(@Nonnull Consumer<? super PacketEvent> handler) {
+    @NonNull
+    default ProtocolSubscription handler(@NonNull Consumer<? super PacketEvent> handler) {
         return handlers().consumer(handler).register();
     }
 
@@ -125,8 +125,8 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
      * @return a registered {@link ProtocolSubscription} instance.
      * @throws NullPointerException if the handler is null
      */
-    @Nonnull
-    default ProtocolSubscription biHandler(@Nonnull BiConsumer<ProtocolSubscription, ? super PacketEvent> handler) {
+    @NonNull
+    default ProtocolSubscription biHandler(@NonNull BiConsumer<ProtocolSubscription, ? super PacketEvent> handler) {
         return handlers().biConsumer(handler).register();
     }
 

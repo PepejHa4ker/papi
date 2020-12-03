@@ -1,8 +1,8 @@
 package com.pepej.papi.signprompt;
 
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public interface SignPromptFactory {
      * @param lines the lines to fill the sign with initially
      * @param responseHandler the response handler.
      */
-    void openPrompt(@Nonnull Player player, @Nonnull List<String> lines, @Nonnull ResponseHandler responseHandler);
+    void openPrompt(@NonNull Player player, @NonNull List<String> lines, @NonNull ResponseHandler responseHandler);
 
     /**
      * Functional interface for handling responses to an active sign prompt.
@@ -31,8 +31,8 @@ public interface SignPromptFactory {
          * @param lines the response content
          * @return the response
          */
-        @Nonnull
-        Response handleResponse(@Nonnull List<String> lines);
+        @NonNull
+        Response handleResponse(@NonNull List<String> lines);
 
     }
 

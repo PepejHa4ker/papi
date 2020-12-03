@@ -1,8 +1,8 @@
 package com.pepej.papi.network.modules;
 
-import com.pepej.papi.Commands;
+import com.pepej.papi.command.Commands;
 import com.pepej.papi.Papi;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.messaging.InstanceData;
 import com.pepej.papi.messaging.Messenger;
 import com.pepej.papi.messaging.conversation.ConversationChannel;
@@ -14,8 +14,8 @@ import com.pepej.papi.terminable.module.TerminableModule;
 import com.pepej.papi.utils.Players;
 import org.bukkit.command.CommandException;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +37,7 @@ public class DispatchModule implements TerminableModule {
     }
 
     @Override
-    public void setup(@Nonnull TerminableConsumer consumer) {
+    public void setup(@NonNull TerminableConsumer consumer) {
         ConversationChannel<DispatchMessage, DispatchReply> dispatchChannel = this.messenger.getConversationChannel("papi-dispatch", DispatchMessage.class, DispatchReply.class);
 
         // listen for dispatches targeting this server
@@ -69,7 +69,7 @@ public class DispatchModule implements TerminableModule {
         }).bindWith(consumer);
 
         Commands.create()
-                .assertPermission("helper.dispatch")
+                .assertPermission("papi.dispatch")
                 .assertUsage("<target> <command>")
                 .handler(c -> {
                     String target = c.arg(0).parseOrFail(String.class).toLowerCase();
@@ -86,9 +86,9 @@ public class DispatchModule implements TerminableModule {
                     dispatch.senderLocation = this.instanceData.getId();
 
                     dispatchChannel.sendMessage(dispatch, new ConversationReplyListener<DispatchReply>() {
-                        @Nonnull
+                        @NonNull
                         @Override
-                        public RegistrationAction onReply(@Nonnull DispatchReply reply) {
+                        public RegistrationAction onReply(@NonNull DispatchReply reply) {
                             if (reply.success) {
                                 Players.msg(c.sender(), "&7[&anetwork&7] Dispatched command '&f" + command + "&7' was &asuccessfully executed&7 on &2" + reply.server + "&7.");
                             } else {
@@ -98,7 +98,7 @@ public class DispatchModule implements TerminableModule {
                         }
 
                         @Override
-                        public void onTimeout(@Nonnull List<DispatchReply> replies) {
+                        public void onTimeout(@NonNull List<DispatchReply> replies) {
                             if (replies.isEmpty()) {
                                 Players.msg(c.sender(), "&7[&anetwork&7] Dispatched command '&f" + command + "&7' was not acknowledged by any servers.");
                             }
@@ -119,7 +119,7 @@ public class DispatchModule implements TerminableModule {
         private String senderName;
         private String senderLocation;
 
-        @Nonnull
+        @NonNull
         @Override
         public UUID getConversationId() {
             return this.convoId;
@@ -131,7 +131,7 @@ public class DispatchModule implements TerminableModule {
         private String server;
         private boolean success;
 
-        @Nonnull
+        @NonNull
         @Override
         public UUID getConversationId() {
             return this.convoId;

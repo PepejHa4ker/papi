@@ -4,9 +4,9 @@ package com.pepej.papi.npc;
 import com.pepej.papi.metadata.MetadataMap;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 /**
@@ -26,7 +26,7 @@ public interface Npc {
      *
      * @return the metadata map
      */
-    @Nonnull
+    @NonNull
     MetadataMap getMeta();
 
     /**
@@ -36,7 +36,7 @@ public interface Npc {
      * @deprecated in favour of {@link #setSkin(String, String)}
      */
     @Deprecated
-    void setSkin(@Nonnull String skinPlayer);
+    void setSkin(@NonNull String skinPlayer);
 
     /**
      * Sets the NPCs skin to the given textures
@@ -44,14 +44,14 @@ public interface Npc {
      * @param textures the textures
      * @param signature the signature of the textures
      */
-    void setSkin(@Nonnull String textures, @Nonnull String signature);
+    void setSkin(@NonNull String textures, @NonNull String signature);
 
     /**
      * Sets the name of this NPC
      *
      * @param name the name
      */
-    void setName(@Nonnull String name);
+    void setName(@NonNull String name);
 
     /**
      * Sets if this NPCs nametag should be shown
@@ -65,7 +65,7 @@ public interface Npc {
      *
      * @return the initial spawn location of the NPC
      */
-    @Nonnull
+    @NonNull
     Location getInitialSpawn();
 
 }

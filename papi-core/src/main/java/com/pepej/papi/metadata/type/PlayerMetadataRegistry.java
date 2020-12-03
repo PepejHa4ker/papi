@@ -4,8 +4,8 @@ import com.pepej.papi.metadata.MetadataKey;
 import com.pepej.papi.metadata.MetadataMap;
 import com.pepej.papi.metadata.MetadataRegistry;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,8 +21,8 @@ public interface PlayerMetadataRegistry extends MetadataRegistry<UUID> {
      * @param player the player
      * @return a metadata map
      */
-    @Nonnull
-    MetadataMap provide(@Nonnull Player player);
+    @NonNull
+    MetadataMap provide(@NonNull Player player);
 
     /**
      * Gets a {@link MetadataMap} for the given player, if one already exists and has
@@ -31,8 +31,8 @@ public interface PlayerMetadataRegistry extends MetadataRegistry<UUID> {
      * @param player the player
      * @return a metadata map, if present
      */
-    @Nonnull
-    Optional<MetadataMap> get(@Nonnull Player player);
+    @NonNull
+    Optional<MetadataMap> get(@NonNull Player player);
 
     /**
      * Gets a map of the players with a given metadata key
@@ -41,7 +41,7 @@ public interface PlayerMetadataRegistry extends MetadataRegistry<UUID> {
      * @param <K> the key type
      * @return an immutable map of players to key value
      */
-    @Nonnull
-    <K> Map<Player, K> getAllWithKey(@Nonnull MetadataKey<K> key);
+    @NonNull
+    <K> Map<Player, K> getAllWithKey(@NonNull MetadataKey<K> key);
 
 }

@@ -2,9 +2,9 @@ package com.pepej.papi.terminable.composite;
 
 import com.pepej.papi.terminable.Terminable;
 import com.pepej.papi.terminable.TerminableConsumer;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Represents a {@link Terminable} made up of several other {@link Terminable}s.
@@ -21,7 +21,7 @@ public interface CompositeTerminable extends Terminable, TerminableConsumer {
      *
      * @return a new {@link CompositeTerminable}
      */
-    @Nonnull
+    @NonNull
     static CompositeTerminable create() {
         return new AbstractCompositeTerminable();
     }
@@ -32,7 +32,7 @@ public interface CompositeTerminable extends Terminable, TerminableConsumer {
      *
      * @return a new {@link CompositeTerminable}
      */
-    @Nonnull
+    @NonNull
     static CompositeTerminable createWeak() {
         return new AbstractWeakCompositeTerminable();
     }
@@ -125,9 +125,9 @@ public interface CompositeTerminable extends Terminable, TerminableConsumer {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    default <T extends AutoCloseable> T bind(@Nonnull T terminable) {
+    default <T extends AutoCloseable> T bind(@NonNull T terminable) {
         with(terminable);
         return terminable;
     }

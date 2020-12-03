@@ -1,6 +1,0 @@
-name: papi-kotlin
-author: pepej
-version: 1.0
-main: com.pepej.papi.kotlin.PapiKotlinPlugin
-depend:
-  - papi

@@ -2,8 +2,9 @@ package com.pepej.papi.metadata;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -14,12 +15,12 @@ final class MetadataMapImpl implements MetadataMap {
     private final ReentrantLock lock = new ReentrantLock();
 
     @Override
-    public <T> void put(@Nonnull MetadataKey<T> key, @Nonnull T value) {
+    public <T> void put(@NonNull MetadataKey<T> key, @NonNull T value) {
         internalPut(key, value);
     }
 
     @Override
-    public <T> void put(@Nonnull MetadataKey<T> key, @Nonnull TransientValue<T> value) {
+    public <T> void put(@NonNull MetadataKey<T> key, @NonNull TransientValue<T> value) {
         internalPut(key, value);
     }
 
@@ -49,12 +50,12 @@ final class MetadataMapImpl implements MetadataMap {
     }
 
     @Override
-    public <T> void forcePut(@Nonnull MetadataKey<T> key, @Nonnull T value) {
+    public <T> void forcePut(@NonNull MetadataKey<T> key, @NonNull T value) {
         internalForcePut(key, value);
     }
 
     @Override
-    public <T> void forcePut(@Nonnull MetadataKey<T> key, @Nonnull TransientValue<T> value) {
+    public <T> void forcePut(@NonNull MetadataKey<T> key, @NonNull TransientValue<T> value) {
         internalForcePut(key, value);
     }
 
@@ -71,12 +72,12 @@ final class MetadataMapImpl implements MetadataMap {
     }
 
     @Override
-    public <T> boolean putIfAbsent(@Nonnull MetadataKey<T> key, @Nonnull T value) {
+    public <T> boolean putIfAbsent(@NonNull MetadataKey<T> key, @NonNull T value) {
         return internalPutIfAbsent(key, value);
     }
 
     @Override
-    public <T> boolean putIfAbsent(@Nonnull MetadataKey<T> key, @Nonnull TransientValue<T> value) {
+    public <T> boolean putIfAbsent(@NonNull MetadataKey<T> key, @NonNull TransientValue<T> value) {
         return internalPutIfAbsent(key, value);
     }
 
@@ -93,9 +94,9 @@ final class MetadataMapImpl implements MetadataMap {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T> Optional<T> get(@Nonnull MetadataKey<T> key) {
+    public <T> Optional<T> get(@NonNull MetadataKey<T> key) {
         Objects.requireNonNull(key, "key");
 
         this.lock.lock();
@@ -146,9 +147,9 @@ final class MetadataMapImpl implements MetadataMap {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T> boolean ifPresent(@Nonnull MetadataKey<T> key, @Nonnull Consumer<? super T> action) {
+    public <T> boolean ifPresent(@NonNull MetadataKey<T> key, @NonNull Consumer<? super T> action) {
         Objects.requireNonNull(key, "key");
         Objects.requireNonNull(action, "action");
         Optional<T> opt = get(key);
@@ -160,22 +161,23 @@ final class MetadataMapImpl implements MetadataMap {
         return true;
     }
 
+    @Nullable
     @Override
-    public <T> T getOrNull(@Nonnull MetadataKey<T> key) {
+    public <T> T getOrNull(@NonNull MetadataKey<T> key) {
         Objects.requireNonNull(key, "key");
         return get(key).orElse(null);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T> T getOrDefault(@Nonnull MetadataKey<T> key, T def) {
+    public <T> T getOrDefault(@NonNull MetadataKey<T> key, T def) {
         Objects.requireNonNull(key, "key");
         return get(key).orElse(def);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T> T getOrPut(@Nonnull MetadataKey<T> key, @Nonnull Supplier<? extends T> def) {
+    public <T> T getOrPut(@NonNull MetadataKey<T> key, @NonNull Supplier<? extends T> def) {
         Objects.requireNonNull(key, "key");
         Objects.requireNonNull(def, "def");
 
@@ -231,9 +233,9 @@ final class MetadataMapImpl implements MetadataMap {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T> T getOrPutExpiring(@Nonnull MetadataKey<T> key, @Nonnull Supplier<? extends TransientValue<T>> def) {
+    public <T> T getOrPutExpiring(@NonNull MetadataKey<T> key, @NonNull Supplier<? extends TransientValue<T>> def) {
         Objects.requireNonNull(key, "key");
         Objects.requireNonNull(def, "def");
 
@@ -295,7 +297,7 @@ final class MetadataMapImpl implements MetadataMap {
     }
 
     @Override
-    public boolean has(@Nonnull MetadataKey<?> key) {
+    public boolean has(@NonNull MetadataKey<?> key) {
         Objects.requireNonNull(key, "key");
 
         this.lock.lock();
@@ -329,7 +331,7 @@ final class MetadataMapImpl implements MetadataMap {
     }
 
     @Override
-    public boolean remove(@Nonnull MetadataKey<?> key) {
+    public boolean remove(@NonNull MetadataKey<?> key) {
         Objects.requireNonNull(key, "key");
 
         this.lock.lock();
@@ -350,7 +352,7 @@ final class MetadataMapImpl implements MetadataMap {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public ImmutableMap<MetadataKey<?>, Object> asMap() {
         this.lock.lock();

@@ -1,19 +1,18 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("com.google.code.findbugs:jsr305:3.0.0")
-    compile project(":papi-core")
+    compileOnly project(":papi-core")
+    annotationProcessor project(":papi-core")
     compile 'io.github.classgraph:classgraph:4.6.9'
 }
 
 shadowJar {
-    archiveName = "Papi-Js-1.1.jar"
-}
+    destinationDir = file("C:\\Users\\pepej\\Desktop\\locahost\\plugins")
 
-artifacts {
-    archives shadowJar
+    archiveName = "Papi-Js-1.1.jar"
 }

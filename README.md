@@ -3,8 +3,6 @@ A collection of utilities and extended APIs to support the rapid and easy develo
 ### Modules
 ##### [`papi-core`](https://github.com/PepejHa4ker/papi/tree/master/papi-core): The main papi module
 ##### [`papi-js`](https://github.com/PepejHa4ker/papi/tree/master/papi-js): The javascript papi module
-##### [`papi-kotlin`](https://github.com/PepejHa4ker/papi/tree/master/papi-kotlin): The kotlin papi module 
-##### [`papi-groovy`](https://github.com/PepejHa4ker/papi/tree/master/papi-groovy): The groovy papi module (Not implemented yet)
 
 ## Events:
 ```

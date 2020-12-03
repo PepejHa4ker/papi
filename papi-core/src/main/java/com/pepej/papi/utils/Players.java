@@ -4,12 +4,16 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.pepej.papi.Papi;
 import com.pepej.papi.text.Text;
+import net.kyori.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
@@ -29,7 +33,7 @@ public final class Players {
      * @return a player, or null
      */
     @Nullable
-    public static Player getNullable(UUID uuid) {
+    public static Player getNullable(@NonNull final UUID uuid) {
         return Papi.server().getPlayer(uuid);
     }
 
@@ -39,7 +43,7 @@ public final class Players {
      * @param uuid the uuid
      * @return an optional player
      */
-    public static Optional<Player> get(UUID uuid) {
+    public static Optional<Player> get(@NonNull final UUID uuid) {
         return Optional.ofNullable(getNullable(uuid));
     }
 
@@ -50,7 +54,7 @@ public final class Players {
      * @return the player, or null
      */
     @Nullable
-    public static Player getNullable(String username) {
+    public static Player getNullable(@NonNull final String username) {
         //noinspection deprecation
         return Papi.server().getPlayerExact(username);
     }
@@ -61,7 +65,7 @@ public final class Players {
      * @param username the players username
      * @return an optional player
      */
-    public static Optional<Player> get(String username) {
+    public static Optional<Player> get(@NonNull final String username) {
         return Optional.ofNullable(getNullable(username));
     }
 
@@ -89,7 +93,7 @@ public final class Players {
      *
      * @param consumer the action to apply
      */
-    public static void forEach(Consumer<Player> consumer) {
+    public static void forEach(@NonNull final Consumer<Player> consumer) {
         all().forEach(consumer);
     }
 
@@ -99,7 +103,7 @@ public final class Players {
      * @param objects the objects to iterate
      * @param consumer the action to apply
      */
-    public static void forEachIfPlayer(Iterable<Object> objects, Consumer<Player> consumer) {
+    public static void forEachIfPlayer(@NonNull final Iterable<Object> objects, Consumer<Player> consumer) {
         for (Object o : objects) {
             if (o instanceof Player) {
                 consumer.accept(((Player) o));
@@ -114,7 +118,7 @@ public final class Players {
      * @param radius the radius
      * @return a stream of players
      */
-    public static Stream<Player> streamInRange(Location center, double radius) {
+    public static Stream<Player> streamInRange(@NonNull final Location center, final double radius) {
         return center.getWorld().getNearbyEntities(center, radius, radius, radius).stream()
                      .filter(e -> e instanceof Player)
                      .map(e -> ((Player) e));
@@ -127,7 +131,7 @@ public final class Players {
      * @param radius the radius
      * @param consumer the action to apply
      */
-    public static void forEachInRange(Location center, double radius, Consumer<Player> consumer) {
+    public static void forEachInRange(@NonNull final Location center, final double radius, @NonNull final Consumer<Player> consumer) {
         streamInRange(center, radius).forEach(consumer);
     }
 
@@ -137,28 +141,42 @@ public final class Players {
      * @param sender the sender
      * @param messages the messages to send
      */
-    public static void msg(CommandSender sender, String... messages) {
-        for (String s : messages) {
-            sender.sendMessage(Text.colorize(s));
+
+    public static void msg(@NonNull final CommandSender sender, @NonNull final MessageType type, @NonNull final String... messages) {
+        for (String message : messages) {
+            sender.sendMessage(Text.colorize(type.getPrefix() + message));
         }
     }
 
+    public static void msg(@NonNull final CommandSender sender, @NonNull final TextComponent component) {
+        msg(sender, MessageType.INFO, component);
+    }
+
+    public static void msg(@NonNull final CommandSender sender, @NonNull final MessageType type, @NonNull final TextComponent component) {
+        TextComponent textComponent = new TextComponent(Text.colorize(type.getPrefix()));
+        textComponent.addExtra(component);
+        sender.spigot().sendMessage(textComponent);
+    }
+    public static void msg(@NonNull final CommandSender sender, @NonNull final String... messages) {
+        msg(sender, MessageType.INFO, messages);
+    }
+
     @Nullable
-    public static OfflinePlayer getOfflineNullable(UUID uuid) {
+    public static OfflinePlayer getOfflineNullable(@NonNull final UUID uuid) {
         return Papi.server().getOfflinePlayer(uuid);
     }
 
-    public static Optional<OfflinePlayer> getOffline(UUID uuid) {
+    public static Optional<OfflinePlayer> getOffline(@NonNull final UUID uuid) {
         return Optional.ofNullable(getOfflineNullable(uuid));
     }
 
     @Nullable
-    public static OfflinePlayer getOfflineNullable(String username) {
+    public static OfflinePlayer getOfflineNullable(@NonNull final String username) {
         //noinspection deprecation
         return Papi.server().getOfflinePlayer(username);
     }
 
-    public static Optional<OfflinePlayer> getOffline(String username) {
+    public static Optional<OfflinePlayer> getOffline(@NonNull final String username) {
         return Optional.ofNullable(getOfflineNullable(username));
     }
 
@@ -170,108 +188,127 @@ public final class Players {
         return Arrays.stream(Bukkit.getOfflinePlayers());
     }
 
-    public static void forEachOffline(Consumer<OfflinePlayer> consumer) {
+    public static void forEachOffline(@NonNull final Consumer<OfflinePlayer> consumer) {
         for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
             consumer.accept(player);
         }
     }
 
-    public static void playSound(Player player, Sound sound) {
+    public static void playSound(@NonNull final Player player, @NonNull final Sound sound) {
         player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
     }
 
-    public static void playSound(Player player, Location location, Sound sound) {
+    public static void playSound(@NonNull final Player player, @NonNull final Location location, @NonNull final Sound sound) {
         player.playSound(location, sound, 1.0f, 1.0f);
     }
 
-    public static void playSound(Location location, Sound sound) {
+    public static void playSound(@NonNull final Location location, @NonNull final Sound sound) {
         location.getWorld().playSound(location, sound, 1.0f, 1.0f);
     }
 
     @SuppressWarnings("deprecation")
-    public static void sendBlockChange(Player player, Location loc, Material type, int data) {
+    public static void sendBlockChange(@NonNull final Player player, @NonNull final Location loc, @NonNull final Material type, final int data) {
         player.sendBlockChange(loc, type, (byte) data);
     }
 
-    public static void sendBlockChange(Player player, Block block, Material type, int data) {
+    public static void sendBlockChange(@NonNull final Player player, @NonNull final Block block, @NonNull final Material type, final int data) {
         sendBlockChange(player, block.getLocation(), type, data);
     }
 
-    public static void sendBlockChange(Player player, Location loc, Material type) {
+    public static void sendBlockChange(@NonNull final Player player, @NonNull final Location loc, @NonNull final Material type) {
         sendBlockChange(player, loc, type, 0);
     }
 
-    public static void sendBlockChange(Player player, Block block, Material type) {
+    public static void sendBlockChange(@NonNull final Player player, @NonNull final Block block, @NonNull final Material type) {
         sendBlockChange(player, block, type, 0);
     }
 
-    public static void spawnParticle(Player player, Location location, Particle particle) {
+    public static void spawnParticle(@NonNull final Player player, @NonNull final Location location, @NonNull final Particle particle) {
         player.spawnParticle(particle, location, 1);
     }
 
-    public static void spawnParticle(Location location, Particle particle) {
+    public static void spawnParticle(@NonNull final Location location, @NonNull final Particle particle) {
         location.getWorld().spawnParticle(particle, location, 1);
     }
 
-    public static void spawnParticle(Player player, Location location, Particle particle, int amount) {
+    public static void spawnParticle(@NonNull final Player player, @NonNull final Location location, @NonNull final Particle particle, final int amount) {
         Preconditions.checkArgument(amount > 0, "amount > 0");
         player.spawnParticle(particle, location, amount);
     }
 
-    public static void spawnParticle(Location location, Particle particle, int amount) {
+    public static void spawnParticle(@NonNull final Location location, @NonNull final Particle particle, final int amount) {
         Preconditions.checkArgument(amount > 0, "amount > 0");
         location.getWorld().spawnParticle(particle, location, amount);
     }
 
-    public static void spawnParticleOffset(Player player, Location location, Particle particle, double offset) {
+    public static void spawnParticleOffset(@NonNull final Player player, @NonNull final Location location, @NonNull final Particle particle, final double offset) {
         player.spawnParticle(particle, location, 1, offset, offset, offset);
     }
 
-    public static void spawnParticleOffset(Location location, Particle particle, double offset) {
+    public static void spawnParticleOffset(Location location, Particle particle, final double offset) {
         location.getWorld().spawnParticle(particle, location, 1, offset, offset, offset);
     }
 
-    public static void spawnParticleOffset(Player player, Location location, Particle particle, int amount, double offset) {
+    public static void spawnParticleOffset(@NonNull final Player player, @NonNull final Location location, @NonNull final Particle particle, final int amount, final double offset) {
         Preconditions.checkArgument(amount > 0, "amount > 0");
         player.spawnParticle(particle, location, amount, offset, offset, offset);
     }
 
-    public static void spawnParticleOffset(Location location, Particle particle, int amount, double offset) {
+    public static void spawnParticleOffset(@NonNull final Location location, @NonNull final Particle particle, final int amount, final double offset) {
         Preconditions.checkArgument(amount > 0, "amount > 0");
         location.getWorld().spawnParticle(particle, location, amount, offset, offset, offset);
     }
 
-    public static void spawnEffect(Player player, Location location, Effect effect) {
+    public static void spawnEffect(@NonNull final Player player, @NonNull final Location location, @NonNull final Effect effect) {
         player.playEffect(location, effect, null);
     }
 
-    public static void spawnEffect(Location location, Effect effect) {
+    public static void spawnEffect(@NonNull final Location location, @NonNull final Effect effect) {
         location.getWorld().playEffect(location, effect, null);
     }
 
-    public static void spawnEffect(Player player, Location location, Effect effect, int amount) {
+    public static void spawnEffect(@NonNull final Player player, @NonNull final Location location, @NonNull final Effect effect, final int amount) {
         Preconditions.checkArgument(amount > 0, "amount > 0");
         for (int i = 0; i < amount; i++) {
             player.playEffect(location, effect, null);
         }
     }
 
-    public static void spawnEffect(Location location, Effect effect, int amount) {
+    public static void spawnEffect(@NonNull final Location location, @NonNull final Effect effect, final int amount) {
         Preconditions.checkArgument(amount > 0, "amount > 0");
         for (int i = 0; i < amount; i++) {
             location.getWorld().playEffect(location, effect, null);
         }
     }
 
-    public static void resetWalkSpeed(Player player) {
+    public static void resetWalkSpeed(@NonNull final Player player) {
         player.setWalkSpeed(0.2f);
     }
 
-    public static void resetFlySpeed(Player player) {
+    public static void resetFlySpeed(@NonNull final Player player) {
         player.setFlySpeed(0.1f);
     }
 
     private Players() {
         throw new UnsupportedOperationException("This class cannot be instantiated");
+    }
+
+    public enum MessageType {
+        ANNOUNCEMENT("&b∗&a "),
+        INFO("&7&m&l-->&7 "),
+        WARNING("&e&l!&6 "),
+        ERROR("&c&l✕&6 ");
+
+        @NonNull
+        private final String prefix;
+
+        MessageType(@NonNull final String prefix) {
+            this.prefix = prefix;
+        }
+
+        @NonNull
+        public String getPrefix() {
+            return prefix;
+        }
     }
 }

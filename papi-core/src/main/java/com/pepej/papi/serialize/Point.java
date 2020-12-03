@@ -6,9 +6,9 @@ import com.pepej.papi.Papi;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
 import org.bukkit.Location;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -72,7 +72,7 @@ public final class Point implements GsonSerializable {
         return this.position.subtract(x, y, z).withDirection(this.direction);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonObject serialize() {
         return JsonBuilder.object()

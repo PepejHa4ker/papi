@@ -1,6 +1,7 @@
 package com.pepej.papi.cooldown;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.OptionalLong;
@@ -21,8 +22,8 @@ public interface ComposedCooldownMap<I, O> {
      * @param base the cooldown to base off
      * @return a new collection
      */
-    @Nonnull
-    static <I, O> ComposedCooldownMap<I, O> create(@Nonnull Cooldown base, @Nonnull Function<I, O> composeFunction) {
+    @NonNull
+    static <I, O> ComposedCooldownMap<I, O> create(@NonNull Cooldown base, @NonNull Function<I, O> composeFunction) {
         Objects.requireNonNull(base, "base");
         Objects.requireNonNull(composeFunction, "composeFunction");
         return new ComposedCooldownMapImpl<>(base, composeFunction);
@@ -33,7 +34,7 @@ public interface ComposedCooldownMap<I, O> {
      *
      * @return the base cooldown
      */
-    @Nonnull
+    @NonNull
     Cooldown getBase();
 
     /**
@@ -45,51 +46,51 @@ public interface ComposedCooldownMap<I, O> {
      * @param key the key
      * @return a cooldown instance
      */
-    @Nonnull
-    Cooldown get(@Nonnull I key);
+    @NonNull
+    Cooldown get(@NonNull I key);
 
-    void put(@Nonnull O key, @Nonnull Cooldown cooldown);
+    void put(@NonNull O key, @NonNull Cooldown cooldown);
 
     /**
      * Gets the cooldowns contained within this collection.
      *
      * @return the backing map
      */
-    @Nonnull
+    @NonNull
     Map<O, Cooldown> getAll();
 
     /* methods from Cooldown */
 
-    default boolean test(@Nonnull I key) {
+    default boolean test(@NonNull I key) {
         return get(key).test();
     }
 
-    default boolean testSilently(@Nonnull I key) {
+    default boolean testSilently(@NonNull I key) {
         return get(key).testSilently();
     }
 
-    default long elapsed(@Nonnull I key) {
+    default long elapsed(@NonNull I key) {
         return get(key).elapsed();
     }
 
-    default void reset(@Nonnull I key) {
+    default void reset(@NonNull I key) {
         get(key).reset();
     }
 
-    default long remainingMillis(@Nonnull I key) {
+    default long remainingMillis(@NonNull I key) {
         return get(key).remainingMillis();
     }
 
-    default long remainingTime(@Nonnull I key, @Nonnull TimeUnit unit) {
+    default long remainingTime(@NonNull I key, @NonNull TimeUnit unit) {
         return get(key).remainingTime(unit);
     }
 
-    @Nonnull
-    default OptionalLong getLastTested(@Nonnull I key) {
+    @NonNull
+    default OptionalLong getLastTested(@NonNull I key) {
         return get(key).getLastTested();
     }
 
-    default void setLastTested(@Nonnull I key, long time) {
+    default void setLastTested(@NonNull I key, long time) {
         get(key).setLastTested(time);
     }
 

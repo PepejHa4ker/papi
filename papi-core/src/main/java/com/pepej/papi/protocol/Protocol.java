@@ -7,8 +7,8 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketContainer;
 import com.pepej.papi.event.functional.protocol.ProtocolSubscriptionBuilder;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -22,8 +22,8 @@ public final class Protocol {
      * @param packets the packets to handle
      * @return a {@link ProtocolSubscriptionBuilder} to construct the event handler
      */
-    @Nonnull
-    public static ProtocolSubscriptionBuilder subscribe(@Nonnull PacketType... packets) {
+    @NonNull
+    public static ProtocolSubscriptionBuilder subscribe(@NonNull PacketType... packets) {
         return ProtocolSubscriptionBuilder.newBuilder(packets);
     }
 
@@ -34,8 +34,8 @@ public final class Protocol {
      * @param packets the packets to handle
      * @return a {@link ProtocolSubscriptionBuilder} to construct the event handler
      */
-    @Nonnull
-    public static ProtocolSubscriptionBuilder subscribe(@Nonnull ListenerPriority priority, @Nonnull PacketType... packets) {
+    @NonNull
+    public static ProtocolSubscriptionBuilder subscribe(@NonNull ListenerPriority priority, @NonNull PacketType... packets) {
         return ProtocolSubscriptionBuilder.newBuilder(priority, packets);
     }
 
@@ -44,7 +44,7 @@ public final class Protocol {
      *
      * @return the protocol manager.
      */
-    @Nonnull
+    @NonNull
     public static ProtocolManager manager() {
         return ProtocolLibrary.getProtocolManager();
     }
@@ -55,7 +55,7 @@ public final class Protocol {
      * @param player the player
      * @param packet the packet
      */
-    public static void sendPacket(@Nonnull Player player, @Nonnull PacketContainer packet) {
+    public static void sendPacket(@NonNull Player player, @NonNull PacketContainer packet) {
         try {
             manager().sendServerPacket(player, packet);
         } catch (InvocationTargetException e) {
@@ -68,7 +68,7 @@ public final class Protocol {
      *
      * @param packet the packet
      */
-    public static void broadcastPacket(@Nonnull PacketContainer packet) {
+    public static void broadcastPacket(@NonNull PacketContainer packet) {
         manager().broadcastServerPacket(packet);
     }
 
@@ -78,7 +78,7 @@ public final class Protocol {
      * @param players the players
      * @param packet the packet
      */
-    public static void broadcastPacket(@Nonnull Iterable<Player> players, @Nonnull PacketContainer packet) {
+    public static void broadcastPacket(@NonNull Iterable<Player> players, @NonNull PacketContainer packet) {
         for (Player player : players) {
             sendPacket(player, packet);
         }

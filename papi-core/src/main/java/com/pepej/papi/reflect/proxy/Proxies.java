@@ -2,8 +2,8 @@ package com.pepej.papi.reflect.proxy;
 
 
 import com.google.common.collect.Lists;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.List;
@@ -24,8 +24,8 @@ public final class Proxies {
      * @return a proxy instance
      * @throws IllegalArgumentException if {@code interfaces} contains a class that is not an interface
      */
-    @Nonnull
-    public static <T> T create(@Nonnull Class<T> interfaceType, @Nonnull InvocationHandler handler) {
+    @NonNull
+    public static <T> T create(@NonNull Class<T> interfaceType, @NonNull InvocationHandler handler) {
         return create(interfaceType.getClassLoader(), interfaceType, handler);
     }
 
@@ -39,8 +39,8 @@ public final class Proxies {
      * @return a proxy instance
      * @throws IllegalArgumentException if {@code interfaces} contains a class that is not an interface
      */
-    @Nonnull
-    public static <T> T create(@Nonnull ClassLoader loader, @Nonnull Class<T> interfaceType, @Nonnull InvocationHandler handler) {
+    @NonNull
+    public static <T> T create(@NonNull ClassLoader loader, @NonNull Class<T> interfaceType, @NonNull InvocationHandler handler) {
         return interfaceType.cast(create(loader, new Class<?>[]{interfaceType}, handler));
     }
 
@@ -55,8 +55,8 @@ public final class Proxies {
      * @return a proxy instance
      * @throws IllegalArgumentException if {@code interfaces} contains a class that is not an interface
      */
-    @Nonnull
-    public static <T> T create(@Nonnull ClassLoader loader, @Nonnull Class<T> interfaceType, @Nonnull List<Class<?>> interfaces, @Nonnull InvocationHandler handler) {
+    @NonNull
+    public static <T> T create(@NonNull ClassLoader loader, @NonNull Class<T> interfaceType, @NonNull List<Class<?>> interfaces, @NonNull InvocationHandler handler) {
         return create(loader, interfaceType, interfaces.toArray(new Class<?>[interfaces.size()]), handler);
     }
 
@@ -71,8 +71,8 @@ public final class Proxies {
      * @return a proxy instance
      * @throws IllegalArgumentException if {@code interfaces} contains a class that is not an interface
      */
-    @Nonnull
-    public static <T> T create(@Nonnull ClassLoader loader, @Nonnull Class<T> interfaceType, @Nonnull Class<?>[] interfaces, @Nonnull InvocationHandler handler) {
+    @NonNull
+    public static <T> T create(@NonNull ClassLoader loader, @NonNull Class<T> interfaceType, @NonNull Class<?>[] interfaces, @NonNull InvocationHandler handler) {
         return interfaceType.cast(create(loader, Lists.asList(interfaceType, interfaces), handler));
     }
 
@@ -85,8 +85,8 @@ public final class Proxies {
      * @return a proxy instance
      * @throws IllegalArgumentException if {@code interfaces} contains a class that is not an interface
      */
-    @Nonnull
-    public static Object create(@Nonnull ClassLoader loader, @Nonnull List<Class<?>> interfaces, @Nonnull InvocationHandler handler) {
+    @NonNull
+    public static Object create(@NonNull ClassLoader loader, @NonNull List<Class<?>> interfaces, @NonNull InvocationHandler handler) {
         return create(loader, interfaces.toArray(new Class<?>[interfaces.size()]), handler);
     }
 
@@ -100,8 +100,8 @@ public final class Proxies {
      * @throws IllegalArgumentException if {@code interfaces} contains a class that is not an interface
      * @see Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)
      */
-    @Nonnull
-    public static Object create(@Nonnull ClassLoader loader, @Nonnull Class<?>[] interfaces, @Nonnull InvocationHandler handler) {
+    @NonNull
+    public static Object create(@NonNull ClassLoader loader, @NonNull Class<?>[] interfaces, @NonNull InvocationHandler handler) {
         return Proxy.newProxyInstance(loader, interfaces, handler);
     }
 

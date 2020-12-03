@@ -1,8 +1,8 @@
 package com.pepej.papi.metadata;
 
 
-import com.pepej.papi.Events;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.events.Events;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.metadata.type.BlockMetadataRegistry;
 import com.pepej.papi.metadata.type.EntityMetadataRegistry;
 import com.pepej.papi.metadata.type.PlayerMetadataRegistry;
@@ -14,8 +14,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -103,8 +103,8 @@ public final class Metadata {
      * @param obj the object
      * @return a metadata map
      */
-    @Nonnull
-    public static MetadataMap provide(@Nonnull Object obj) {
+    @NonNull
+    public static MetadataMap provide(@NonNull Object obj) {
         Objects.requireNonNull(obj, "obj");
         if (obj instanceof Player) {
             return provideForPlayer(((Player) obj));
@@ -131,8 +131,8 @@ public final class Metadata {
      * @param obj the object
      * @return a metadata map
      */
-    @Nonnull
-    public static Optional<MetadataMap> get(@Nonnull Object obj) {
+    @NonNull
+    public static Optional<MetadataMap> get(@NonNull Object obj) {
         Objects.requireNonNull(obj, "obj");
         if (obj instanceof Player) {
             return getForPlayer(((Player) obj));
@@ -149,103 +149,103 @@ public final class Metadata {
         }
     }
 
-    @Nonnull
-    public static MetadataMap provideForPlayer(@Nonnull UUID uuid) {
+    @NonNull
+    public static MetadataMap provideForPlayer(@NonNull UUID uuid) {
         return players().provide(uuid);
     }
 
-    @Nonnull
-    public static MetadataMap provideForPlayer(@Nonnull Player player) {
+    @NonNull
+    public static MetadataMap provideForPlayer(@NonNull Player player) {
         return players().provide(player);
     }
 
-    @Nonnull
-    public static Optional<MetadataMap> getForPlayer(@Nonnull UUID uuid) {
+    @NonNull
+    public static Optional<MetadataMap> getForPlayer(@NonNull UUID uuid) {
         return players().get(uuid);
     }
 
-    @Nonnull
-    public static Optional<MetadataMap> getForPlayer(@Nonnull Player player) {
+    @NonNull
+    public static Optional<MetadataMap> getForPlayer(@NonNull Player player) {
         return players().get(player);
     }
 
-    @Nonnull
-    public static <T> Map<Player, T> lookupPlayersWithKey(@Nonnull MetadataKey<T> key) {
+    @NonNull
+    public static <T> Map<Player, T> lookupPlayersWithKey(@NonNull MetadataKey<T> key) {
         return players().getAllWithKey(key);
     }
 
-    @Nonnull
-    public static MetadataMap provideForEntity(@Nonnull UUID uuid) {
+    @NonNull
+    public static MetadataMap provideForEntity(@NonNull UUID uuid) {
         return entities().provide(uuid);
     }
 
-    @Nonnull
-    public static MetadataMap provideForEntity(@Nonnull Entity entity) {
+    @NonNull
+    public static MetadataMap provideForEntity(@NonNull Entity entity) {
         return entities().provide(entity);
     }
 
-    @Nonnull
-    public static Optional<MetadataMap> getForEntity(@Nonnull UUID uuid) {
+    @NonNull
+    public static Optional<MetadataMap> getForEntity(@NonNull UUID uuid) {
         return entities().get(uuid);
     }
 
-    @Nonnull
-    public static Optional<MetadataMap> getForEntity(@Nonnull Entity entity) {
+    @NonNull
+    public static Optional<MetadataMap> getForEntity(@NonNull Entity entity) {
         return entities().get(entity);
     }
 
-    @Nonnull
-    public static <T> Map<Entity, T> lookupEntitiesWithKey(@Nonnull MetadataKey<T> key) {
+    @NonNull
+    public static <T> Map<Entity, T> lookupEntitiesWithKey(@NonNull MetadataKey<T> key) {
         return entities().getAllWithKey(key);
     }
 
-    @Nonnull
-    public static MetadataMap provideForBlock(@Nonnull BlockPosition block) {
+    @NonNull
+    public static MetadataMap provideForBlock(@NonNull BlockPosition block) {
         return blocks().provide(block);
     }
 
-    @Nonnull
-    public static MetadataMap provideForBlock(@Nonnull Block block) {
+    @NonNull
+    public static MetadataMap provideForBlock(@NonNull Block block) {
         return blocks().provide(block);
     }
 
-    @Nonnull
-    public static Optional<MetadataMap> getForBlock(@Nonnull BlockPosition block) {
+    @NonNull
+    public static Optional<MetadataMap> getForBlock(@NonNull BlockPosition block) {
         return blocks().get(block);
     }
 
-    @Nonnull
-    public static Optional<MetadataMap> getForBlock(@Nonnull Block block) {
+    @NonNull
+    public static Optional<MetadataMap> getForBlock(@NonNull Block block) {
         return blocks().get(block);
     }
 
-    @Nonnull
-    public static <T> Map<BlockPosition, T> lookupBlocksWithKey(@Nonnull MetadataKey<T> key) {
+    @NonNull
+    public static <T> Map<BlockPosition, T> lookupBlocksWithKey(@NonNull MetadataKey<T> key) {
         return blocks().getAllWithKey(key);
     }
 
-    @Nonnull
-    public static MetadataMap provideForWorld(@Nonnull UUID uid) {
+    @NonNull
+    public static MetadataMap provideForWorld(@NonNull UUID uid) {
         return worlds().provide(uid);
     }
 
-    @Nonnull
-    public static MetadataMap provideForWorld(@Nonnull World world) {
+    @NonNull
+    public static MetadataMap provideForWorld(@NonNull World world) {
         return worlds().provide(world);
     }
 
-    @Nonnull
-    public static Optional<MetadataMap> getForWorld(@Nonnull UUID uid) {
+    @NonNull
+    public static Optional<MetadataMap> getForWorld(@NonNull UUID uid) {
         return worlds().get(uid);
     }
 
-    @Nonnull
-    public static Optional<MetadataMap> getForWorld(@Nonnull World world) {
+    @NonNull
+    public static Optional<MetadataMap> getForWorld(@NonNull World world) {
         return worlds().get(world);
     }
 
-    @Nonnull
-    public static <T> Map<World, T> lookupWorldsWithKey(@Nonnull MetadataKey<T> key) {
+    @NonNull
+    public static <T> Map<World, T> lookupWorldsWithKey(@NonNull MetadataKey<T> key) {
         return worlds().getAllWithKey(key);
     }
 

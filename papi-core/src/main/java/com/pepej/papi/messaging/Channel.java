@@ -4,8 +4,8 @@ import com.google.common.reflect.TypeToken;
 import com.pepej.papi.interfaces.TypeAware;
 import com.pepej.papi.messaging.codec.Codec;
 import com.pepej.papi.promise.Promise;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 /**
  * Represents an individual messaging channel.
@@ -21,7 +21,7 @@ public interface Channel<T> extends TypeAware<T> {
      *
      * @return the channel name
      */
-    @Nonnull
+    @NonNull
     String getName();
 
     /**
@@ -30,7 +30,7 @@ public interface Channel<T> extends TypeAware<T> {
      * @return the channels message type.
      */
     @Override
-    @Nonnull
+    @NonNull
     TypeToken<T> getType();
 
     /**
@@ -38,7 +38,7 @@ public interface Channel<T> extends TypeAware<T> {
      *
      * @return the codec
      */
-    @Nonnull
+    @NonNull
     Codec<T> getCodec();
 
     /**
@@ -46,7 +46,7 @@ public interface Channel<T> extends TypeAware<T> {
      *
      * @return a new channel agent.
      */
-    @Nonnull
+    @NonNull
     ChannelAgent<T> newAgent();
 
     /**
@@ -56,7 +56,7 @@ public interface Channel<T> extends TypeAware<T> {
      * @param listener the listener to register
      * @return the resultant agent
      */
-    @Nonnull
+    @NonNull
     default ChannelAgent<T> newAgent(ChannelListener<T> listener) {
         ChannelAgent<T> agent = newAgent();
         agent.addListener(listener);
@@ -72,7 +72,7 @@ public interface Channel<T> extends TypeAware<T> {
      * @param message the message to dispatch
      * @return a promise which will complete when the message has sent.
      */
-    @Nonnull
-    Promise<Void> sendMessage(@Nonnull T message);
+    @NonNull
+    Promise<Void> sendMessage(@NonNull T message);
 
 }

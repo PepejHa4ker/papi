@@ -1,6 +1,6 @@
 package com.pepej.papi.messaging;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents an object listening to messages sent on the channel.
@@ -18,6 +18,6 @@ public interface ChannelListener<T> {
      * @param agent the agent which forwarded the message.
      * @param message the message
      */
-    void onMessage(@Nonnull ChannelAgent<T> agent, @Nonnull T message);
+    void onMessage(@NonNull ChannelAgent<T> agent, @NonNull T message);
 
 }

@@ -11,9 +11,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -161,7 +161,7 @@ public final class BlockPosition implements GsonSerializable {
         return BlockRegion.of(this, other);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonObject serialize() {
         return JsonBuilder.object()

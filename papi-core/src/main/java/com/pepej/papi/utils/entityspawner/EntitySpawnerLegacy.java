@@ -1,5 +1,4 @@
 package com.pepej.papi.utils.entityspawner;
-
 import com.pepej.papi.reflect.ServerReflection;
 import org.bukkit.Location;
 import org.bukkit.World;

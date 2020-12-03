@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.pepej.papi.command.argument.Argument;
 import com.pepej.papi.utils.Players;
 import org.bukkit.command.CommandSender;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Represents the context for a given command execution
@@ -20,7 +20,7 @@ public interface CommandContext<T extends CommandSender> {
      *
      * @return the sender who executed the command
      */
-    @Nonnull
+    @NonNull
     T sender();
 
     /**
@@ -32,12 +32,24 @@ public interface CommandContext<T extends CommandSender> {
         Players.msg(sender(), message);
     }
 
+    default void replyError(String... message) {
+        Players.msg(sender(), Players.MessageType.ERROR, message);
+    }
+
+    default void replyWarning(String... message) {
+        Players.msg(sender(), Players.MessageType.WARNING, message);
+    }
+
+    default void replyAnnouncement(String... message) {
+        Players.msg(sender(), Players.MessageType.ANNOUNCEMENT, message);
+    }
+
     /**
      * Gets an immutable list of the supplied arguments
      *
      * @return an immutable list of the supplied arguments
      */
-    @Nonnull
+    @NonNull
     ImmutableList<String> args();
 
     /**
@@ -46,7 +58,7 @@ public interface CommandContext<T extends CommandSender> {
      * @param index the index
      * @return the argument
      */
-    @Nonnull
+    @NonNull
     Argument arg(int index);
 
     /**
@@ -64,7 +76,7 @@ public interface CommandContext<T extends CommandSender> {
      *
      * @return the command label which was used to execute this command
      */
-    @Nonnull
+    @NonNull
     String label();
 
 }

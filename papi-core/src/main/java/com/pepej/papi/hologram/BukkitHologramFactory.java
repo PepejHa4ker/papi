@@ -2,41 +2,40 @@ package com.pepej.papi.hologram;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
-import com.pepej.papi.Events;
-import com.pepej.papi.Papi;
+import com.pepej.papi.events.Events;
 import com.pepej.papi.gson.JsonBuilder;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.serialize.Position;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.text.Text;
+import lombok.SneakyThrows;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.entity.*;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PigZapEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class BukkitHologramFactory implements HologramFactory {
 
-    @Nonnull
+    @NonNull
     @Override
-    public Hologram newHologram(@Nonnull Position position, @Nonnull List<String> lines) {
+    public Hologram newHologram(@NonNull Position position, @NonNull List<String> lines) {
         return new BukkitHologram(position, lines);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Hologram newHologram(@Nonnull Position position, @Nonnull String... lines) {
+    public Hologram newHologram(@NonNull Position position, @NonNull String... lines) {
         return new BukkitHologram(position, Arrays.asList(lines));
     }
 
@@ -47,9 +46,7 @@ public class BukkitHologramFactory implements HologramFactory {
             Method setCanTick = null;
             try {
                 setCanTick = ArmorStand.class.getDeclaredMethod("setCanTick", boolean.class);
-            } catch (Throwable ignored) {
-            }
-
+            } catch (Throwable ignored) {}
             SET_CAN_TICK = setCanTick;
         }
 
@@ -59,8 +56,7 @@ public class BukkitHologramFactory implements HologramFactory {
         private boolean spawned = false;
 
         private CompositeTerminable listeners = null;
-        private Consumer<Player> clickCallback = null;
-        private final List<Pig> spawnedPassengers = new ArrayList<>();
+
 
         BukkitHologram(Position position, List<String> lines) {
             this.position = Objects.requireNonNull(position, "position");
@@ -70,8 +66,7 @@ public class BukkitHologramFactory implements HologramFactory {
         private Position getNewLinePosition() {
             if (this.spawnedEntities.isEmpty()) {
                 return this.position;
-            }
-            else {
+            } else {
                 // get the last entry
                 ArmorStand last = this.spawnedEntities.get(this.spawnedEntities.size() - 1);
                 return Position.of(last.getLocation()).subtract(0.0d, 0.25d, 0.0d);
@@ -79,7 +74,11 @@ public class BukkitHologramFactory implements HologramFactory {
         }
 
         @Override
+        @SneakyThrows
         public void spawn() {
+            if (this.listeners == null) {
+                setupListeners();
+            }
             // resize to fit any new lines
             int linesSize = this.lines.size();
             int spawnedSize = this.spawnedEntities.size();
@@ -93,10 +92,6 @@ public class BukkitHologramFactory implements HologramFactory {
                     ArmorStand as = this.spawnedEntities.remove(this.spawnedEntities.size() - 1);
                     as.remove();
 
-                    if (this.listeners != null) {
-                        Pig pig = this.spawnedPassengers.remove(this.spawnedPassengers.size() - 1);
-                        pig.remove();
-                    }
                 }
             }
 
@@ -141,24 +136,8 @@ public class BukkitHologramFactory implements HologramFactory {
                         }
                     }
 
-                    if (this.listeners != null) {
-                        Pig pig = (Pig) as.getWorld().spawnEntity(as.getLocation(), EntityType.PIG);
-                        pig.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
-                        pig.setCustomNameVisible(false);
-                        pig.setSilent(true);
-                        pig.setGravity(false);
-                        pig.setMetadata("nodespawn", new FixedMetadataValue(Papi.hostPlugin(), true));
-                        pig.setAI(false);
-                        pig.setCollidable(false);
-                        pig.setInvulnerable(true);
-                        as.addPassenger(pig);
-
-                        this.spawnedPassengers.add(pig);
-                    }
-
                     this.spawnedEntities.add(as);
-                }
-                else {
+                } else {
                     // update existing line if necessary
                     ArmorStand as = this.spawnedEntities.get(i);
 
@@ -170,11 +149,17 @@ public class BukkitHologramFactory implements HologramFactory {
                 }
             }
 
-            if (this.listeners == null && this.clickCallback != null) {
-                setClickCallback(this.clickCallback);
-            }
 
             this.spawned = true;
+        }
+
+        private void setupListeners() {
+            this.listeners = CompositeTerminable.create();
+
+            Events.subscribe(PluginDisableEvent.class)
+                  .filter(e -> e.getPlugin().getName().equals("papi"))
+                  .handler(e -> onPluginDisable(e.getPlugin()))
+                  .bindWith(this.listeners);
         }
 
         @Override
@@ -204,7 +189,7 @@ public class BukkitHologramFactory implements HologramFactory {
             return true;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Collection<ArmorStand> getArmorStands() {
             return this.spawnedEntities;
@@ -220,7 +205,7 @@ public class BukkitHologramFactory implements HologramFactory {
         }
 
         @Override
-        public void updatePosition(@Nonnull Position position) {
+        public void updatePosition(@NonNull Position position) {
             Objects.requireNonNull(position, "position");
             if (this.position.equals(position)) {
                 return;
@@ -232,7 +217,23 @@ public class BukkitHologramFactory implements HologramFactory {
         }
 
         @Override
-        public void updateLines(@Nonnull List<String> lines) {
+        public void onPluginDisable(@NonNull final Plugin plugin) {
+            this.close();
+        }
+
+        @Override
+        public void addExpiring(final long ticksDelay) {
+            Schedulers.async().runLater(this::close, ticksDelay);
+
+        }
+
+        @Override
+        public void addExpiring(final long delay, final TimeUnit unit) {
+            Schedulers.async().runLater(this::close, delay, unit);
+        }
+
+        @Override
+        public void updateLines(@NonNull List<String> lines) {
             Objects.requireNonNull(lines, "lines");
             Preconditions.checkArgument(!lines.isEmpty(), "lines cannot be empty");
             for (String line : lines) {
@@ -248,86 +249,6 @@ public class BukkitHologramFactory implements HologramFactory {
             this.lines.addAll(ret);
         }
 
-        @Override
-        public void setClickCallback(@Nullable Consumer<Player> clickCallback) {
-            // unregister any existing listeners
-            if (clickCallback == null) {
-                if (this.listeners != null) {
-                    this.listeners.closeAndReportException();
-                }
-                this.clickCallback = null;
-                this.listeners = null;
-                return;
-            }
-
-            this.clickCallback = clickCallback;
-
-            if (this.listeners == null) {
-                this.listeners = CompositeTerminable.create();
-
-                this.listeners.bind(() -> {
-                    this.spawnedPassengers.forEach(Entity::remove);
-                    this.spawnedPassengers.clear();
-                });
-
-                this.spawnedPassengers.forEach(Entity::remove);
-                this.spawnedPassengers.clear();
-
-                for (ArmorStand as : this.spawnedEntities) {
-                    Pig pig = (Pig) as.getWorld().spawnEntity(as.getLocation(), EntityType.PIG);
-                    pig.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
-                    pig.setCustomNameVisible(false);
-                    pig.setSilent(true);
-                    pig.setGravity(false);
-                    pig.setMetadata("nodespawn", new FixedMetadataValue(Papi.hostPlugin(), true));
-                    pig.setAI(false);
-                    pig.setCollidable(false);
-                    pig.setInvulnerable(true);
-                    as.addPassenger(pig);
-                }
-
-                Events.subscribe(PigZapEvent.class)
-                      .handler(e -> {
-                          for (Pig spawned : this.spawnedPassengers) {
-                              if (spawned.equals(e.getEntity())) {
-                                  e.setCancelled(true);
-                                  return;
-                              }
-                          }
-                      }).bindWith(this.listeners);
-
-                Events.subscribe(PlayerInteractEntityEvent.class)
-                      .filter(e -> e.getRightClicked() instanceof Pig)
-                      .handler(e -> {
-                          Player p = e.getPlayer();
-                          Pig pig = (Pig) e.getRightClicked();
-                          for (Pig spawned : this.spawnedPassengers) {
-                              if (spawned.equals(pig)) {
-                                  e.setCancelled(true);
-                                  this.clickCallback.accept(p);
-                                  return;
-                              }
-                          }
-                      })
-                      .bindWith(this.listeners);
-
-                Events.subscribe(EntityDamageByEntityEvent.class)
-                      .filter(e -> e.getEntity() instanceof Pig)
-                      .filter(e -> e.getDamager() instanceof Player)
-                      .handler(e -> {
-                          Player p = (Player) e.getDamager();
-                          Pig pig = (Pig) e.getEntity();
-                          for (Pig spawned : this.spawnedPassengers) {
-                              if (spawned.equals(pig)) {
-                                  e.setCancelled(true);
-                                  this.clickCallback.accept(p);
-                                  return;
-                              }
-                          }
-                      })
-                      .bindWith(this.listeners);
-            }
-        }
 
         @Override
         public void close() {
@@ -339,7 +260,7 @@ public class BukkitHologramFactory implements HologramFactory {
             return !this.spawned;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public JsonObject serialize() {
             return JsonBuilder.object()

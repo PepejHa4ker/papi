@@ -1,6 +1,9 @@
 package com.pepej.papi.cooldown;
 
-import javax.annotation.Nonnull;
+import com.pepej.papi.cooldown.Cooldown;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.OptionalLong;
@@ -19,8 +22,8 @@ public interface CooldownMap<T> {
      * @param base the cooldown to base off
      * @return a new collection
      */
-    @Nonnull
-    static <T> CooldownMap<T> create(@Nonnull Cooldown base) {
+    @NonNull
+    static <T> CooldownMap<T> create(@NonNull Cooldown base) {
         Objects.requireNonNull(base, "base");
         return new CooldownMapImpl<>(base);
     }
@@ -30,7 +33,7 @@ public interface CooldownMap<T> {
      *
      * @return the base cooldown
      */
-    @Nonnull
+    @NonNull
     Cooldown getBase();
 
     /**
@@ -42,51 +45,51 @@ public interface CooldownMap<T> {
      * @param key the key
      * @return a cooldown instance
      */
-    @Nonnull
-    Cooldown get(@Nonnull T key);
+    @NonNull
+    Cooldown get(@NonNull T key);
 
-    void put(@Nonnull T key, @Nonnull Cooldown cooldown);
+    void put(@NonNull T key, @NonNull Cooldown cooldown);
 
     /**
      * Gets the cooldowns contained within this collection.
      *
      * @return the backing map
      */
-    @Nonnull
+    @NonNull
     Map<T, Cooldown> getAll();
 
     /* methods from Cooldown */
 
-    default boolean test(@Nonnull T key) {
+    default boolean test(@NonNull T key) {
         return get(key).test();
     }
 
-    default boolean testSilently(@Nonnull T key) {
+    default boolean testSilently(@NonNull T key) {
         return get(key).testSilently();
     }
 
-    default long elapsed(@Nonnull T key) {
+    default long elapsed(@NonNull T key) {
         return get(key).elapsed();
     }
 
-    default void reset(@Nonnull T key) {
+    default void reset(@NonNull T key) {
         get(key).reset();
     }
 
-    default long remainingMillis(@Nonnull T key) {
+    default long remainingMillis(@NonNull T key) {
         return get(key).remainingMillis();
     }
 
-    default long remainingTime(@Nonnull T key, @Nonnull TimeUnit unit) {
+    default long remainingTime(@NonNull T key, @NonNull TimeUnit unit) {
         return get(key).remainingTime(unit);
     }
 
-    @Nonnull
-    default OptionalLong getLastTested(@Nonnull T key) {
+    @NonNull
+    default OptionalLong getLastTested(@NonNull T key) {
         return get(key).getLastTested();
     }
 
-    default void setLastTested(@Nonnull T key, long time) {
+    default void setLastTested(@NonNull T key, long time) {
         get(key).setLastTested(time);
     }
 

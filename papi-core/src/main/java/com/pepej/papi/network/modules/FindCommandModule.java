@@ -1,13 +1,13 @@
 package com.pepej.papi.network.modules;
 
-import com.pepej.papi.Commands;
+import com.pepej.papi.command.Commands;
 import com.pepej.papi.network.Network;
 import com.pepej.papi.profiles.Profile;
 import com.pepej.papi.terminable.TerminableConsumer;
 import com.pepej.papi.terminable.module.TerminableModule;
 import com.pepej.papi.utils.Players;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,7 +26,7 @@ public class FindCommandModule implements TerminableModule {
     }
 
     @Override
-    public void setup(@Nonnull TerminableConsumer consumer) {
+    public void setup(@NonNull TerminableConsumer consumer) {
         Commands.create()
                 .assertPermission("papi.find")
                 .handler(c -> {

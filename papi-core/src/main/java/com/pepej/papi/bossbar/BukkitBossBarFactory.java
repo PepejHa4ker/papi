@@ -1,12 +1,12 @@
-package com.pepej.papi.bossbar;
 
+package com.pepej.papi.bossbar;
 import com.pepej.papi.text.Text;
 import org.bukkit.Server;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 import static org.bukkit.boss.BarColor.*;
@@ -22,7 +22,7 @@ public class BukkitBossBarFactory implements BossBarFactory {
         this.server = server;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public BossBar newBossBar() {
         return new BukkitBossBar(this.server.createBossBar("null", convertColor(BossBarColor.defaultColor()), convertStyle(BossBarStyle.defaultStyle())));
@@ -35,15 +35,15 @@ public class BukkitBossBarFactory implements BossBarFactory {
             this.bar = bar;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String title() {
             return this.bar.getTitle();
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public BossBar title(@Nonnull String title) {
+        public BossBar title(@NonNull String title) {
             this.bar.setTitle(Text.colorize(title));
             return this;
         }
@@ -53,35 +53,35 @@ public class BukkitBossBarFactory implements BossBarFactory {
             return this.bar.getProgress();
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public BossBar progress(double progress) {
             this.bar.setProgress(progress);
             return this;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public BossBarColor color() {
             return convertColor(this.bar.getColor());
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public BossBar color(@Nonnull BossBarColor color) {
+        public BossBar color(@NonNull BossBarColor color) {
             this.bar.setColor(convertColor(color));
             return this;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public BossBarStyle style() {
             return convertStyle(this.bar.getStyle());
         }
 
-        @Nonnull
+        @NonNull
         @Override
-        public BossBar style(@Nonnull BossBarStyle style) {
+        public BossBar style(@NonNull BossBarStyle style) {
             this.bar.setStyle(convertStyle(style));
             return this;
         }
@@ -91,26 +91,26 @@ public class BukkitBossBarFactory implements BossBarFactory {
             return this.bar.isVisible();
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public BossBar visible(boolean visible) {
             this.bar.setVisible(visible);
             return this;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public List<Player> players() {
             return this.bar.getPlayers();
         }
 
         @Override
-        public void addPlayer(@Nonnull Player player) {
+        public void addPlayer(@NonNull Player player) {
             this.bar.addPlayer(player);
         }
 
         @Override
-        public void removePlayer(@Nonnull Player player) {
+        public void removePlayer(@NonNull Player player) {
             this.bar.removePlayer(player);
         }
 

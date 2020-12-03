@@ -2,8 +2,8 @@ package com.pepej.papi.event.functional;
 
 import com.pepej.papi.event.Subscription;
 import com.pepej.papi.utils.Log;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
@@ -26,8 +26,8 @@ public interface SubscriptionBuilder<T> {
      * @param predicate the expiry test
      * @return ths builder instance
      */
-    @Nonnull
-    SubscriptionBuilder<T> expireIf(@Nonnull Predicate<T> predicate);
+    @NonNull
+    SubscriptionBuilder<T> expireIf(@NonNull Predicate<T> predicate);
 
     /**
      * Sets the expiry time on the handler
@@ -37,8 +37,8 @@ public interface SubscriptionBuilder<T> {
      * @return the builder instance
      * @throws IllegalArgumentException if duration is not greater than or equal to 1
      */
-    @Nonnull
-    SubscriptionBuilder<T> expireAfter(long duration, @Nonnull TimeUnit unit);
+    @NonNull
+    SubscriptionBuilder<T> expireAfter(long duration, @NonNull TimeUnit unit);
 
     /**
      * Sets the number of calls until the handler will automatically be unregistered
@@ -50,7 +50,7 @@ public interface SubscriptionBuilder<T> {
      * @return the builder instance
      * @throws IllegalArgumentException if maxCalls is not greater than or equal to 1
      */
-    @Nonnull
+    @NonNull
     SubscriptionBuilder<T> expireAfter(long maxCalls);
 
     /**
@@ -62,7 +62,7 @@ public interface SubscriptionBuilder<T> {
      * @param predicate the filter
      * @return the builder instance
      */
-    @Nonnull
-    SubscriptionBuilder<T> filter(@Nonnull Predicate<T> predicate);
+    @NonNull
+    SubscriptionBuilder<T> filter(@NonNull Predicate<T> predicate);
 
 }

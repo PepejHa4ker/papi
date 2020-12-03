@@ -1,8 +1,8 @@
 package com.pepej.papi.profiles;
 
 import com.pepej.papi.promise.Promise;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -27,8 +27,8 @@ public interface ProfileRepository {
      * @param uniqueId the unique id to get a profile for
      * @return a profile for the uuid
      */
-    @Nonnull
-    Profile getProfile(@Nonnull UUID uniqueId);
+    @NonNull
+    Profile getProfile(@NonNull UUID uniqueId);
 
     /**
      * Gets a profile from this repository, using the name as the base
@@ -43,8 +43,8 @@ public interface ProfileRepository {
      * @param name the name to get a profile for
      * @return a profile for the name
      */
-    @Nonnull
-    Optional<Profile> getProfile(@Nonnull String name);
+    @NonNull
+    Optional<Profile> getProfile(@NonNull String name);
 
     /**
      * Gets a collection of profiles known to the repository.
@@ -54,7 +54,7 @@ public interface ProfileRepository {
      *
      * @return a collection of known profiles
      */
-    @Nonnull
+    @NonNull
     Collection<Profile> getKnownProfiles();
 
     /**
@@ -67,8 +67,8 @@ public interface ProfileRepository {
      * @return a map of uuid to profile, where possible, for each uuid in the iterable
      * @see #getProfile(UUID)
      */
-    @Nonnull
-    default Map<UUID, Profile> getProfiles(@Nonnull Iterable<UUID> uniqueIds) {
+    @NonNull
+    default Map<UUID, Profile> getProfiles(@NonNull Iterable<UUID> uniqueIds) {
         Objects.requireNonNull(uniqueIds, "uniqueIds");
         Map<UUID, Profile> ret = new HashMap<>();
         for (UUID uniqueId : uniqueIds) {
@@ -90,8 +90,8 @@ public interface ProfileRepository {
      * @return a map of name to profile, where possible, for each name in the iterable
      * @see #getProfile(String)
      */
-    @Nonnull
-    default Map<String, Profile> getProfilesByName(@Nonnull Iterable<String> names) {
+    @NonNull
+    default Map<String, Profile> getProfilesByName(@NonNull Iterable<String> names) {
         Objects.requireNonNull(names, "names");
         Map<String, Profile> ret = new HashMap<>();
         for (String name : names) {
@@ -110,8 +110,8 @@ public interface ProfileRepository {
      * @param uniqueId the unique id to get a profile for
      * @return a profile for the uuid
      */
-    @Nonnull
-    Promise<Profile> lookupProfile(@Nonnull UUID uniqueId);
+    @NonNull
+    Promise<Profile> lookupProfile(@NonNull UUID uniqueId);
 
     /**
      * Gets a profile from this repository, using the name as the base
@@ -126,8 +126,8 @@ public interface ProfileRepository {
      * @param name the name to get a profile for
      * @return a profile for the name
      */
-    @Nonnull
-    Promise<Optional<Profile>> lookupProfile(@Nonnull String name);
+    @NonNull
+    Promise<Optional<Profile>> lookupProfile(@NonNull String name);
 
     /**
      * Gets a collection of profiles known to the repository.
@@ -137,7 +137,7 @@ public interface ProfileRepository {
      *
      * @return a collection of known profiles
      */
-    @Nonnull
+    @NonNull
     Promise<Collection<Profile>> lookupKnownProfiles();
 
     /**
@@ -150,8 +150,8 @@ public interface ProfileRepository {
      * @return a map of uuid to profile, where possible, for each uuid in the iterable
      * @see #getProfile(UUID)
      */
-    @Nonnull
-    Promise<Map<UUID, Profile>> lookupProfiles(@Nonnull Iterable<UUID> uniqueIds);
+    @NonNull
+    Promise<Map<UUID, Profile>> lookupProfiles(@NonNull Iterable<UUID> uniqueIds);
 
     /**
      * Populates a map of name to profile for the given iterable of names.
@@ -163,7 +163,7 @@ public interface ProfileRepository {
      * @return a map of name to profile, where possible, for each name in the iterable
      * @see #getProfile(String)
      */
-    @Nonnull
-    Promise<Map<String, Profile>> lookupProfilesByName(@Nonnull Iterable<String> names);
+    @NonNull
+    Promise<Map<String, Profile>> lookupProfilesByName(@NonNull Iterable<String> names);
 
 }

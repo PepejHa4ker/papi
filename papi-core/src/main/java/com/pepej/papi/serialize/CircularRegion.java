@@ -7,8 +7,8 @@ import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
 import com.pepej.papi.utils.Maths;
 import org.bukkit.block.Block;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -100,7 +100,7 @@ public class CircularRegion implements GsonSerializable {
      * Get the circumference {@link BlockPosition} of the region
      * @return the {@link BlockPosition}s
      */
-    @Nonnull
+    @NonNull
     public Set<BlockPosition> getOuterBlockPositions() {
         Set<BlockPosition> positions = new HashSet<>((int) getCircumference());
         for (int degree = 0; degree < 360; degree++) {
@@ -114,7 +114,7 @@ public class CircularRegion implements GsonSerializable {
         return Collections.unmodifiableSet(positions);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonObject serialize() {
         return JsonBuilder.object()

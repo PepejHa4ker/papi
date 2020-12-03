@@ -1,6 +1,7 @@
 package com.pepej.papi.messaging.util;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +18,7 @@ public final class ChannelReceiver<T> {
     private long timestamp = 0;
     private final long expiryMillis;
 
-    public ChannelReceiver(long expiryDuration, @Nonnull TimeUnit unit) {
+    public ChannelReceiver(long expiryDuration, @NonNull TimeUnit unit) {
         this.expiryMillis = unit.toMillis(expiryDuration);
     }
 

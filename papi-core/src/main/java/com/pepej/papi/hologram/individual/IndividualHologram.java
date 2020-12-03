@@ -2,10 +2,11 @@ package com.pepej.papi.hologram.individual;
 
 import com.pepej.papi.Services;
 import com.pepej.papi.hologram.BaseHologram;
+import com.pepej.papi.hologram.HologramLine;
 import com.pepej.papi.serialize.Position;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
@@ -20,8 +21,8 @@ public interface IndividualHologram extends BaseHologram {
      * @param lines the initial lines to display
      * @return the new hologram.
      */
-    @Nonnull
-    static IndividualHologram create(@Nonnull Position position, @Nonnull List<HologramLine> lines) {
+    @NonNull
+    static IndividualHologram create(@NonNull Position position, @NonNull List<HologramLine> lines) {
         return Services.load(IndividualHologramFactory.class).newHologram(position, lines);
     }
 
@@ -33,14 +34,14 @@ public interface IndividualHologram extends BaseHologram {
      *
      * @param lines the new lines
      */
-    void updateLines(@Nonnull List<HologramLine> lines);
+    void updateLines(@NonNull List<HologramLine> lines);
 
     /**
      * Returns a copy of the available viewers of the hologram.
      *
      * @return a {@link Set} of players.
      */
-    @Nonnull
+    @NonNull
     Set<Player> getViewers();
 
     /**
@@ -48,14 +49,14 @@ public interface IndividualHologram extends BaseHologram {
      *
      * @param player the player
      */
-    void addViewer(@Nonnull Player player);
+    void addViewer(@NonNull Player player);
 
     /**
      * Removes a viewer from the hologram.
      *
      * @param player the player
      */
-    void removeViewer(@Nonnull Player player);
+    void removeViewer(@NonNull Player player);
 
     /**
      * Check if there are any viewers for the hologram.

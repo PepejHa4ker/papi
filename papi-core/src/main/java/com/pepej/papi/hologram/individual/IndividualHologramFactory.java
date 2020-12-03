@@ -1,8 +1,9 @@
 package com.pepej.papi.hologram.individual;
 
+import com.pepej.papi.hologram.HologramLine;
 import com.pepej.papi.serialize.Position;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface IndividualHologramFactory {
      * @param lines the lines to display
      * @return the new hologram
      */
-    @Nonnull
-    IndividualHologram newHologram(@Nonnull Position position, @Nonnull List<HologramLine> lines);
+    @NonNull
+    IndividualHologram newHologram(@NonNull Position position, @NonNull List<HologramLine> lines);
 
 }

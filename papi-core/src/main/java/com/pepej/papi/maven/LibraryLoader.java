@@ -2,6 +2,7 @@ package com.pepej.papi.maven;
 
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.utils.Log;
+import lombok.*;
 
 import java.io.File;
 import java.io.InputStream;
@@ -10,7 +11,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.util.Objects;
 
 
 /**
@@ -19,6 +19,7 @@ import java.util.Objects;
  */
 public final class LibraryLoader {
     private static final Method ADD_URL_METHOD;
+
     static {
         try {
             ADD_URL_METHOD = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -58,25 +59,17 @@ public final class LibraryLoader {
         load(new Dependency(groupId, artifactId, version, repoUrl));
     }
 
+    @SneakyThrows
     public static void load(Dependency d) {
         Log.info(String.format("Loading dependency %s:%s:%s from %s", d.getGroupId(), d.getArtifactId(), d.getVersion(), d.getRepoUrl()));
         String name = d.getArtifactId() + "-" + d.getVersion();
 
         File saveLocation = new File(getLibFolder(), name + ".jar");
         if (!saveLocation.exists()) {
-
-            try {
-                Log.info("Dependency '" + name + "' is not already in the libraries folder. Attempting to download...");
-                URL url = d.getUrl();
-
-                try (InputStream is = url.openStream()) {
-                    Files.copy(is, saveLocation.toPath());
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+            Log.info("Dependency '" + name + "' is not already in the libraries folder. Attempting to download...");
+            URL url = d.getUrl();
+            @Cleanup InputStream is = url.openStream();
+            Files.copy(is, saveLocation.toPath());
             Log.info("Dependency '" + name + "' successfully downloaded.");
         }
 
@@ -104,34 +97,14 @@ public final class LibraryLoader {
         return libs;
     }
 
-    public static final class Dependency {
-        private final String groupId;
-        private final String artifactId;
-        private final String version;
-        private final String repoUrl;
-
-        public Dependency(String groupId, String artifactId, String version, String repoUrl) {
-            this.groupId = Objects.requireNonNull(groupId, "groupId");
-            this.artifactId = Objects.requireNonNull(artifactId, "artifactId");
-            this.version = Objects.requireNonNull(version, "version");
-            this.repoUrl = Objects.requireNonNull(repoUrl, "repoUrl");
-        }
-
-        public String getGroupId() {
-            return this.groupId;
-        }
-
-        public String getArtifactId() {
-            return this.artifactId;
-        }
-
-        public String getVersion() {
-            return this.version;
-        }
-
-        public String getRepoUrl() {
-            return this.repoUrl;
-        }
+    @EqualsAndHashCode
+    @ToString
+    @Value
+    public static class Dependency {
+        String groupId;
+        String artifactId;
+        String version;
+        String repoUrl;
 
         public URL getUrl() throws MalformedURLException {
             String repo = this.repoUrl;
@@ -144,36 +117,6 @@ public final class LibraryLoader {
             return new URL(url);
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (o == this) return true;
-            if (!(o instanceof Dependency)) return false;
-            final Dependency other = (Dependency) o;
-            return this.getGroupId().equals(other.getGroupId()) &&
-                    this.getArtifactId().equals(other.getArtifactId()) &&
-                    this.getVersion().equals(other.getVersion()) &&
-                    this.getRepoUrl().equals(other.getRepoUrl());
-        }
-
-        @Override
-        public int hashCode() {
-            final int PRIME = 59;
-            int result = 1;
-            result = result * PRIME + this.getGroupId().hashCode();
-            result = result * PRIME + this.getArtifactId().hashCode();
-            result = result * PRIME + this.getVersion().hashCode();
-            result = result * PRIME + this.getRepoUrl().hashCode();
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return "LibraryLoader.Dependency(" +
-                    "groupId=" + this.getGroupId() + ", " +
-                    "artifactId=" + this.getArtifactId() + ", " +
-                    "version=" + this.getVersion() + ", " +
-                    "repoUrl=" + this.getRepoUrl() + ")";
-        }
     }
 
 

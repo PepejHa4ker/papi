@@ -1,8 +1,8 @@
 package com.pepej.papi.messaging.conversation;
 
 import com.pepej.papi.terminable.Terminable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -17,7 +17,7 @@ public interface ConversationChannelAgent<T extends ConversationMessage, R exten
      *
      * @return the parent channel
      */
-    @Nonnull
+    @NonNull
     ConversationChannel<T, R> getChannel();
 
     /**
@@ -25,7 +25,7 @@ public interface ConversationChannelAgent<T extends ConversationMessage, R exten
      *
      * @return the active listeners
      */
-    @Nonnull
+    @NonNull
     Set<ConversationChannelListener<T, R>> getListeners();
 
     /**
@@ -41,7 +41,7 @@ public interface ConversationChannelAgent<T extends ConversationMessage, R exten
      * @param listener the listener to add
      * @return true if successful
      */
-    boolean addListener(@Nonnull ConversationChannelListener<T, R> listener);
+    boolean addListener(@NonNull ConversationChannelListener<T, R> listener);
 
     /**
      * Removes a listener from the channel.
@@ -49,7 +49,7 @@ public interface ConversationChannelAgent<T extends ConversationMessage, R exten
      * @param listener the listener to remove
      * @return true if successful
      */
-    boolean removeListener(@Nonnull ConversationChannelListener<T, R> listener);
+    boolean removeListener(@NonNull ConversationChannelListener<T, R> listener);
 
     @Override
     void close();

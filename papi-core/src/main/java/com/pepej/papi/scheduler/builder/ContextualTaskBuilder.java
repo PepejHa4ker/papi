@@ -2,8 +2,8 @@ package com.pepej.papi.scheduler.builder;
 
 import com.pepej.papi.scheduler.Scheduler;
 import com.pepej.papi.scheduler.Task;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**
@@ -12,10 +12,10 @@ import java.util.function.Consumer;
  */
 public interface ContextualTaskBuilder {
 
-    @Nonnull
-    Task consume(@Nonnull Consumer<Task> consumer);
+    @NonNull
+    Task consume(@NonNull Consumer<Task> consumer);
 
-    @Nonnull
-    Task run(@Nonnull Runnable runnable);
+    @NonNull
+    Task run(@NonNull Runnable runnable);
 
 }

@@ -1,8 +1,8 @@
 package com.pepej.papi.terminable;
 
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * An extension of {@link AutoCloseable}.
@@ -58,7 +58,7 @@ public interface Terminable extends AutoCloseable {
      *
      * @param consumer the terminable consumer
      */
-    default void bindWith(@Nonnull TerminableConsumer consumer) {
+    default void bindWith(@NonNull TerminableConsumer consumer) {
         consumer.bind(this);
     }
 

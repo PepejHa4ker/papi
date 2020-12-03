@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.scheduler.Ticks;
 import com.pepej.papi.time.Time;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +36,7 @@ public interface Cooldown extends GsonSerializable {
      * @param ticks the number of ticks
      * @return a new cooldown
      */
-    @Nonnull
+    @NonNull
     static Cooldown ofTicks(long ticks) {
         return new CooldownImpl(Ticks.to(ticks, TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
     }
@@ -48,8 +48,8 @@ public interface Cooldown extends GsonSerializable {
      * @param unit the unit of time
      * @return a new cooldown
      */
-    @Nonnull
-    static Cooldown of(long amount, @Nonnull TimeUnit unit) {
+    @NonNull
+    static Cooldown of(long amount, @NonNull TimeUnit unit) {
         return new CooldownImpl(amount, unit);
     }
 
@@ -123,7 +123,7 @@ public interface Cooldown extends GsonSerializable {
      *
      * @return the last call time
      */
-    @Nonnull
+    @NonNull
     OptionalLong getLastTested();
 
     /**
@@ -148,7 +148,7 @@ public interface Cooldown extends GsonSerializable {
      *
      * @return a cloned cooldown instance
      */
-    @Nonnull
+    @NonNull
     Cooldown copy();
 
 }

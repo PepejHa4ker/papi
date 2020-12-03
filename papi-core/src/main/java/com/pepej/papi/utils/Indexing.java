@@ -1,6 +1,7 @@
 package com.pepej.papi.utils;
 
 import com.google.common.collect.ImmutableMap;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -23,7 +24,7 @@ public final class Indexing {
      * @param <R> the actual (value) type
      * @return the index
      */
-    public static <I, R> Map<I, R> build(Iterable<? extends R> values, Function<? super R, ? extends I> indexFunction) {
+    public static <I, R> Map<I, R> build(@NonNull final Iterable<? extends R> values, @NonNull final Function<? super R, ? extends I> indexFunction) {
         Objects.requireNonNull(indexFunction, "indexFunction");
         return buildMultiple(values, r -> Collections.singleton(indexFunction.apply(r)));
     }
@@ -37,7 +38,7 @@ public final class Indexing {
      * @param <R> the actual (value) type
      * @return the index
      */
-    public static <I, R> Map<I, R> buildMultiple(Iterable<? extends R> values, Function<? super R, ? extends Iterable<? extends I>> indexFunction) {
+    public static <I, R> Map<I, R> buildMultiple(@NonNull final Iterable<? extends R> values, @NonNull final Function<? super R, ? extends Iterable<? extends I>> indexFunction) {
         Objects.requireNonNull(values, "values");
         Objects.requireNonNull(indexFunction, "indexFunction");
 
@@ -63,7 +64,7 @@ public final class Indexing {
      * @param <R> the actual (value) type
      * @return the index
      */
-    public static <I, R> Map<I, R> build(R[] values, Function<? super R, ? extends I> indexFunction) {
+    public static <I, R> Map<I, R> build(@NonNull final R[] values, @NonNull final Function<? super R, ? extends I> indexFunction) {
         Objects.requireNonNull(values, "values");
         return build(Arrays.asList(values), indexFunction);
     }
@@ -77,7 +78,7 @@ public final class Indexing {
      * @param <R> the actual (value) type
      * @return the index
      */
-    public static <I, R> Map<I, R> buildMultiple(R[] values, Function<? super R, ? extends Iterable<? extends I>> indexFunction) {
+    public static <I, R> Map<I, R> buildMultiple(@NonNull final R[] values, @NonNull final Function<? super R, ? extends Iterable<? extends I>> indexFunction) {
         Objects.requireNonNull(values, "values");
         return buildMultiple(Arrays.asList(values), indexFunction);
     }
@@ -89,7 +90,7 @@ public final class Indexing {
      * @param <R> the enum type
      * @return the index
      */
-    public static <R extends Enum<?>> Map<String, R> buildFromEnumName(Class<? extends R> enumClass) {
+    public static <R extends Enum<?>> Map<String, R> buildFromEnumName(@NonNull final Class<? extends R> enumClass) {
         Objects.requireNonNull(enumClass, "enumClass");
 
         R[] enumConstants = enumClass.getEnumConstants();

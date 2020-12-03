@@ -1,6 +1,7 @@
 package com.pepej.papi.maven;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.lang.annotation.*;
 
 /**
@@ -11,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MavenLibraries {
 
-    @Nonnull
+    @NonNull
     MavenLibrary[] value() default {};
 
 }

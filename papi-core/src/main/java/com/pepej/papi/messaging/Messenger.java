@@ -4,8 +4,8 @@ import com.google.common.reflect.TypeToken;
 import com.pepej.papi.messaging.conversation.ConversationChannel;
 import com.pepej.papi.messaging.conversation.ConversationMessage;
 import com.pepej.papi.messaging.conversation.SimpleConversationChannel;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /**
@@ -21,8 +21,8 @@ public interface Messenger {
      * @param <T> the channel message type
      * @return a channel
      */
-    @Nonnull
-    <T> Channel<T> getChannel(@Nonnull String name, @Nonnull TypeToken<T> type);
+    @NonNull
+    <T> Channel<T> getChannel(@NonNull String name, @NonNull TypeToken<T> type);
 
 
     /**
@@ -35,8 +35,8 @@ public interface Messenger {
      * @param <R> the channel reply type
      * @return a conversation channel
      */
-    @Nonnull
-    default <T extends ConversationMessage, R extends ConversationMessage> ConversationChannel<T, R> getConversationChannel(@Nonnull String name, @Nonnull TypeToken<T> type, @Nonnull TypeToken<R> replyType) {
+    @NonNull
+    default <T extends ConversationMessage, R extends ConversationMessage> ConversationChannel<T, R> getConversationChannel(@NonNull String name, @NonNull TypeToken<T> type, @NonNull TypeToken<R> replyType) {
         return new SimpleConversationChannel<>(this, name, type, replyType);
     }
 
@@ -48,8 +48,8 @@ public interface Messenger {
      * @param <T> the channel message type
      * @return a channel
      */
-    @Nonnull
-    default <T> Channel<T> getChannel(@Nonnull String name, @Nonnull Class<T> clazz) {
+    @NonNull
+    default <T> Channel<T> getChannel(@NonNull String name, @NonNull Class<T> clazz) {
         return getChannel(name, TypeToken.of(Objects.requireNonNull(clazz)));
     }
 
@@ -63,8 +63,8 @@ public interface Messenger {
      * @param <R> the channel reply type
      * @return a conversation channel
      */
-    @Nonnull
-    default <T extends ConversationMessage, R extends ConversationMessage> ConversationChannel<T, R> getConversationChannel(@Nonnull String name, @Nonnull Class<T> clazz, @Nonnull Class<R> replyClazz) {
+    @NonNull
+    default <T extends ConversationMessage, R extends ConversationMessage> ConversationChannel<T, R> getConversationChannel(@NonNull String name, @NonNull Class<T> clazz, @NonNull Class<R> replyClazz) {
         return getConversationChannel(name, TypeToken.of(Objects.requireNonNull(clazz)), TypeToken.of(Objects.requireNonNull(replyClazz)));
     }
 

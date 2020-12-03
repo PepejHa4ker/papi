@@ -1,7 +1,8 @@
 package com.pepej.papi.function;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.*;
@@ -15,7 +16,7 @@ public final class Numbers {
     // number
 
     @Nullable
-    public static Number parseNullable(@Nonnull String s) {
+    public static Number parseNullable(@NonNull String s) {
         Objects.requireNonNull(s);
         try {
             return NumberFormat.getInstance().parse(s);
@@ -24,15 +25,15 @@ public final class Numbers {
         }
     }
 
-    @Nonnull
-    public static Optional<Number> parse(@Nonnull String s) {
+    @NonNull
+    public static Optional<Number> parse(@NonNull String s) {
         return Optional.ofNullable(parseNullable(s));
     }
 
     // integer
 
     @Nullable
-    public static Integer parseIntegerNullable(@Nonnull String s) {
+    public static Integer parseIntegerNullable(@NonNull String s) {
         Objects.requireNonNull(s);
         try {
             return Integer.parseInt(s);
@@ -41,13 +42,13 @@ public final class Numbers {
         }
     }
 
-    @Nonnull
-    public static Optional<Integer> parseIntegerOpt(@Nonnull String s) {
+    @NonNull
+    public static Optional<Integer> parseIntegerOpt(@NonNull String s) {
         return Optional.ofNullable(parseIntegerNullable(s));
     }
 
-    @Nonnull
-    public static OptionalInt parseInteger(@Nonnull String s) {
+    @NonNull
+    public static OptionalInt parseInteger(@NonNull String s) {
         try {
             return OptionalInt.of(Integer.parseInt(s));
         } catch (NumberFormatException e) {
@@ -58,7 +59,7 @@ public final class Numbers {
     // long
 
     @Nullable
-    public static Long parseLongNullable(@Nonnull String s) {
+    public static Long parseLongNullable(@NonNull String s) {
         Objects.requireNonNull(s);
         try {
             return Long.parseLong(s);
@@ -67,13 +68,13 @@ public final class Numbers {
         }
     }
 
-    @Nonnull
-    public static Optional<Long> parseLongOpt(@Nonnull String s) {
+    @NonNull
+    public static Optional<Long> parseLongOpt(@NonNull String s) {
         return Optional.ofNullable(parseLongNullable(s));
     }
 
-    @Nonnull
-    public static OptionalLong parseLong(@Nonnull String s) {
+    @NonNull
+    public static OptionalLong parseLong(@NonNull String s) {
         try {
             return OptionalLong.of(Long.parseLong(s));
         } catch (NumberFormatException e) {
@@ -84,7 +85,7 @@ public final class Numbers {
     // float
 
     @Nullable
-    public static Float parseFloatNullable(@Nonnull String s) {
+    public static Float parseFloatNullable(@NonNull String s) {
         Objects.requireNonNull(s);
         try {
             return Float.parseFloat(s);
@@ -93,13 +94,13 @@ public final class Numbers {
         }
     }
 
-    @Nonnull
-    public static Optional<Float> parseFloatOpt(@Nonnull String s) {
+    @NonNull
+    public static Optional<Float> parseFloatOpt(@NonNull String s) {
         return Optional.ofNullable(parseFloatNullable(s));
     }
 
-    @Nonnull
-    public static OptionalDouble parseFloat(@Nonnull String s) {
+    @NonNull
+    public static OptionalDouble parseFloat(@NonNull String s) {
         try {
             return OptionalDouble.of(Float.parseFloat(s));
         } catch (NumberFormatException e) {
@@ -110,7 +111,7 @@ public final class Numbers {
     // double
 
     @Nullable
-    public static Double parseDoubleNullable(@Nonnull String s) {
+    public static Double parseDoubleNullable(@NonNull String s) {
         Objects.requireNonNull(s);
         try {
             return Double.parseDouble(s);
@@ -119,13 +120,13 @@ public final class Numbers {
         }
     }
 
-    @Nonnull
-    public static Optional<Double> parseDoubleOpt(@Nonnull String s) {
+    @NonNull
+    public static Optional<Double> parseDoubleOpt(@NonNull String s) {
         return Optional.ofNullable(parseDoubleNullable(s));
     }
 
-    @Nonnull
-    public static OptionalDouble parseDouble(@Nonnull String s) {
+    @NonNull
+    public static OptionalDouble parseDouble(@NonNull String s) {
         try {
             return OptionalDouble.of(Double.parseDouble(s));
         } catch (NumberFormatException e) {
@@ -136,7 +137,7 @@ public final class Numbers {
     // byte
 
     @Nullable
-    public static Byte parseByteNullable(@Nonnull String s) {
+    public static Byte parseByteNullable(@NonNull String s) {
         Objects.requireNonNull(s);
         try {
             return Byte.parseByte(s);
@@ -145,8 +146,8 @@ public final class Numbers {
         }
     }
 
-    @Nonnull
-    public static Optional<Byte> parseByteOpt(@Nonnull String s) {
+    @NonNull
+    public static Optional<Byte> parseByteOpt(@NonNull String s) {
         return Optional.ofNullable(parseByteNullable(s));
     }
 

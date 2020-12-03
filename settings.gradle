@@ -1,6 +1,4 @@
 rootProject.name = 'papi'
 include 'papi-core'
 include 'papi-js'
-include 'papi-groovy'
-include 'papi-kotlin'
 

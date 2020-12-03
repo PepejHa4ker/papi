@@ -2,8 +2,8 @@ package com.pepej.papi.scheduler.builder;
 
 
 import com.pepej.papi.promise.Promise;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
@@ -13,13 +13,13 @@ import java.util.function.Supplier;
  */
 public interface ContextualPromiseBuilder {
 
-    @Nonnull
-    <T> Promise<T> supply(@Nonnull Supplier<T> supplier);
+    @NonNull
+    <T> Promise<T> supply(@NonNull Supplier<T> supplier);
 
-    @Nonnull
-    <T> Promise<T> call(@Nonnull Callable<T> callable);
+    @NonNull
+    <T> Promise<T> call(@NonNull Callable<T> callable);
 
-    @Nonnull
-    Promise<Void> run(@Nonnull Runnable runnable);
+    @NonNull
+    Promise<Void> run(@NonNull Runnable runnable);
 
 }

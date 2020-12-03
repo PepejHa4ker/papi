@@ -1,8 +1,8 @@
 package com.pepej.papi.messaging.conversation;
 
 import com.pepej.papi.messaging.codec.Codec;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.UUID;
 
 /**
@@ -17,7 +17,7 @@ public interface ConversationMessage {
      *
      * @return the conversation id
      */
-    @Nonnull
+    @NonNull
     UUID getConversationId();
 
 }

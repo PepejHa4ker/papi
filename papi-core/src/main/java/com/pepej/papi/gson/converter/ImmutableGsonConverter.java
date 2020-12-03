@@ -3,8 +3,8 @@ package com.pepej.papi.gson.converter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nullable;
 
 class ImmutableGsonConverter extends AbstractGsonConverter<ImmutableMap<String, Object>, ImmutableList<Object>, ImmutableSet<Object>> {
     public static final ImmutableGsonConverter INSTANCE = new ImmutableGsonConverter();

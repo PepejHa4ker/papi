@@ -4,8 +4,8 @@ import com.pepej.papi.metadata.MetadataKey;
 import com.pepej.papi.metadata.MetadataMap;
 import com.pepej.papi.metadata.MetadataRegistry;
 import org.bukkit.World;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,8 +21,8 @@ public interface WorldMetadataRegistry extends MetadataRegistry<UUID> {
      * @param world the world
      * @return a metadata map
      */
-    @Nonnull
-    MetadataMap provide(@Nonnull World world);
+    @NonNull
+    MetadataMap provide(@NonNull World world);
 
     /**
      * Gets a {@link MetadataMap} for the given world, if one already exists and has
@@ -31,8 +31,8 @@ public interface WorldMetadataRegistry extends MetadataRegistry<UUID> {
      * @param world the world
      * @return a metadata map, if present
      */
-    @Nonnull
-    Optional<MetadataMap> get(@Nonnull World world);
+    @NonNull
+    Optional<MetadataMap> get(@NonNull World world);
 
     /**
      * Gets a map of the worlds with a given metadata key
@@ -41,7 +41,7 @@ public interface WorldMetadataRegistry extends MetadataRegistry<UUID> {
      * @param <K> the key type
      * @return an immutable map of worlds to key value
      */
-    @Nonnull
-    <K> Map<World, K> getAllWithKey(@Nonnull MetadataKey<K> key);
+    @NonNull
+    <K> Map<World, K> getAllWithKey(@NonNull MetadataKey<K> key);
 
 }

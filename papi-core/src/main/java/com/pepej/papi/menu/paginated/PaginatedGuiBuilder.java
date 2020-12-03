@@ -23,12 +23,14 @@ public class PaginatedGuiBuilder {
     public static final int DEFAULT_NEXT_PAGE_SLOT = new MenuScheme()
             .maskEmpty(5)
             .mask("000000010")
-            .getMaskedIndexes().get(0);
+            .getMaskedIndexes()
+            .get(0);
 
     public static final int DEFAULT_PREVIOUS_PAGE_SLOT = new MenuScheme()
             .maskEmpty(5)
             .mask("010000000")
-            .getMaskedIndexes().get(0);
+            .getMaskedIndexes()
+            .get(0);
 
     public static final List<Integer> DEFAULT_ITEM_SLOTS = new MenuScheme()
             .mask("011111110")
@@ -39,31 +41,31 @@ public class PaginatedGuiBuilder {
             .getMaskedIndexesImmutable();
 
     public static final MenuScheme DEFAULT_SCHEME = new MenuScheme(StandardSchemeMappings.STAINED_GLASS)
-            .mask("000000000")
-            .mask("000000000")
-            .mask("000000000")
-            .mask("000000000")
-            .mask("000000000")
-            .mask("000000000")
-            .scheme(0, 0)
-            .scheme(0, 0)
-            .scheme(0, 0)
-            .scheme(0, 0)
-            .scheme(0, 0)
-            .scheme(0, 0);
+            .mask("100000001")
+            .mask("100000001")
+            .mask("100000001")
+            .mask("100000001")
+            .mask("100000001")
+            .mask("100000001")
+            .scheme(3, 3)
+            .scheme(3, 3)
+            .scheme(3, 3)
+            .scheme(3, 3)
+            .scheme(3, 3)
+            .scheme(3, 3);
 
     public static final Function<PageInfo, ItemStack> DEFAULT_NEXT_PAGE_ITEM = pageInfo -> ItemStackBuilder.of(Material.ARROW)
                                                                                                            .name("&b&m--&b>")
-                                                                                                           .lore("&fSwitch to the next page.")
+                                                                                                           .lore("&fПереключиться на следующую страницу.")
                                                                                                            .lore("")
-                                                                                                           .lore("&7Currently viewing page &b" + pageInfo.getCurrent() + "&7/&b" + pageInfo.getSize())
+                                                                                                           .lore("&7Текущая страница &b" + pageInfo.getCurrent() + "&7/&b" + pageInfo.getSize())
                                                                                                            .build();
 
     public static final Function<PageInfo, ItemStack> DEFAULT_PREVIOUS_PAGE_ITEM = pageInfo -> ItemStackBuilder.of(Material.ARROW)
                                                                                                                .name("&b<&b&m--")
-                                                                                                               .lore("&fSwitch to the previous page.")
+                                                                                                               .lore("&fПереключиться на предыдушую страницу..")
                                                                                                                .lore("")
-                                                                                                               .lore("&7Currently viewing page &b" + pageInfo.getCurrent() + "&7/&b" + pageInfo.getSize())
+                                                                                                               .lore("&7Текущая страница &b" + pageInfo.getCurrent() + "&7/&b" + pageInfo.getSize())
                                                                                                                .build();
 
     public static PaginatedGuiBuilder create() {
@@ -177,11 +179,8 @@ public class PaginatedGuiBuilder {
     public PaginatedGui build(Player player, Function<PaginatedGui, List<Item>> content) {
         Objects.requireNonNull(player, "player");
         Objects.requireNonNull(content, "content");
-        Objects.requireNonNull(this.lines, "lines");
         Objects.requireNonNull(this.title, "title");
         Objects.requireNonNull(this.itemSlots, "itemSlots");
-        Objects.requireNonNull(this.nextPageSlot, "nextPageSlot");
-        Objects.requireNonNull(this.previousPageSlot, "previousPageSlot");
         Objects.requireNonNull(this.scheme, "scheme");
         Objects.requireNonNull(this.nextPageItem, "nextPageItem");
         Objects.requireNonNull(this.previousPageItem, "previousPageItem");

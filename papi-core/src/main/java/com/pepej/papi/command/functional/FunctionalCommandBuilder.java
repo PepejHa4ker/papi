@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
@@ -66,7 +65,7 @@ public interface FunctionalCommandBuilder<T extends CommandSender> {
      * @param failureMessage the failure message to send if they don't have permission
      * @return the builder instance
      */
-    FunctionalCommandBuilder<T> assertPermission(String permission, @Nullable String failureMessage);
+    FunctionalCommandBuilder<T> assertPermission(String permission, String failureMessage);
 
     /**
      * Asserts that the sender is op, and sends them the default failure message if they're not.

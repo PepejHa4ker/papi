@@ -7,10 +7,12 @@ import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
+
+;
 
 /**
  * An immutable and serializable vector + direction object
@@ -79,7 +81,7 @@ public final class VectorPoint implements GsonSerializable {
         return Point.of(Position.of(this.position, world), this.direction);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonObject serialize() {
         return JsonBuilder.object()

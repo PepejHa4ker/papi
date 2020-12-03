@@ -17,9 +17,9 @@ import ninja.leaping.configurate.objectmapping.serialize.TypeSerializerCollectio
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.yaml.snakeyaml.DumperOptions;
 
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,9 +32,9 @@ import java.nio.file.Path;
 public abstract class ConfigFactory<N extends ConfigurationNode, L extends ConfigurationLoader<N>> {
 
     private static final ConfigFactory<ConfigurationNode, YAMLConfigurationLoader> YAML = new ConfigFactory<ConfigurationNode, YAMLConfigurationLoader>() {
-        @Nonnull
+        @NonNull
         @Override
-        public YAMLConfigurationLoader loader(@Nonnull Path path) {
+        public YAMLConfigurationLoader loader(@NonNull Path path) {
             YAMLConfigurationLoader.Builder builder = YAMLConfigurationLoader.builder()
                                                                              .setFlowStyle(DumperOptions.FlowStyle.BLOCK)
                                                                              .setIndent(2)
@@ -47,9 +47,9 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
     };
 
     private static final ConfigFactory<ConfigurationNode, GsonConfigurationLoader> GSON = new ConfigFactory<ConfigurationNode, GsonConfigurationLoader>() {
-        @Nonnull
+        @NonNull
         @Override
-        public GsonConfigurationLoader loader(@Nonnull Path path) {
+        public GsonConfigurationLoader loader(@NonNull Path path) {
             GsonConfigurationLoader.Builder builder = GsonConfigurationLoader.builder()
                                                                              .setIndent(2)
                                                                              .setSource(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
@@ -61,9 +61,9 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
     };
 
     private static final ConfigFactory<CommentedConfigurationNode, HoconConfigurationLoader> HOCON = new ConfigFactory<CommentedConfigurationNode, HoconConfigurationLoader>() {
-        @Nonnull
+        @NonNull
         @Override
-        public HoconConfigurationLoader loader(@Nonnull Path path) {
+        public HoconConfigurationLoader loader(@NonNull Path path) {
             HoconConfigurationLoader.Builder builder = HoconConfigurationLoader.builder()
                                                                                .setSource(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
                                                                                .setSink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
@@ -83,22 +83,22 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
         TYPE_SERIALIZERS = helperSerializers.newChild();
     }
 
-    @Nonnull
+    @NonNull
     public static TypeSerializerCollection typeSerializers() {
         return TYPE_SERIALIZERS;
     }
 
-    @Nonnull
+    @NonNull
     public static ConfigFactory<ConfigurationNode, YAMLConfigurationLoader> yaml() {
         return YAML;
     }
 
-    @Nonnull
+    @NonNull
     public static ConfigFactory<ConfigurationNode, GsonConfigurationLoader> gson() {
         return GSON;
     }
 
-    @Nonnull
+    @NonNull
     public static ConfigFactory<CommentedConfigurationNode, HoconConfigurationLoader> hocon() {
         return HOCON;
     }
@@ -107,11 +107,11 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
 
     }
 
-    @Nonnull
-    public abstract L loader(@Nonnull Path path);
+    @NonNull
+    public abstract L loader(@NonNull Path path);
 
-    @Nonnull
-    public N load(@Nonnull Path path) {
+    @NonNull
+    public N load(@NonNull Path path) {
         try {
             return loader(path).load();
         } catch (IOException e) {
@@ -119,7 +119,7 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
         }
     }
 
-    public void save(@Nonnull Path path, @Nonnull ConfigurationNode node) {
+    public void save(@NonNull Path path, @NonNull ConfigurationNode node) {
         try {
             loader(path).save(node);
         } catch (IOException e) {
@@ -127,7 +127,7 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
         }
     }
 
-    public <T> void load(@Nonnull Path path, T object) {
+    public <T> void load(@NonNull Path path, T object) {
         try {
             L loader = loader(path);
             ObjectMapper<T>.BoundInstance mapper = objectMapper(object);
@@ -150,26 +150,26 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
         }
     }
 
-    @Nonnull
-    public L loader(@Nonnull File file) {
+    @NonNull
+    public L loader(@NonNull File file) {
         return loader(file.toPath());
     }
 
-    @Nonnull
-    public N load(@Nonnull File file) {
+    @NonNull
+    public N load(@NonNull File file) {
         return load(file.toPath());
     }
 
-    public void save(@Nonnull File file, @Nonnull ConfigurationNode node) {
+    public void save(@NonNull File file, @NonNull ConfigurationNode node) {
         save(file.toPath(), node);
     }
 
-    public <T> void load(@Nonnull File file, T object) {
+    public <T> void load(@NonNull File file, T object) {
         load(file.toPath(), object);
     }
 
-    @Nonnull
-    public static <T> ObjectMapper<T> classMapper(@Nonnull Class<T> clazz) {
+    @NonNull
+    public static <T> ObjectMapper<T> classMapper(@NonNull Class<T> clazz) {
         try {
             return ObjectMapper.forClass(clazz);
         } catch (ObjectMappingException e) {
@@ -177,8 +177,8 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
         }
     }
 
-    @Nonnull
-    public static <T> ObjectMapper<T>.BoundInstance objectMapper(@Nonnull T object) {
+    @NonNull
+    public static <T> ObjectMapper<T>.BoundInstance objectMapper(@NonNull T object) {
         try {
             return ObjectMapper.forObject(object);
         } catch (ObjectMappingException e) {
@@ -186,8 +186,8 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
         }
     }
 
-    @Nonnull
-    public static <T> T generate(@Nonnull Class<T> clazz, @Nonnull ConfigurationNode node) {
+    @NonNull
+    public static <T> T generate(@NonNull Class<T> clazz, @NonNull ConfigurationNode node) {
         try {
             return classMapper(clazz).bindToNew().populate(node);
         } catch (ObjectMappingException e) {
@@ -195,8 +195,8 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
         }
     }
 
-    @Nonnull
-    public static <T> T populate(@Nonnull T object, @Nonnull ConfigurationNode node) {
+    @NonNull
+    public static <T> T populate(@NonNull T object, @NonNull ConfigurationNode node) {
         try {
             return objectMapper(object).populate(node);
         } catch (ObjectMappingException e) {

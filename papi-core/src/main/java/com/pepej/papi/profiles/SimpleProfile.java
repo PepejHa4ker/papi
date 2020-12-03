@@ -1,14 +1,15 @@
 package com.pepej.papi.profiles;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 final class SimpleProfile implements Profile {
 
-    @Nonnull
+    @NonNull
     private final UUID uniqueId;
 
     @Nullable
@@ -16,19 +17,19 @@ final class SimpleProfile implements Profile {
 
     private final long timestamp;
 
-    SimpleProfile(@Nonnull UUID uniqueId, @Nullable String name) {
+    SimpleProfile(@NonNull UUID uniqueId, @Nullable String name) {
         this.uniqueId = Objects.requireNonNull(uniqueId, "uniqueId");
         this.name = name;
         this.timestamp = System.currentTimeMillis();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public UUID getUniqueId() {
         return this.uniqueId;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Optional<String> getName() {
         return Optional.ofNullable(this.name);

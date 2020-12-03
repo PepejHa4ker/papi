@@ -1,8 +1,8 @@
 package com.pepej.papi.messaging.conversation;
 
 import com.pepej.papi.promise.Promise;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -88,7 +88,7 @@ public final class ConversationReply<R extends ConversationMessage> {
      * @return the reply
      * @throws IllegalStateException if this object doesn't {@link #hasReply() have a reply}
      */
-    @Nonnull
+    @NonNull
     public Promise<R> getReply() {
         if (this.reply == null) {
             throw new IllegalStateException("No reply present");

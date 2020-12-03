@@ -3,8 +3,8 @@ package com.pepej.papi.command;
 import com.pepej.papi.command.context.CommandContext;
 import com.pepej.papi.terminable.Terminable;
 import com.pepej.papi.terminable.TerminableConsumer;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 /**
  * Represents a command
@@ -16,7 +16,7 @@ public interface Command extends Terminable {
      *
      * @param aliases the aliases for the command
      */
-    void register(@Nonnull String... aliases);
+    void register(@NonNull String... aliases);
 
     /**
      * Registers this command with the server, via the given plugin instance, and then binds it with the composite terminable.
@@ -24,7 +24,7 @@ public interface Command extends Terminable {
      * @param consumer the terminable consumer to bind with
      * @param aliases the aliases for the command
      */
-    default void registerAndBind(@Nonnull TerminableConsumer consumer, @Nonnull String... aliases) {
+    default void registerAndBind(@NonNull TerminableConsumer consumer, @NonNull String... aliases) {
         register(aliases);
         bindWith(consumer);
     }
@@ -34,6 +34,6 @@ public interface Command extends Terminable {
      *
      * @param context the contexts for the command
      */
-    void call(@Nonnull CommandContext<?> context) throws CommandInterruptException;
+    void call(@NonNull CommandContext<?> context) throws CommandInterruptException;
 
 }

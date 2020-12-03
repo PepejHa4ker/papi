@@ -1,8 +1,8 @@
 package com.pepej.papi.menu.scheme;
 
 import com.pepej.papi.menu.Item;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 final class EmptySchemeMapping implements SchemeMapping {
 
-    @Nonnull
+    @NonNull
     @Override
     public Optional<Item> get(int key) {
         return Optional.empty();
@@ -26,7 +26,7 @@ final class EmptySchemeMapping implements SchemeMapping {
         return false;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public SchemeMapping copy() {
         return this; // no need to make a copy, this class is a singleton

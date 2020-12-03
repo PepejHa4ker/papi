@@ -1,6 +1,7 @@
 package com.pepej.papi.event.functional;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -18,8 +19,8 @@ public interface FunctionalHandlerList<T, R> {
      * @param handler the handler
      * @return this handler list
      */
-    @Nonnull
-    FunctionalHandlerList<T, R> consumer(@Nonnull Consumer<? super T> handler);
+    @NonNull
+    FunctionalHandlerList<T, R> consumer(@NonNull Consumer<? super T> handler);
 
     /**
      * Add a {@link BiConsumer} handler.
@@ -27,8 +28,8 @@ public interface FunctionalHandlerList<T, R> {
      * @param handler the handler
      * @return this handler list
      */
-    @Nonnull
-    FunctionalHandlerList<T, R> biConsumer(@Nonnull BiConsumer<R, ? super T> handler);
+    @NonNull
+    FunctionalHandlerList<T, R> biConsumer(@NonNull BiConsumer<R, ? super T> handler);
 
     /**
      * Builds and registers the Handler.
@@ -36,7 +37,7 @@ public interface FunctionalHandlerList<T, R> {
      * @return a registered {@link R} instance.
      * @throws IllegalStateException if no handlers have been registered
      */
-    @Nonnull
+    @NonNull
     R register();
 
 }

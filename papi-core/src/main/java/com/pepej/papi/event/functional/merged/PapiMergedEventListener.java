@@ -11,8 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -179,13 +179,13 @@ class PapiMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
         return functions;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Class<? super T> getHandledClass() {
         return this.handledClass.getRawType();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Set<Class<? extends Event>> getEventClasses() {
         return this.mappings.keySet();

@@ -11,8 +11,8 @@ import com.pepej.papi.gson.JsonBuilder;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -159,7 +159,7 @@ public final class ChunkPosition implements GsonSerializable {
         return (long) this.x & 0xffffffffL | ((long) this.z & 0xffffffffL) << 32;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonObject serialize() {
         return JsonBuilder.object()

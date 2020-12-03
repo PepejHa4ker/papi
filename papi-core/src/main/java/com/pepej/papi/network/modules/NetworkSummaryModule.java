@@ -1,8 +1,8 @@
 package com.pepej.papi.network.modules;
 
-import com.pepej.papi.Commands;
-import com.pepej.papi.Events;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.command.Commands;
+import com.pepej.papi.events.Events;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.event.filter.EventFilters;
 import com.pepej.papi.messaging.InstanceData;
 import com.pepej.papi.network.Network;
@@ -15,8 +15,8 @@ import com.pepej.papi.utils.Tps;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.time.Instant;
 import java.util.Map;
 
@@ -36,7 +36,7 @@ public class NetworkSummaryModule implements TerminableModule {
     }
 
     @Override
-    public void setup(@Nonnull TerminableConsumer consumer) {
+    public void setup(@NonNull TerminableConsumer consumer) {
         Commands.create()
                 .assertPermission("papi.networksummary")
                 .handler(c -> sendSummary(c.sender()))

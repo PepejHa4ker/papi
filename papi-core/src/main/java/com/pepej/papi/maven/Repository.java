@@ -1,6 +1,7 @@
 package com.pepej.papi.maven;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.lang.annotation.*;
 
 /**
@@ -16,7 +17,7 @@ public @interface Repository {
      *
      * @return the base url of the repository
      */
-    @Nonnull
+    @NonNull
     String url();
 
 }

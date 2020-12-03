@@ -7,16 +7,16 @@ import com.google.common.collect.Maps;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.plugin.PapiPlugin;
 import com.pepej.papi.promise.Promise;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.utils.Players;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -214,31 +214,31 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public void connect(@Nonnull Player player, @Nonnull String serverName) {
+    public void connect(@NonNull Player player, @NonNull String serverName) {
         sendMessage(new ConnectAgent(player, serverName));
     }
 
     @Override
-    public void connectOther(@Nonnull String playerName, @Nonnull String serverName) {
+    public void connectOther(@NonNull String playerName, @NonNull String serverName) {
         sendMessage(new ConnectOtherAgent(playerName, serverName));
     }
 
     @Override
-    public Promise<Map.Entry<String, Integer>> ip(@Nonnull Player player) {
+    public Promise<Map.Entry<String, Integer>> ip(@NonNull Player player) {
         Promise<Map.Entry<String, Integer>> fut = Promise.empty();
         sendMessage(new IPAgent(player, fut));
         return fut;
     }
 
     @Override
-    public Promise<Integer> playerCount(@Nonnull String serverName) {
+    public Promise<Integer> playerCount(@NonNull String serverName) {
         Promise<Integer> fut = Promise.empty();
         sendMessage(new PlayerCountAgent(serverName, fut));
         return fut;
     }
 
     @Override
-    public Promise<List<String>> playerList(@Nonnull String serverName) {
+    public Promise<List<String>> playerList(@NonNull String serverName) {
         Promise<List<String>> fut = Promise.empty();
         sendMessage(new PlayerListAgent(serverName, fut));
         return fut;
@@ -252,7 +252,7 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public void message(@Nonnull String playerName, @Nonnull String message) {
+    public void message(@NonNull String playerName, @NonNull String message) {
         sendMessage(new PlayerMessageAgent(playerName, message));
     }
 
@@ -264,59 +264,59 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public Promise<UUID> uuid(@Nonnull Player player) {
+    public Promise<UUID> uuid(@NonNull Player player) {
         Promise<UUID> fut = Promise.empty();
         sendMessage(new UUIDAgent(player, fut));
         return fut;
     }
 
     @Override
-    public Promise<UUID> uuidOther(@Nonnull String playerName) {
+    public Promise<UUID> uuidOther(@NonNull String playerName) {
         Promise<UUID> fut = Promise.empty();
         sendMessage(new UUIDOtherAgent(playerName, fut));
         return fut;
     }
 
     @Override
-    public Promise<Map.Entry<String, Integer>> serverIp(@Nonnull String serverName) {
+    public Promise<Map.Entry<String, Integer>> serverIp(@NonNull String serverName) {
         Promise<Map.Entry<String, Integer>> fut = Promise.empty();
         sendMessage(new ServerIPAgent(serverName, fut));
         return fut;
     }
 
     @Override
-    public void kickPlayer(@Nonnull String playerName, @Nonnull String reason) {
+    public void kickPlayer(@NonNull String playerName, @NonNull String reason) {
         sendMessage(new KickPlayerAgent(playerName, reason));
     }
 
     @Override
-    public void forward(@Nonnull String serverName, @Nonnull String channelName, @Nonnull byte[] data) {
+    public void forward(@NonNull String serverName, @NonNull String channelName, @NonNull byte[] data) {
         sendMessage(new ForwardAgent(serverName, channelName, data));
     }
 
     @Override
-    public void forward(@Nonnull String serverName, @Nonnull String channelName, @Nonnull ByteArrayDataOutput data) {
+    public void forward(@NonNull String serverName, @NonNull String channelName, @NonNull ByteArrayDataOutput data) {
         sendMessage(new ForwardAgent(serverName, channelName, data));
     }
 
     @Override
-    public void forwardToPlayer(@Nonnull String playerName, @Nonnull String channelName, @Nonnull byte[] data) {
+    public void forwardToPlayer(@NonNull String playerName, @NonNull String channelName, @NonNull byte[] data) {
         sendMessage(new ForwardToPlayerAgent(playerName, channelName, data));
     }
 
     @Override
-    public void forwardToPlayer(@Nonnull String playerName, @Nonnull String channelName, @Nonnull ByteArrayDataOutput data) {
+    public void forwardToPlayer(@NonNull String playerName, @NonNull String channelName, @NonNull ByteArrayDataOutput data) {
         sendMessage(new ForwardToPlayerAgent(playerName, channelName, data));
     }
 
     @Override
-    public void registerForwardCallbackRaw(@Nonnull String channelName, @Nonnull Predicate<byte[]> callback) {
+    public void registerForwardCallbackRaw(@NonNull String channelName, @NonNull Predicate<byte[]> callback) {
         ForwardCustomCallback customCallback = new ForwardCustomCallback(channelName, callback);
         registerCallback(customCallback);
     }
 
     @Override
-    public void registerForwardCallback(@Nonnull String channelName, @Nonnull Predicate<ByteArrayDataInput> callback) {
+    public void registerForwardCallback(@NonNull String channelName, @NonNull Predicate<ByteArrayDataInput> callback) {
         final Predicate<ByteArrayDataInput> cb = Objects.requireNonNull(callback, "callback");
         ForwardCustomCallback customCallback = new ForwardCustomCallback(channelName, bytes -> cb.test(ByteStreams.newDataInput(bytes)));
         registerCallback(customCallback);

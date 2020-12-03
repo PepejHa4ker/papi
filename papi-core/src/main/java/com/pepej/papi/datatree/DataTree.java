@@ -4,8 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import ninja.leaping.configurate.ConfigurationNode;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -44,8 +44,8 @@ public interface DataTree {
      * @param element the element
      * @return a tree
      */
-    @Nonnull
-    static GsonDataTree from(@Nonnull JsonElement element) {
+    @NonNull
+    static GsonDataTree from(@NonNull JsonElement element) {
         return new GsonDataTree(element);
     }
 
@@ -55,8 +55,8 @@ public interface DataTree {
      * @param node the node
      * @return a tree
      */
-    @Nonnull
-    static ConfigurateDataTree from(@Nonnull ConfigurationNode node) {
+    @NonNull
+    static ConfigurateDataTree from(@NonNull ConfigurationNode node) {
         return new ConfigurateDataTree(node);
     }
 
@@ -69,15 +69,15 @@ public interface DataTree {
      * @param path the path
      * @return the resultant tree node
      */
-    @Nonnull
-    DataTree resolve(@Nonnull Object... path);
+    @NonNull
+    DataTree resolve(@NonNull Object... path);
 
     /**
      * Gets a stream of the member nodes, as if this tree was a {@link JsonObject}.
      *
      * @return the members
      */
-    @Nonnull
+    @NonNull
     Stream<? extends Map.Entry<String, ? extends DataTree>> asObject();
 
     /**
@@ -85,7 +85,7 @@ public interface DataTree {
      *
      * @return the members
      */
-    @Nonnull
+    @NonNull
     Stream<? extends DataTree> asArray();
 
     /**
@@ -93,7 +93,7 @@ public interface DataTree {
      *
      * @return the members
      */
-    @Nonnull
+    @NonNull
     Stream<? extends Map.Entry<Integer, ? extends DataTree>> asIndexedArray();
 
     /**
@@ -101,7 +101,7 @@ public interface DataTree {
      *
      * @return this as a string
      */
-    @Nonnull
+    @NonNull
     String asString();
 
     /**
@@ -109,7 +109,7 @@ public interface DataTree {
      *
      * @return this as a number
      */
-    @Nonnull
+    @NonNull
     Number asNumber();
 
     /**

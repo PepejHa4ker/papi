@@ -3,9 +3,9 @@ package com.pepej.papi.menu;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -21,7 +21,7 @@ public interface Slot {
      *
      * @return the parent gui
      */
-    @Nonnull
+    @NonNull
     Gui gui();
 
     /**
@@ -60,8 +60,8 @@ public interface Slot {
      * @param item the new item
      * @return this slot
      */
-    @Nonnull
-    Slot setItem(@Nonnull ItemStack item);
+    @NonNull
+    Slot setItem(@NonNull ItemStack item);
 
     /**
      * Clears all attributes of the slot.
@@ -75,7 +75,7 @@ public interface Slot {
      *
      * @return this slot
      */
-    @Nonnull
+    @NonNull
     Slot clearItem();
 
     /**
@@ -83,7 +83,7 @@ public interface Slot {
      *
      * @return this slot
      */
-    @Nonnull
+    @NonNull
     Slot clearBindings();
 
     /**
@@ -91,25 +91,25 @@ public interface Slot {
      *
      * @return this slot
      */
-    @Nonnull
+    @NonNull
     Slot clearBindings(ClickType type);
 
-    @Nonnull
-    Slot bind(@Nonnull ClickType type, @Nonnull Consumer<InventoryClickEvent> handler);
+    @NonNull
+    Slot bind(@NonNull ClickType type, @NonNull Consumer<InventoryClickEvent> handler);
 
-    @Nonnull
-    Slot bind(@Nonnull ClickType type, @Nonnull Runnable handler);
+    @NonNull
+    Slot bind(@NonNull ClickType type, @NonNull Runnable handler);
 
-    @Nonnull
-    Slot bind(@Nonnull Consumer<InventoryClickEvent> handler, @Nonnull ClickType... types);
+    @NonNull
+    Slot bind(@NonNull Consumer<InventoryClickEvent> handler, @NonNull ClickType... types);
 
-    @Nonnull
-    Slot bind(@Nonnull Runnable handler, @Nonnull ClickType... types);
+    @NonNull
+    Slot bind(@NonNull Runnable handler, @NonNull ClickType... types);
 
-    @Nonnull
-    <T extends Runnable> Slot bindAllRunnables(@Nonnull Iterable<Map.Entry<ClickType, T>> handlers);
+    @NonNull
+    <T extends Runnable> Slot bindAllRunnables(@NonNull Iterable<Map.Entry<ClickType, T>> handlers);
 
-    @Nonnull
-    <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@Nonnull Iterable<Map.Entry<ClickType, T>> handlers);
+    @NonNull
+    <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers);
 
 }

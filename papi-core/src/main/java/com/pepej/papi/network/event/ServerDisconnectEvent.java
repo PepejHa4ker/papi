@@ -1,6 +1,7 @@
 package com.pepej.papi.network.event;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Objects;
 
 /**

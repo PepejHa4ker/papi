@@ -2,8 +2,8 @@ package com.pepej.papi.bossbar;
 
 import com.pepej.papi.terminable.Terminable;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ public interface BossBar extends Terminable {
      *
      * @return the title of the bar
      */
-    @Nonnull
+    @NonNull
     String title();
 
     /**
@@ -25,8 +25,8 @@ public interface BossBar extends Terminable {
      * @param title the title of the bar
      * @return this bar (for chaining)
      */
-    @Nonnull
-    BossBar title(@Nonnull String title);
+    @NonNull
+    BossBar title(@NonNull String title);
 
     /**
      * Gets the progress of the bar between 0.0 and 1.0
@@ -42,7 +42,7 @@ public interface BossBar extends Terminable {
      * @param progress the progress of the bar
      * @return this bar (for chaining)
      */
-    @Nonnull
+    @NonNull
     BossBar progress(double progress);
 
     /**
@@ -50,7 +50,7 @@ public interface BossBar extends Terminable {
      *
      * @return the color of the bar
      */
-    @Nonnull
+    @NonNull
     BossBarColor color();
 
     /**
@@ -59,15 +59,15 @@ public interface BossBar extends Terminable {
      * @param color the color of the bar
      * @return this bar (for chaining)
      */
-    @Nonnull
-    BossBar color(@Nonnull BossBarColor color);
+    @NonNull
+    BossBar color(@NonNull BossBarColor color);
 
     /**
      * Gets the style of this boss bar
      *
      * @return the style of the bar
      */
-    @Nonnull
+    @NonNull
     BossBarStyle style();
 
     /**
@@ -76,8 +76,8 @@ public interface BossBar extends Terminable {
      * @param style the style of the bar
      * @return this bar (for chaining)
      */
-    @Nonnull
-    BossBar style(@Nonnull BossBarStyle style);
+    @NonNull
+    BossBar style(@NonNull BossBarStyle style);
 
     /**
      * Gets if the boss bar is displayed to attached players.
@@ -92,7 +92,7 @@ public interface BossBar extends Terminable {
      * @param visible visible status
      * @return this bar (for chaining)
      */
-    @Nonnull
+    @NonNull
     BossBar visible(boolean visible);
 
     /**
@@ -100,7 +100,7 @@ public interface BossBar extends Terminable {
      *
      * @return a immutable list of players
      */
-    @Nonnull
+    @NonNull
     List<Player> players();
 
     /**
@@ -108,7 +108,7 @@ public interface BossBar extends Terminable {
      *
      * @param player the player to add
      */
-    void addPlayer(@Nonnull Player player);
+    void addPlayer(@NonNull Player player);
 
     /**
      * Removes the player from this boss bar causing it to be removed from their
@@ -116,14 +116,14 @@ public interface BossBar extends Terminable {
      *
      * @param player the player to remove
      */
-    void removePlayer(@Nonnull Player player);
+    void removePlayer(@NonNull Player player);
 
     /**
      * Adds the players to this boss bar causing it to display on their screens.
      *
      * @param players the players to add
      */
-    default void addPlayers(@Nonnull Iterable<Player> players) {
+    default void addPlayers(@NonNull Iterable<Player> players) {
         for (Player player : players) {
             addPlayer(player);
         }
@@ -135,7 +135,7 @@ public interface BossBar extends Terminable {
      *
      * @param players the players to remove
      */
-    default void removePlayers(@Nonnull Iterable<Player> players) {
+    default void removePlayers(@NonNull Iterable<Player> players) {
         for (Player player : players) {
             removePlayer(player);
         }

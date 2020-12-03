@@ -4,8 +4,8 @@ import com.google.gson.JsonElement;
 import com.pepej.papi.Services;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.serialize.Position;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -22,8 +22,8 @@ public interface Hologram extends BaseHologram, GsonSerializable {
      * @param lines the initial lines to display
      * @return the new hologram.
      */
-    @Nonnull
-    static Hologram create(@Nonnull Position position, @Nonnull List<String> lines) {
+    @NonNull
+    static Hologram create(@NonNull Position position, @NonNull List<String> lines) {
         return Services.load(HologramFactory.class).newHologram(position, lines);
     }
 
@@ -39,6 +39,6 @@ public interface Hologram extends BaseHologram, GsonSerializable {
      *
      * @param lines the new lines
      */
-    void updateLines(@Nonnull List<String> lines);
+    void updateLines(@NonNull List<String> lines);
 
 }

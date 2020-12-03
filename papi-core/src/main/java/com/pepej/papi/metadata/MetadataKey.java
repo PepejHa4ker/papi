@@ -3,8 +3,8 @@ package com.pepej.papi.metadata;
 import com.google.common.reflect.TypeToken;
 import com.pepej.papi.cooldown.Cooldown;
 import com.pepej.papi.interfaces.TypeAware;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -99,7 +99,7 @@ public interface MetadataKey<T> extends TypeAware<T> {
      *
      * @return the type of the value
      */
-    @Nonnull
+    @NonNull
     @Override
     TypeToken<T> getType();
 

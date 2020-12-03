@@ -1,6 +1,7 @@
 package com.pepej.papi.metadata;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.function.Supplier;
 
 /**
@@ -15,12 +16,12 @@ public final class Empty {
     private static final Empty INSTANCE = new Empty();
     private static final Supplier<Empty> SUPPLIER = () -> INSTANCE;
 
-    @Nonnull
+    @NonNull
     public static Empty instance() {
         return INSTANCE;
     }
 
-    @Nonnull
+    @NonNull
     public static Supplier<Empty> supplier() {
         return SUPPLIER;
     }

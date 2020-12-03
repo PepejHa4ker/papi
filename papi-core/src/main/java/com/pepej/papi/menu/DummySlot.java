@@ -3,9 +3,9 @@ package com.pepej.papi.menu;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -20,12 +20,12 @@ public class DummySlot implements Slot {
     // the id of this slot
     private final int id;
 
-    public DummySlot(@Nonnull Gui gui, int id) {
+    public DummySlot(@NonNull Gui gui, int id) {
         this.gui = gui;
         this.id = id;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Gui gui() {
         return this.gui;
@@ -52,9 +52,9 @@ public class DummySlot implements Slot {
         return false;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot setItem(@Nonnull ItemStack item) {
+    public Slot setItem(@NonNull ItemStack item) {
         return this;
     }
 
@@ -63,57 +63,57 @@ public class DummySlot implements Slot {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Slot clearItem() {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Slot clearBindings() {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Slot clearBindings(ClickType type) {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot bind(@Nonnull ClickType type, @Nonnull Consumer<InventoryClickEvent> handler) {
+    public Slot bind(@NonNull ClickType type, @NonNull Consumer<InventoryClickEvent> handler) {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot bind(@Nonnull ClickType type, @Nonnull Runnable handler) {
+    public Slot bind(@NonNull ClickType type, @NonNull Runnable handler) {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot bind(@Nonnull Consumer<InventoryClickEvent> handler, @Nonnull ClickType... types) {
+    public Slot bind(@NonNull Consumer<InventoryClickEvent> handler, @NonNull ClickType... types) {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public Slot bind(@Nonnull Runnable handler, @Nonnull ClickType... types) {
+    public Slot bind(@NonNull Runnable handler, @NonNull ClickType... types) {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T extends Runnable> Slot bindAllRunnables(@Nonnull Iterable<Map.Entry<ClickType, T>> handlers) {
+    public <T extends Runnable> Slot bindAllRunnables(@NonNull Iterable<Map.Entry<ClickType, T>> handlers) {
         return this;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@Nonnull Iterable<Map.Entry<ClickType, T>> handlers) {
+    public <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers) {
         return this;
     }
 }

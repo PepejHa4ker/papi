@@ -77,7 +77,7 @@ public class PaginatedGui extends Gui {
         } else {
             setItem(this.previousPageSlot, ItemStackBuilder.of(this.previousPageItem.apply(PageInfo.create(this.page, pages.size())))
                                                            .build(() -> {
-                                                               this.page = this.page - 1;
+                                                               this.page -= 1;
                                                                redraw();
                                                            }));
         }
@@ -93,7 +93,7 @@ public class PaginatedGui extends Gui {
         } else {
             setItem(this.nextPageSlot, ItemStackBuilder.of(this.nextPageItem.apply(PageInfo.create(this.page, pages.size())))
                                                        .build(() -> {
-                                                           this.page = this.page + 1;
+                                                           this.page += 1;
                                                            redraw();
                                                        }));
         }

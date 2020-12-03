@@ -1,8 +1,8 @@
 package com.pepej.papi.event;
 
 import com.comphenix.protocol.PacketType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -15,7 +15,7 @@ public interface ProtocolSubscription extends Subscription {
      *
      * @return the types
      */
-    @Nonnull
+    @NonNull
     Set<PacketType> getPackets();
 
 }

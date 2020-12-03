@@ -2,8 +2,8 @@ package com.pepej.papi.cooldown;
 
 import com.google.gson.JsonElement;
 import com.pepej.papi.gson.JsonBuilder;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +20,7 @@ class CooldownImpl implements Cooldown {
         this.lastTested = 0;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public OptionalLong getLastTested() {
         return this.lastTested == 0 ? OptionalLong.empty() : OptionalLong.of(this.lastTested);
@@ -40,13 +40,13 @@ class CooldownImpl implements Cooldown {
         return this.timeout;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public CooldownImpl copy() {
         return new CooldownImpl(this.timeout, TimeUnit.MILLISECONDS);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public JsonElement serialize() {
         return JsonBuilder.object()

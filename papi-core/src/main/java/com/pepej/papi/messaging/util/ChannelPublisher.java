@@ -1,12 +1,12 @@
 package com.pepej.papi.messaging.util;
 
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.messaging.Channel;
 import com.pepej.papi.promise.ThreadContext;
 import com.pepej.papi.scheduler.Task;
 import com.pepej.papi.terminable.Terminable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -29,8 +29,8 @@ public final class ChannelPublisher<T> implements Terminable {
      * @param <T> the type of the message
      * @return a channel publisher
      */
-    @Nonnull
-    public static <T> ChannelPublisher<T> create(@Nonnull Channel<T> channel, long duration, @Nonnull TimeUnit unit, @Nonnull ThreadContext threadContext, @Nonnull Supplier<? extends T> supplier) {
+    @NonNull
+    public static <T> ChannelPublisher<T> create(@NonNull Channel<T> channel, long duration, @NonNull TimeUnit unit, @NonNull ThreadContext threadContext, @NonNull Supplier<? extends T> supplier) {
         Objects.requireNonNull(channel, "channel");
         Objects.requireNonNull(unit, "unit");
         Objects.requireNonNull(threadContext, "threadContext");
@@ -49,8 +49,8 @@ public final class ChannelPublisher<T> implements Terminable {
      * @param <T> the type of the message
      * @return a channel publisher
      */
-    @Nonnull
-    public static <T> ChannelPublisher<T> create(@Nonnull Channel<T> channel, long duration, @Nonnull TimeUnit unit, @Nonnull Supplier<? extends T> supplier) {
+    @NonNull
+    public static <T> ChannelPublisher<T> create(@NonNull Channel<T> channel, long duration, @NonNull TimeUnit unit, @NonNull Supplier<? extends T> supplier) {
         return create(channel, duration, unit, ThreadContext.ASYNC, supplier);
     }
 

@@ -1,8 +1,8 @@
 package com.pepej.papi.scheduler;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -46,31 +46,31 @@ final class PapiAsyncExecutor extends AbstractExecutorService implements Schedul
     }
 
     @Override
-    public void execute(@Nonnull Runnable runnable) {
+    public void execute(@NonNull Runnable runnable) {
         this.taskService.execute(PapiExecutors.wrapRunnable(runnable));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public ScheduledFuture<?> schedule(@Nonnull Runnable command, long delay, @Nonnull TimeUnit unit) {
+    public ScheduledFuture<?> schedule(@NonNull Runnable command, long delay, @NonNull TimeUnit unit) {
         Runnable delegate = PapiExecutors.wrapRunnable(command);
         return consumeTask(this.timerExecutionService.schedule(() -> this.taskService.execute(delegate), delay, unit));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <V> ScheduledFuture<V> schedule(@Nonnull Callable<V> callable, long delay, @Nonnull TimeUnit unit) {
+    public <V> ScheduledFuture<V> schedule(@NonNull Callable<V> callable, long delay, @NonNull TimeUnit unit) {
         throw new UnsupportedOperationException();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public ScheduledFuture<?> scheduleAtFixedRate(@Nonnull Runnable command, long initialDelay, long period, @Nonnull TimeUnit unit) {
+    public ScheduledFuture<?> scheduleAtFixedRate(@NonNull Runnable command, long initialDelay, long period, @NonNull TimeUnit unit) {
         return consumeTask(this.timerExecutionService.scheduleAtFixedRate(new FixedRateWorker(PapiExecutors.wrapRunnable(command)), initialDelay, period, unit));
     }
 
     @Override
-    public ScheduledFuture<?> scheduleWithFixedDelay(@Nonnull Runnable command, long initialDelay, long delay, @Nonnull TimeUnit unit) {
+    public ScheduledFuture<?> scheduleWithFixedDelay(@NonNull Runnable command, long initialDelay, long delay, @NonNull TimeUnit unit) {
         return scheduleAtFixedRate(command, initialDelay, delay, unit);
     }
 
@@ -96,7 +96,7 @@ final class PapiAsyncExecutor extends AbstractExecutorService implements Schedul
     }
 
     @Override
-    public boolean awaitTermination(long timeout, @Nonnull TimeUnit unit) {
+    public boolean awaitTermination(long timeout, @NonNull TimeUnit unit) {
         throw new IllegalStateException("Not shutdown");
     }
 

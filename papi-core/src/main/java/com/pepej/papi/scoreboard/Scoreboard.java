@@ -2,8 +2,7 @@ package com.pepej.papi.scoreboard;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
-
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Represents a Scoreboard on the server

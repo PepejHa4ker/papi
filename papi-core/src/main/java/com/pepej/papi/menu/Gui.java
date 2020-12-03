@@ -1,13 +1,14 @@
 package com.pepej.papi.menu;
 
 import com.google.common.base.Preconditions;
-import com.pepej.papi.Events;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.events.Events;
+import com.pepej.papi.menu.SimpleSlot;
 import com.pepej.papi.metadata.Metadata;
 import com.pepej.papi.metadata.MetadataKey;
 import com.pepej.papi.metadata.MetadataMap;
 import com.pepej.papi.reflect.MinecraftVersion;
 import com.pepej.papi.reflect.MinecraftVersions;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.terminable.TerminableConsumer;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.text.Text;
@@ -23,9 +24,9 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.Inventory;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -131,9 +132,9 @@ public abstract class Gui implements TerminableConsumer {
         this.fallbackGui = fallbackGui;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public <T extends AutoCloseable> T bind(@Nonnull T terminable) {
+    public <T extends AutoCloseable> T bind(@NonNull T terminable) {
         return this.compositeTerminable.bind(terminable);
     }
 

@@ -4,8 +4,8 @@ import com.pepej.papi.interfaces.Delegate;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.utils.Log;
 import org.bukkit.Bukkit;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.Consumer;
@@ -41,14 +41,14 @@ public final class PapiExecutors {
 
     private static final class BukkitSyncExecutor implements Executor {
         @Override
-        public void execute(@Nonnull Runnable runnable) {
+        public void execute(@NonNull Runnable runnable) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(LoaderUtils.getPlugin(), wrapRunnable(runnable));
         }
     }
 
     private static final class BukkitAsyncExecutor implements Executor {
         @Override
-        public void execute(@Nonnull Runnable runnable) {
+        public void execute(@NonNull Runnable runnable) {
             Bukkit.getScheduler().runTaskAsynchronously(LoaderUtils.getPlugin(), wrapRunnable(runnable));
         }
     }

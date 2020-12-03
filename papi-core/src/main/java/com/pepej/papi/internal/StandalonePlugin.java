@@ -1,24 +1,23 @@
 package com.pepej.papi.internal;
 
-import com.pepej.papi.maven.MavenLibraries;
-import com.pepej.papi.maven.MavenLibrary;
-import com.pepej.papi.plugin.PapiBukkitPlugin;
+import com.pepej.papi.events.Events;
+import com.pepej.papi.events.server.ServerUpdateEvent;
+import com.pepej.papi.events.server.ServerUpdateType;
+import com.pepej.papi.plugin.PapiJavaPlugin;
+import com.pepej.papi.scheduler.Schedulers;
 
 
 @PapiImplementationPlugin
-@MavenLibraries({
-        @MavenLibrary(groupId = "com.google.code.findbugs", artifactId = "jsr305", version = "3.0.0"),
-        @MavenLibrary(groupId = "com.flowpowered", artifactId = "flow-math", version = "1.0.0"),
-        @MavenLibrary(groupId = "net.kyori", artifactId = "text-adapter-bukkit", version = "3.0.5"),
-        @MavenLibrary(groupId = "net.kyori", artifactId = "text-serializer-legacy", version = "3.0.4"),
-        @MavenLibrary(groupId = "net.kyori", artifactId = "text-api", version = "3.0.4"),
-        @MavenLibrary(groupId = "net.kyori", artifactId = "text-serializer-gson", version = "3.0.4"),
-        @MavenLibrary(groupId = "ninja.leaping.configurate", artifactId = "configurate-hocon", version = "3.3"),
-        @MavenLibrary(groupId = "ninja.leaping.configurate", artifactId = "configurate-gson", version = "3.3"),
-        @MavenLibrary(groupId = "ninja.leaping.configurate", artifactId = "configurate-json", version = "3.3"),
-        @MavenLibrary(groupId = "ninja.leaping.configurate", artifactId = "configurate-yaml", version = "3.3")})
-public final class StandalonePlugin extends PapiBukkitPlugin {
+public final class StandalonePlugin extends PapiJavaPlugin {
+
     @Override
-    protected void enable() {
+    public void onPluginEnable() {
+        for (ServerUpdateType value : ServerUpdateType.values()) {
+            Schedulers.async().runRepeating(() -> Events.call(new ServerUpdateEvent(value)), 0L, value.getDelayTicks());
+        }
     }
+
+    @Override
+    public void onPluginDisable() {}
+
 }

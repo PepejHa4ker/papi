@@ -1,10 +1,11 @@
 package com.pepej.papi.promise;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.pepej.papi.terminable.Terminable;
 import com.pepej.papi.utils.Delegates;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -32,7 +33,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return a new empty promise
      */
-    @Nonnull
+    @NonNull
     static <U> Promise<U> empty() {
         return PapiPromise.empty();
     }
@@ -42,7 +43,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      *
      * @return a new promise
      */
-    @Nonnull
+    @NonNull
     static Promise<Void> start() {
         return PapiPromise.completed(null);
     }
@@ -54,7 +55,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return a new completed promise
      */
-    @Nonnull
+    @NonNull
     static <U> Promise<U> completed(@Nullable U value) {
         return PapiPromise.completed(value);
     }
@@ -66,8 +67,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new completed promise
      */
-    @Nonnull
-    static <U> Promise<U> exceptionally(@Nonnull Throwable exception) {
+    @NonNull
+    static <U> Promise<U> exceptionally(@NonNull Throwable exception) {
         return PapiPromise.exceptionally(exception);
     }
 
@@ -75,8 +76,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * Returns a Promise which represents the given future.
      *
      * <p>The implementation will make an attempt to wrap the future without creating a new process
-     * to await the result (by casting to {@link java.util.concurrent.CompletionStage} or
-     * {@link com.google.common.util.concurrent.ListenableFuture}).</p>
+     * to await the result (by casting to {@link CompletionStage} or
+     * {@link ListenableFuture}).</p>
      *
      * <p>Calls to {@link #cancel() cancel} the returned promise will not affected the wrapped
      * future.</p>
@@ -85,8 +86,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    static <U> Promise<U> wrapFuture(@Nonnull Future<U> future) {
+    @NonNull
+    static <U> Promise<U> wrapFuture(@NonNull Future<U> future) {
         return PapiPromise.wrapFuture(future);
     }
 
@@ -98,8 +99,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplying(@Nonnull ThreadContext context, @Nonnull Supplier<U> supplier) {
+    @NonNull
+    static <U> Promise<U> supplying(@NonNull ThreadContext context, @NonNull Supplier<U> supplier) {
         Promise<U> p = empty();
         return p.supply(context, supplier);
     }
@@ -111,8 +112,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingSync(@Nonnull Supplier<U> supplier) {
+    @NonNull
+    static <U> Promise<U> supplyingSync(@NonNull Supplier<U> supplier) {
         Promise<U> p = empty();
         return p.supplySync(supplier);
     }
@@ -124,8 +125,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingAsync(@Nonnull Supplier<U> supplier) {
+    @NonNull
+    static <U> Promise<U> supplyingAsync(@NonNull Supplier<U> supplier) {
         Promise<U> p = empty();
         return p.supplyAsync(supplier);
     }
@@ -140,8 +141,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingDelayed(@Nonnull ThreadContext context, @Nonnull Supplier<U> supplier, long delayTicks) {
+    @NonNull
+    static <U> Promise<U> supplyingDelayed(@NonNull ThreadContext context, @NonNull Supplier<U> supplier, long delayTicks) {
         Promise<U> p = empty();
         return p.supplyDelayed(context, supplier, delayTicks);
     }
@@ -157,8 +158,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingDelayed(@Nonnull ThreadContext context, @Nonnull Supplier<U> supplier, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    static <U> Promise<U> supplyingDelayed(@NonNull ThreadContext context, @NonNull Supplier<U> supplier, long delay, @NonNull TimeUnit unit) {
         Promise<U> p = empty();
         return p.supplyDelayed(context, supplier, delay, unit);
     }
@@ -172,8 +173,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingDelayedSync(@Nonnull Supplier<U> supplier, long delayTicks) {
+    @NonNull
+    static <U> Promise<U> supplyingDelayedSync(@NonNull Supplier<U> supplier, long delayTicks) {
         Promise<U> p = empty();
         return p.supplyDelayedSync(supplier, delayTicks);
     }
@@ -188,8 +189,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingDelayedSync(@Nonnull Supplier<U> supplier, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    static <U> Promise<U> supplyingDelayedSync(@NonNull Supplier<U> supplier, long delay, @NonNull TimeUnit unit) {
         Promise<U> p = empty();
         return p.supplyDelayedSync(supplier, delay, unit);
     }
@@ -203,8 +204,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingDelayedAsync(@Nonnull Supplier<U> supplier, long delayTicks) {
+    @NonNull
+    static <U> Promise<U> supplyingDelayedAsync(@NonNull Supplier<U> supplier, long delayTicks) {
         Promise<U> p = empty();
         return p.supplyDelayedAsync(supplier, delayTicks);
     }
@@ -219,8 +220,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingDelayedAsync(@Nonnull Supplier<U> supplier, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    static <U> Promise<U> supplyingDelayedAsync(@NonNull Supplier<U> supplier, long delay, @NonNull TimeUnit unit) {
         Promise<U> p = empty();
         return p.supplyDelayedAsync(supplier, delay, unit);
     }
@@ -233,8 +234,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionally(@Nonnull ThreadContext context, @Nonnull Callable<U> callable) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionally(@NonNull ThreadContext context, @NonNull Callable<U> callable) {
         Promise<U> p = empty();
         return p.supplyExceptionally(context, callable);
     }
@@ -246,8 +247,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionallySync(@Nonnull Callable<U> callable) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionallySync(@NonNull Callable<U> callable) {
         Promise<U> p = empty();
         return p.supplyExceptionallySync(callable);
     }
@@ -259,8 +260,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionallyAsync(@Nonnull Callable<U> callable) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionallyAsync(@NonNull Callable<U> callable) {
         Promise<U> p = empty();
         return p.supplyExceptionallyAsync(callable);
     }
@@ -275,8 +276,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionallyDelayed(@Nonnull ThreadContext context, @Nonnull Callable<U> callable, long delayTicks) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionallyDelayed(@NonNull ThreadContext context, @NonNull Callable<U> callable, long delayTicks) {
         Promise<U> p = empty();
         return p.supplyExceptionallyDelayed(context, callable, delayTicks);
     }
@@ -292,8 +293,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionallyDelayed(@Nonnull ThreadContext context, @Nonnull Callable<U> callable, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionallyDelayed(@NonNull ThreadContext context, @NonNull Callable<U> callable, long delay, @NonNull TimeUnit unit) {
         Promise<U> p = empty();
         return p.supplyExceptionallyDelayed(context, callable, delay, unit);
     }
@@ -307,8 +308,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionallyDelayedSync(@Nonnull Callable<U> callable, long delayTicks) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionallyDelayedSync(@NonNull Callable<U> callable, long delayTicks) {
         Promise<U> p = empty();
         return p.supplyExceptionallyDelayedSync(callable, delayTicks);
     }
@@ -323,8 +324,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionallyDelayedSync(@Nonnull Callable<U> callable, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionallyDelayedSync(@NonNull Callable<U> callable, long delay, @NonNull TimeUnit unit) {
         Promise<U> p = empty();
         return p.supplyExceptionallyDelayedSync(callable, delay, unit);
     }
@@ -338,8 +339,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionallyDelayedAsync(@Nonnull Callable<U> callable, long delayTicks) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionallyDelayedAsync(@NonNull Callable<U> callable, long delayTicks) {
         Promise<U> p = empty();
         return p.supplyExceptionallyDelayedAsync(callable, delayTicks);
     }
@@ -354,8 +355,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the promise
      */
-    @Nonnull
-    static <U> Promise<U> supplyingExceptionallyDelayedAsync(@Nonnull Callable<U> callable, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    static <U> Promise<U> supplyingExceptionallyDelayedAsync(@NonNull Callable<U> callable, long delay, @NonNull TimeUnit unit) {
         Promise<U> p = empty();
         return p.supplyExceptionallyDelayedAsync(callable, delay, unit);
     }
@@ -407,7 +408,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
+    @NonNull
     Promise<V> supply(@Nullable V value);
 
     /**
@@ -417,8 +418,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyException(@Nonnull Throwable exception);
+    @NonNull
+    Promise<V> supplyException(@NonNull Throwable exception);
 
     /**
      * Schedules the supply of the Promise's result, via the given supplier.
@@ -428,8 +429,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    default Promise<V> supply(@Nonnull ThreadContext context, @Nonnull Supplier<V> supplier) {
+    @NonNull
+    default Promise<V> supply(@NonNull ThreadContext context, @NonNull Supplier<V> supplier) {
         switch (context) {
             case SYNC:
                 return supplySync(supplier);
@@ -447,8 +448,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplySync(@Nonnull Supplier<V> supplier);
+    @NonNull
+    Promise<V> supplySync(@NonNull Supplier<V> supplier);
 
     /**
      * Schedules the supply of the Promise's result, via the given supplier.
@@ -457,8 +458,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyAsync(@Nonnull Supplier<V> supplier);
+    @NonNull
+    Promise<V> supplyAsync(@NonNull Supplier<V> supplier);
 
     /**
      * Schedules the supply of the Promise's result, via the given supplier,
@@ -470,8 +471,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    default Promise<V> supplyDelayed(@Nonnull ThreadContext context, @Nonnull Supplier<V> supplier, long delayTicks) {
+    @NonNull
+    default Promise<V> supplyDelayed(@NonNull ThreadContext context, @NonNull Supplier<V> supplier, long delayTicks) {
         switch (context) {
             case SYNC:
                 return supplyDelayedSync(supplier, delayTicks);
@@ -493,8 +494,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    default Promise<V> supplyDelayed(@Nonnull ThreadContext context, @Nonnull Supplier<V> supplier, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<V> supplyDelayed(@NonNull ThreadContext context, @NonNull Supplier<V> supplier, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return supplyDelayedSync(supplier, delay, unit);
@@ -514,8 +515,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyDelayedSync(@Nonnull Supplier<V> supplier, long delayTicks);
+    @NonNull
+    Promise<V> supplyDelayedSync(@NonNull Supplier<V> supplier, long delayTicks);
 
     /**
      * Schedules the supply of the Promise's result, via the given supplier,
@@ -527,8 +528,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyDelayedSync(@Nonnull Supplier<V> supplier, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    Promise<V> supplyDelayedSync(@NonNull Supplier<V> supplier, long delay, @NonNull TimeUnit unit);
 
     /**
      * Schedules the supply of the Promise's result, via the given supplier,
@@ -539,8 +540,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyDelayedAsync(@Nonnull Supplier<V> supplier, long delayTicks);
+    @NonNull
+    Promise<V> supplyDelayedAsync(@NonNull Supplier<V> supplier, long delayTicks);
 
     /**
      * Schedules the supply of the Promise's result, via the given supplier,
@@ -552,8 +553,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyDelayedAsync(@Nonnull Supplier<V> supplier, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    Promise<V> supplyDelayedAsync(@NonNull Supplier<V> supplier, long delay, @NonNull TimeUnit unit);
 
     /**
      * Schedules the supply of the Promise's result, via the given callable.
@@ -563,8 +564,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    default Promise<V> supplyExceptionally(@Nonnull ThreadContext context, @Nonnull Callable<V> callable) {
+    @NonNull
+    default Promise<V> supplyExceptionally(@NonNull ThreadContext context, @NonNull Callable<V> callable) {
         switch (context) {
             case SYNC:
                 return supplyExceptionallySync(callable);
@@ -582,8 +583,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyExceptionallySync(@Nonnull Callable<V> callable);
+    @NonNull
+    Promise<V> supplyExceptionallySync(@NonNull Callable<V> callable);
 
     /**
      * Schedules the supply of the Promise's result, via the given callable.
@@ -592,8 +593,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyExceptionallyAsync(@Nonnull Callable<V> callable);
+    @NonNull
+    Promise<V> supplyExceptionallyAsync(@NonNull Callable<V> callable);
 
     /**
      * Schedules the supply of the Promise's result, via the given callable,
@@ -605,8 +606,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    default Promise<V> supplyExceptionallyDelayed(@Nonnull ThreadContext context, @Nonnull Callable<V> callable, long delayTicks) {
+    @NonNull
+    default Promise<V> supplyExceptionallyDelayed(@NonNull ThreadContext context, @NonNull Callable<V> callable, long delayTicks) {
         switch (context) {
             case SYNC:
                 return supplyExceptionallyDelayedSync(callable, delayTicks);
@@ -628,8 +629,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    default Promise<V> supplyExceptionallyDelayed(@Nonnull ThreadContext context, @Nonnull Callable<V> callable, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<V> supplyExceptionallyDelayed(@NonNull ThreadContext context, @NonNull Callable<V> callable, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return supplyExceptionallyDelayedSync(callable, delay, unit);
@@ -649,8 +650,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyExceptionallyDelayedSync(@Nonnull Callable<V> callable, long delayTicks);
+    @NonNull
+    Promise<V> supplyExceptionallyDelayedSync(@NonNull Callable<V> callable, long delayTicks);
 
     /**
      * Schedules the supply of the Promise's result, via the given callable,
@@ -662,8 +663,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyExceptionallyDelayedSync(@Nonnull Callable<V> callable, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    Promise<V> supplyExceptionallyDelayedSync(@NonNull Callable<V> callable, long delay, @NonNull TimeUnit unit);
 
     /**
      * Schedules the supply of the Promise's result, via the given callable,
@@ -674,8 +675,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyExceptionallyDelayedAsync(@Nonnull Callable<V> callable, long delayTicks);
+    @NonNull
+    Promise<V> supplyExceptionallyDelayedAsync(@NonNull Callable<V> callable, long delayTicks);
 
     /**
      * Schedules the supply of the Promise's result, via the given callable,
@@ -687,8 +688,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the same promise
      * @throws IllegalStateException if the promise is already being supplied, or has already been completed.
      */
-    @Nonnull
-    Promise<V> supplyExceptionallyDelayedAsync(@Nonnull Callable<V> callable, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    Promise<V> supplyExceptionallyDelayedAsync(@NonNull Callable<V> callable, long delay, @NonNull TimeUnit unit);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -700,8 +701,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    default <U> Promise<U> thenApply(@Nonnull ThreadContext context, @Nonnull Function<? super V, ? extends U> fn) {
+    @NonNull
+    default <U> Promise<U> thenApply(@NonNull ThreadContext context, @NonNull Function<? super V, ? extends U> fn) {
         switch (context) {
             case SYNC:
                 return thenApplySync(fn);
@@ -721,8 +722,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenApplySync(@Nonnull Function<? super V, ? extends U> fn);
+    @NonNull
+    <U> Promise<U> thenApplySync(@NonNull Function<? super V, ? extends U> fn);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -733,8 +734,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenApplyAsync(@Nonnull Function<? super V, ? extends U> fn);
+    @NonNull
+    <U> Promise<U> thenApplyAsync(@NonNull Function<? super V, ? extends U> fn);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -747,8 +748,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    default <U> Promise<U> thenApplyDelayed(@Nonnull ThreadContext context, @Nonnull Function<? super V, ? extends U> fn, long delayTicks) {
+    @NonNull
+    default <U> Promise<U> thenApplyDelayed(@NonNull ThreadContext context, @NonNull Function<? super V, ? extends U> fn, long delayTicks) {
         switch (context) {
             case SYNC:
                 return thenApplyDelayedSync(fn, delayTicks);
@@ -771,8 +772,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    default <U> Promise<U> thenApplyDelayed(@Nonnull ThreadContext context, @Nonnull Function<? super V, ? extends U> fn, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default <U> Promise<U> thenApplyDelayed(@NonNull ThreadContext context, @NonNull Function<? super V, ? extends U> fn, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return thenApplyDelayedSync(fn, delay, unit);
@@ -793,8 +794,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenApplyDelayedSync(@Nonnull Function<? super V, ? extends U> fn, long delayTicks);
+    @NonNull
+    <U> Promise<U> thenApplyDelayedSync(@NonNull Function<? super V, ? extends U> fn, long delayTicks);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -807,8 +808,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenApplyDelayedSync(@Nonnull Function<? super V, ? extends U> fn, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    <U> Promise<U> thenApplyDelayedSync(@NonNull Function<? super V, ? extends U> fn, long delay, @NonNull TimeUnit unit);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -820,8 +821,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenApplyDelayedAsync(@Nonnull Function<? super V, ? extends U> fn, long delayTicks);
+    @NonNull
+    <U> Promise<U> thenApplyDelayedAsync(@NonNull Function<? super V, ? extends U> fn, long delayTicks);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -834,8 +835,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenApplyDelayedAsync(@Nonnull Function<? super V, ? extends U> fn, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    <U> Promise<U> thenApplyDelayedAsync(@NonNull Function<? super V, ? extends U> fn, long delay, @NonNull TimeUnit unit);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -846,8 +847,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param action the action to perform before completing the returned future
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAccept(@Nonnull ThreadContext context, @Nonnull Consumer<? super V> action) {
+    @NonNull
+    default Promise<Void> thenAccept(@NonNull ThreadContext context, @NonNull Consumer<? super V> action) {
         switch (context) {
             case SYNC:
                 return thenAcceptSync(action);
@@ -866,8 +867,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param action the action to perform before completing the returned future
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAcceptSync(@Nonnull Consumer<? super V> action) {
+    @NonNull
+    default Promise<Void> thenAcceptSync(@NonNull Consumer<? super V> action) {
         return thenApplySync(Delegates.consumerToFunction(action));
     }
 
@@ -879,8 +880,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param action the action to perform before completing the returned future
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAcceptAsync(@Nonnull Consumer<? super V> action) {
+    @NonNull
+    default Promise<Void> thenAcceptAsync(@NonNull Consumer<? super V> action) {
         return thenApplyAsync(Delegates.consumerToFunction(action));
     }
 
@@ -894,8 +895,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAcceptDelayed(@Nonnull ThreadContext context, @Nonnull Consumer<? super V> action, long delayTicks) {
+    @NonNull
+    default Promise<Void> thenAcceptDelayed(@NonNull ThreadContext context, @NonNull Consumer<? super V> action, long delayTicks) {
         switch (context) {
             case SYNC:
                 return thenAcceptDelayedSync(action, delayTicks);
@@ -917,8 +918,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAcceptDelayed(@Nonnull ThreadContext context, @Nonnull Consumer<? super V> action, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<Void> thenAcceptDelayed(@NonNull ThreadContext context, @NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return thenAcceptDelayedSync(action, delay, unit);
@@ -938,8 +939,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAcceptDelayedSync(@Nonnull Consumer<? super V> action, long delayTicks) {
+    @NonNull
+    default Promise<Void> thenAcceptDelayedSync(@NonNull Consumer<? super V> action, long delayTicks) {
         return thenApplyDelayedSync(Delegates.consumerToFunction(action), delayTicks);
     }
 
@@ -953,8 +954,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAcceptDelayedSync(@Nonnull Consumer<? super V> action, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<Void> thenAcceptDelayedSync(@NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
         return thenApplyDelayedSync(Delegates.consumerToFunction(action), delay, unit);
     }
 
@@ -967,8 +968,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAcceptDelayedAsync(@Nonnull Consumer<? super V> action, long delayTicks) {
+    @NonNull
+    default Promise<Void> thenAcceptDelayedAsync(@NonNull Consumer<? super V> action, long delayTicks) {
         return thenApplyDelayedAsync(Delegates.consumerToFunction(action), delayTicks);
     }
 
@@ -982,8 +983,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenAcceptDelayedAsync(@Nonnull Consumer<? super V> action, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<Void> thenAcceptDelayedAsync(@NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
         return thenApplyDelayedAsync(Delegates.consumerToFunction(action), delay, unit);
     }
 
@@ -995,8 +996,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param action the action to run before completing the returned future
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRun(@Nonnull ThreadContext context, @Nonnull Runnable action) {
+    @NonNull
+    default Promise<Void> thenRun(@NonNull ThreadContext context, @NonNull Runnable action) {
         switch (context) {
             case SYNC:
                 return thenRunSync(action);
@@ -1014,8 +1015,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param action the action to run before completing the returned future
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRunSync(@Nonnull Runnable action) {
+    @NonNull
+    default Promise<Void> thenRunSync(@NonNull Runnable action) {
         return thenApplySync(Delegates.runnableToFunction(action));
     }
 
@@ -1026,8 +1027,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param action the action to run before completing the returned future
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRunAsync(@Nonnull Runnable action) {
+    @NonNull
+    default Promise<Void> thenRunAsync(@NonNull Runnable action) {
         return thenApplyAsync(Delegates.runnableToFunction(action));
     }
 
@@ -1040,8 +1041,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRunDelayed(@Nonnull ThreadContext context, @Nonnull Runnable action, long delayTicks) {
+    @NonNull
+    default Promise<Void> thenRunDelayed(@NonNull ThreadContext context, @NonNull Runnable action, long delayTicks) {
         switch (context) {
             case SYNC:
                 return thenRunDelayedSync(action, delayTicks);
@@ -1062,8 +1063,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRunDelayed(@Nonnull ThreadContext context, @Nonnull Runnable action, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<Void> thenRunDelayed(@NonNull ThreadContext context, @NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return thenRunDelayedSync(action, delay, unit);
@@ -1082,8 +1083,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRunDelayedSync(@Nonnull Runnable action, long delayTicks) {
+    @NonNull
+    default Promise<Void> thenRunDelayedSync(@NonNull Runnable action, long delayTicks) {
         return thenApplyDelayedSync(Delegates.runnableToFunction(action), delayTicks);
     }
 
@@ -1096,8 +1097,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRunDelayedSync(@Nonnull Runnable action, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<Void> thenRunDelayedSync(@NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
         return thenApplyDelayedSync(Delegates.runnableToFunction(action), delay, unit);
     }
 
@@ -1109,8 +1110,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRunDelayedAsync(@Nonnull Runnable action, long delayTicks) {
+    @NonNull
+    default Promise<Void> thenRunDelayedAsync(@NonNull Runnable action, long delayTicks) {
         return thenApplyDelayedAsync(Delegates.runnableToFunction(action), delayTicks);
     }
 
@@ -1123,8 +1124,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    default Promise<Void> thenRunDelayedAsync(@Nonnull Runnable action, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<Void> thenRunDelayedAsync(@NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
         return thenApplyDelayedAsync(Delegates.runnableToFunction(action), delay, unit);
     }
 
@@ -1138,8 +1139,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    default <U> Promise<U> thenCompose(@Nonnull ThreadContext context, @Nonnull Function<? super V, ? extends Promise<U>> fn) {
+    @NonNull
+    default <U> Promise<U> thenCompose(@NonNull ThreadContext context, @NonNull Function<? super V, ? extends Promise<U>> fn) {
         switch (context) {
             case SYNC:
                 return thenComposeSync(fn);
@@ -1159,8 +1160,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenComposeSync(@Nonnull Function<? super V, ? extends Promise<U>> fn);
+    @NonNull
+    <U> Promise<U> thenComposeSync(@NonNull Function<? super V, ? extends Promise<U>> fn);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1171,8 +1172,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenComposeAsync(@Nonnull Function<? super V, ? extends Promise<U>> fn);
+    @NonNull
+    <U> Promise<U> thenComposeAsync(@NonNull Function<? super V, ? extends Promise<U>> fn);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1185,8 +1186,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    default <U> Promise<U> thenComposeDelayedSync(@Nonnull ThreadContext context, @Nonnull Function<? super V, ? extends Promise<U>> fn, long delayTicks) {
+    @NonNull
+    default <U> Promise<U> thenComposeDelayedSync(@NonNull ThreadContext context, @NonNull Function<? super V, ? extends Promise<U>> fn, long delayTicks) {
         switch (context) {
             case SYNC:
                 return thenComposeDelayedSync(fn, delayTicks);
@@ -1209,8 +1210,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    default <U> Promise<U> thenComposeDelayedSync(@Nonnull ThreadContext context, @Nonnull Function<? super V, ? extends Promise<U>> fn, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default <U> Promise<U> thenComposeDelayedSync(@NonNull ThreadContext context, @NonNull Function<? super V, ? extends Promise<U>> fn, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return thenComposeDelayedSync(fn, delay, unit);
@@ -1231,8 +1232,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenComposeDelayedSync(@Nonnull Function<? super V, ? extends Promise<U>> fn, long delayTicks);
+    @NonNull
+    <U> Promise<U> thenComposeDelayedSync(@NonNull Function<? super V, ? extends Promise<U>> fn, long delayTicks);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1245,8 +1246,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenComposeDelayedSync(@Nonnull Function<? super V, ? extends Promise<U>> fn, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    <U> Promise<U> thenComposeDelayedSync(@NonNull Function<? super V, ? extends Promise<U>> fn, long delay, @NonNull TimeUnit unit);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1258,8 +1259,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenComposeDelayedAsync(@Nonnull Function<? super V, ? extends Promise<U>> fn, long delayTicks);
+    @NonNull
+    <U> Promise<U> thenComposeDelayedAsync(@NonNull Function<? super V, ? extends Promise<U>> fn, long delayTicks);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1272,8 +1273,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param <U> the result type
      * @return the new promise
      */
-    @Nonnull
-    <U> Promise<U> thenComposeDelayedAsync(@Nonnull Function<? super V, ? extends Promise<U>> fn, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    <U> Promise<U> thenComposeDelayedAsync(@NonNull Function<? super V, ? extends Promise<U>> fn, long delay, @NonNull TimeUnit unit);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1286,8 +1287,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      *           Promise, if this promise completed exceptionally
      * @return the new promise
      */
-    @Nonnull
-    default Promise<V> exceptionally(@Nonnull ThreadContext context, @Nonnull Function<Throwable, ? extends V> fn) {
+    @NonNull
+    default Promise<V> exceptionally(@NonNull ThreadContext context, @NonNull Function<Throwable, ? extends V> fn) {
         switch (context) {
             case SYNC:
                 return exceptionallySync(fn);
@@ -1308,8 +1309,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      *           Promise, if this promise completed exceptionally
      * @return the new promise
      */
-    @Nonnull
-    Promise<V> exceptionallySync(@Nonnull Function<Throwable, ? extends V> fn);
+    @NonNull
+    Promise<V> exceptionallySync(@NonNull Function<Throwable, ? extends V> fn);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1321,8 +1322,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      *           Promise, if this promise completed exceptionally
      * @return the new promise
      */
-    @Nonnull
-    Promise<V> exceptionallyAsync(@Nonnull Function<Throwable, ? extends V> fn);
+    @NonNull
+    Promise<V> exceptionallyAsync(@NonNull Function<Throwable, ? extends V> fn);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1337,8 +1338,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    default Promise<V> exceptionallyDelayed(@Nonnull ThreadContext context, @Nonnull Function<Throwable, ? extends V> fn, long delayTicks) {
+    @NonNull
+    default Promise<V> exceptionallyDelayed(@NonNull ThreadContext context, @NonNull Function<Throwable, ? extends V> fn, long delayTicks) {
         switch (context) {
             case SYNC:
                 return exceptionallyDelayedSync(fn, delayTicks);
@@ -1363,8 +1364,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    default Promise<V> exceptionallyDelayed(@Nonnull ThreadContext context, @Nonnull Function<Throwable, ? extends V> fn, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<V> exceptionallyDelayed(@NonNull ThreadContext context, @NonNull Function<Throwable, ? extends V> fn, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return exceptionallyDelayedSync(fn, delay, unit);
@@ -1387,8 +1388,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    Promise<V> exceptionallyDelayedSync(@Nonnull Function<Throwable, ? extends V> fn, long delayTicks);
+    @NonNull
+    Promise<V> exceptionallyDelayedSync(@NonNull Function<Throwable, ? extends V> fn, long delayTicks);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1403,8 +1404,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    Promise<V> exceptionallyDelayedSync(@Nonnull Function<Throwable, ? extends V> fn, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    Promise<V> exceptionallyDelayedSync(@NonNull Function<Throwable, ? extends V> fn, long delay, @NonNull TimeUnit unit);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1418,8 +1419,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param delayTicks the delay in ticks
      * @return the new promise
      */
-    @Nonnull
-    Promise<V> exceptionallyDelayedAsync(@Nonnull Function<Throwable, ? extends V> fn, long delayTicks);
+    @NonNull
+    Promise<V> exceptionallyDelayedAsync(@NonNull Function<Throwable, ? extends V> fn, long delayTicks);
 
     /**
      * Returns a new Promise that, when this promise completes normally, is
@@ -1434,8 +1435,8 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @param unit the unit of delay
      * @return the new promise
      */
-    @Nonnull
-    Promise<V> exceptionallyDelayedAsync(@Nonnull Function<Throwable, ? extends V> fn, long delay, @Nonnull TimeUnit unit);
+    @NonNull
+    Promise<V> exceptionallyDelayedAsync(@NonNull Function<Throwable, ? extends V> fn, long delay, @NonNull TimeUnit unit);
 
 
     /**

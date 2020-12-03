@@ -1,8 +1,9 @@
 package com.pepej.papi.command.argument;
 
 import com.pepej.papi.command.CommandInterruptException;
+import com.pepej.papi.command.argument.Argument;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -20,12 +21,12 @@ public interface ArgumentParser<T> {
     static <T> ArgumentParser<T> of(Function<String, Optional<T>> parseFunction, Function<String, CommandInterruptException> generateExceptionFunction) {
         return new ArgumentParser<T>() {
             @Override
-            public Optional<T> parse(@Nonnull String t) {
+            public Optional<T> parse(@NonNull String t) {
                 return parseFunction.apply(t);
             }
 
             @Override
-            public CommandInterruptException generateException(@Nonnull String s) {
+            public CommandInterruptException generateException(@NonNull String s) {
                 return generateExceptionFunction.apply(s);
             }
         };
@@ -37,7 +38,7 @@ public interface ArgumentParser<T> {
      * @param s the string
      * @return the value, if parsing was successful
      */
-    Optional<T> parse(@Nonnull String s);
+    Optional<T> parse(@NonNull String s);
 
     /**
      * Generates a {@link CommandInterruptException} for when parsing fails with the given content.
@@ -45,7 +46,7 @@ public interface ArgumentParser<T> {
      * @param s the string input
      * @return the exception
      */
-    default CommandInterruptException generateException(@Nonnull String s) {
+    default CommandInterruptException generateException(@NonNull String s) {
         return new CommandInterruptException("Unable to parse argument: " + s);
     }
 
@@ -66,8 +67,8 @@ public interface ArgumentParser<T> {
      * @param s the string
      * @return the value
      */
-    @Nonnull
-    default T parseOrFail(@Nonnull String s) throws CommandInterruptException {
+    @NonNull
+    default T parseOrFail(@NonNull String s) throws CommandInterruptException {
         Optional<T> ret = parse(s);
         if (!ret.isPresent()) {
             throw generateException(s);
@@ -81,8 +82,8 @@ public interface ArgumentParser<T> {
      * @param argument the argument
      * @return the value, if parsing was successful
      */
-    @Nonnull
-    default Optional<T> parse(@Nonnull Argument argument) {
+    @NonNull
+    default Optional<T> parse(@NonNull Argument argument) {
         return argument.value().flatMap(this::parse);
     }
 
@@ -93,8 +94,8 @@ public interface ArgumentParser<T> {
      * @param argument the argument
      * @return the value
      */
-    @Nonnull
-    default T parseOrFail(@Nonnull Argument argument) throws CommandInterruptException {
+    @NonNull
+    default T parseOrFail(@NonNull Argument argument) throws CommandInterruptException {
         Optional<String> value = argument.value();
         if (!value.isPresent()) {
             throw generateException(argument.index());
@@ -109,8 +110,8 @@ public interface ArgumentParser<T> {
      * @param other the other parser
      * @return the combined parser
      */
-    @Nonnull
-    default ArgumentParser<T> thenTry(@Nonnull ArgumentParser<T> other) {
+    @NonNull
+    default ArgumentParser<T> thenTry(@NonNull ArgumentParser<T> other) {
         ArgumentParser<T> first = this;
         return t -> {
             Optional<T> ret = first.parse(t);

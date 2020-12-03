@@ -3,12 +3,12 @@ package com.pepej.papi.hologram;
 import com.pepej.papi.serialize.Position;
 import com.pepej.papi.terminable.Terminable;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.function.Consumer;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Base interface for holograms.
@@ -37,7 +37,7 @@ public interface BaseHologram extends Terminable {
      *
      * @return the ArmorStands holding the lines
      */
-    @Nonnull
+    @NonNull
     Collection<ArmorStand> getArmorStands();
 
     /**
@@ -54,13 +54,15 @@ public interface BaseHologram extends Terminable {
      *
      * @param position the new position
      */
-    void updatePosition(@Nonnull Position position);
+    void updatePosition(@NonNull Position position);
 
-    /**
-     * Sets a click callback for this hologram
-     *
-     * @param clickCallback the click callback, or null to unregister any existing callback
-     */
-    void setClickCallback(@Nullable Consumer<Player> clickCallback);
+    void onPluginDisable(@NonNull Plugin plugin);
+
+    void addExpiring(final long ticksDelay);
+
+    void addExpiring(final long delay, final TimeUnit unit);
+
+
+
 
 }

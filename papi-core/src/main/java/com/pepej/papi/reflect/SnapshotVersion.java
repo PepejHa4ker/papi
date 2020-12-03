@@ -1,6 +1,7 @@
 package com.pepej.papi.reflect;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -28,7 +29,7 @@ public class SnapshotVersion implements Comparable<SnapshotVersion> {
      * @return the parsed version
      * @throws IllegalArgumentException if the version is not a snapshot version
      */
-    @Nonnull
+    @NonNull
     public static SnapshotVersion parse(String version) throws IllegalArgumentException {
         return new SnapshotVersion(version);
     }
@@ -103,7 +104,7 @@ public class SnapshotVersion implements Comparable<SnapshotVersion> {
     }
 
     @Override
-    public int compareTo(SnapshotVersion that) {
+    public int compareTo(@NonNull SnapshotVersion that) {
         return COMPARATOR.compare(this, that);
     }
 

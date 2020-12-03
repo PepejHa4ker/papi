@@ -1,6 +1,7 @@
 package com.pepej.papi.messaging;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.util.Set;
 
 /**
@@ -13,7 +14,7 @@ public interface InstanceData {
      *
      * @return the id of the server
      */
-    @Nonnull
+    @NonNull
     String getId();
 
     /**
@@ -21,7 +22,7 @@ public interface InstanceData {
      *
      * @return this instance's groups
      */
-    @Nonnull
+    @NonNull
     Set<String> getGroups();
 
 }

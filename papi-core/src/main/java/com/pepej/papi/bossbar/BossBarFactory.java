@@ -1,6 +1,6 @@
 package com.pepej.papi.bossbar;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A object which can create {@link BossBar}s.
@@ -12,7 +12,7 @@ public interface BossBarFactory {
      *
      * @return the new boss bar
      */
-    @Nonnull
+    @NonNull
     BossBar newBossBar();
 
 }

@@ -2,7 +2,7 @@ package com.pepej.papi.profiles;
 
 import com.google.common.collect.Lists;
 import com.google.gson.stream.JsonReader;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.promise.Promise;
 import com.pepej.papi.utils.UndashedUuids;
 

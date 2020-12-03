@@ -1,8 +1,8 @@
 package com.pepej.papi.event;
 
 import org.bukkit.event.Event;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 
 /**
  * Represents a subscription to a single given event.
@@ -16,7 +16,7 @@ public interface SingleSubscription<T extends Event> extends Subscription {
      *
      * @return the class the handler is handling.
      */
-    @Nonnull
+    @NonNull
     Class<T> getEventClass();
 
 }

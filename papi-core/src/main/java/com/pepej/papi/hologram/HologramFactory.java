@@ -7,8 +7,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.serialize.Position;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,18 +24,18 @@ public interface HologramFactory {
      * @param lines the initial lines to display
      * @return the new hologram
      */
-    @Nonnull
-    Hologram newHologram(@Nonnull Position position, @Nonnull List<String> lines);
+    @NonNull
+    Hologram newHologram(@NonNull Position position, @NonNull List<String> lines);
 
-    @Nonnull
-    Hologram newHologram(@Nonnull Position position, @Nonnull String... lines);
+    @NonNull
+    Hologram newHologram(@NonNull Position position, @NonNull String... lines);
     /**
      * Deserializes a hologram instance from its {@link GsonSerializable serialized} form.
      *
      * @param element the data
      * @return the hologram
      */
-    @Nonnull
+    @NonNull
     default Hologram deserialize(JsonElement element) {
         Preconditions.checkArgument(element.isJsonObject());
         JsonObject object = element.getAsJsonObject();

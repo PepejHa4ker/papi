@@ -3,12 +3,12 @@ package com.pepej.papi.network;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonElement;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.cooldown.Cooldown;
-import com.pepej.papi.eventbus.EventBus;
-import com.pepej.papi.eventbus.EventSubscriber;
-import com.pepej.papi.eventbus.PostResult;
-import com.pepej.papi.eventbus.SimpleEventBus;
+import com.pepej.papi.event.bus.EventBus;
+import com.pepej.papi.event.bus.EventSubscriber;
+import com.pepej.papi.event.bus.PostResult;
+import com.pepej.papi.event.bus.SimpleEventBus;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.messaging.Channel;
 import com.pepej.papi.messaging.InstanceData;
@@ -24,8 +24,8 @@ import com.pepej.papi.profiles.Profile;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.utils.Players;
 import org.bukkit.Bukkit;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -68,7 +68,7 @@ public class AbstractNetwork implements Network {
         // outgoing (disconnect)
         EventSubscriber<ServerDisconnectEvent> disconnectListener = new EventSubscriber<ServerDisconnectEvent>() {
             @Override
-            public void invoke(@Nonnull ServerDisconnectEvent event) {
+            public void invoke(@NonNull ServerDisconnectEvent event) {
                 if (!event.getId().equals(instanceData.getId())) {
                     return;
                 }
@@ -97,7 +97,7 @@ public class AbstractNetwork implements Network {
 
         /*
          * Handle status messages.
-         * These are sent via the 'hnet-status' channel.
+         * These are sent via the 'pnet-status' channel.
          */
 
         Channel<StatusMessage> statusChannel = messenger.getChannel("pnet-status", StatusMessage.class);
@@ -242,13 +242,13 @@ public class AbstractNetwork implements Network {
             this.metadata = ImmutableMap.copyOf(msg.metadata);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public String getId() {
             return this.id;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Set<String> getGroups() {
             return this.groups;

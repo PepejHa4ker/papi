@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.Types;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -21,13 +21,13 @@ public class ConfigurateDataTree implements DataTree {
         return this.node;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public ConfigurateDataTree resolve(@Nonnull Object... path) {
+    public ConfigurateDataTree resolve(@NonNull Object... path) {
         return new ConfigurateDataTree(this.node.getNode(path));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Stream<Map.Entry<String, ConfigurateDataTree>> asObject() {
         Preconditions.checkState(this.node.hasMapChildren(), "node does not have map children");
@@ -35,14 +35,14 @@ public class ConfigurateDataTree implements DataTree {
                         .map(entry -> Maps.immutableEntry(entry.getKey().toString(), new ConfigurateDataTree(entry.getValue())));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Stream<ConfigurateDataTree> asArray() {
         Preconditions.checkState(this.node.hasListChildren(), "node does not have list children");
         return this.node.getChildrenList().stream().map(ConfigurateDataTree::new);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Stream<Map.Entry<Integer, ConfigurateDataTree>> asIndexedArray() {
         Preconditions.checkState(this.node.hasListChildren(), "node does not have list children");
@@ -62,13 +62,13 @@ public class ConfigurateDataTree implements DataTree {
         }, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String asString() {
         return this.node.getValue(Types::asString);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Number asNumber() {
         return this.node.getValue(Types::asDouble);

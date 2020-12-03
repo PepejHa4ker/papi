@@ -3,8 +3,8 @@ package com.pepej.papi.scheduler;
 import com.pepej.papi.promise.Promise;
 import com.pepej.papi.promise.ThreadContext;
 import com.pepej.papi.utils.Delegates;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
@@ -22,7 +22,7 @@ public interface Scheduler extends Executor {
      *
      * @return the context
      */
-    @Nonnull
+    @NonNull
     ThreadContext getContext();
 
     /**
@@ -32,8 +32,8 @@ public interface Scheduler extends Executor {
      * @param <T>      the return type
      * @return a Promise which will return the result of the computation
      */
-    @Nonnull
-    default <T> Promise<T> supply(@Nonnull Supplier<T> supplier) {
+    @NonNull
+    default <T> Promise<T> supply(@NonNull Supplier<T> supplier) {
         Objects.requireNonNull(supplier, "supplier");
         return Promise.supplying(getContext(), supplier);
     }
@@ -45,8 +45,8 @@ public interface Scheduler extends Executor {
      * @param <T>      the return type
      * @return a Promise which will return the result of the computation
      */
-    @Nonnull
-    default <T> Promise<T> call(@Nonnull Callable<T> callable) {
+    @NonNull
+    default <T> Promise<T> call(@NonNull Callable<T> callable) {
         Objects.requireNonNull(callable, "callable");
         return Promise.supplying(getContext(), Delegates.callableToSupplier(callable));
     }
@@ -57,8 +57,8 @@ public interface Scheduler extends Executor {
      * @param runnable the runnable
      * @return a Promise which will return when the runnable is complete
      */
-    @Nonnull
-    default Promise<Void> run(@Nonnull Runnable runnable) {
+    @NonNull
+    default Promise<Void> run(@NonNull Runnable runnable) {
         Objects.requireNonNull(runnable, "runnable");
         return Promise.supplying(getContext(), Delegates.runnableToSupplier(runnable));
     }
@@ -71,8 +71,8 @@ public interface Scheduler extends Executor {
      * @param <T>        the return type
      * @return a Promise which will return the result of the computation
      */
-    @Nonnull
-    default <T> Promise<T> supplyLater(@Nonnull Supplier<T> supplier, long delayTicks) {
+    @NonNull
+    default <T> Promise<T> supplyLater(@NonNull Supplier<T> supplier, long delayTicks) {
         Objects.requireNonNull(supplier, "supplier");
         return Promise.supplyingDelayed(getContext(), supplier, delayTicks);
     }
@@ -86,8 +86,8 @@ public interface Scheduler extends Executor {
      * @param <T>      the return type
      * @return a Promise which will return the result of the computation
      */
-    @Nonnull
-    default <T> Promise<T> supplyLater(@Nonnull Supplier<T> supplier, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default <T> Promise<T> supplyLater(@NonNull Supplier<T> supplier, long delay, @NonNull TimeUnit unit) {
         Objects.requireNonNull(supplier, "supplier");
         return Promise.supplyingDelayed(getContext(), supplier, delay, unit);
     }
@@ -100,8 +100,8 @@ public interface Scheduler extends Executor {
      * @param <T>        the return type
      * @return a Promise which will return the result of the computation
      */
-    @Nonnull
-    default <T> Promise<T> callLater(@Nonnull Callable<T> callable, long delayTicks) {
+    @NonNull
+    default <T> Promise<T> callLater(@NonNull Callable<T> callable, long delayTicks) {
         Objects.requireNonNull(callable, "callable");
         return Promise.supplyingDelayed(getContext(), Delegates.callableToSupplier(callable), delayTicks);
     }
@@ -115,8 +115,8 @@ public interface Scheduler extends Executor {
      * @param <T>      the return type
      * @return a Promise which will return the result of the computation
      */
-    @Nonnull
-    default <T> Promise<T> callLater(@Nonnull Callable<T> callable, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default <T> Promise<T> callLater(@NonNull Callable<T> callable, long delay, @NonNull TimeUnit unit) {
         Objects.requireNonNull(callable, "callable");
         return Promise.supplyingDelayed(getContext(), Delegates.callableToSupplier(callable), delay, unit);
     }
@@ -128,8 +128,8 @@ public interface Scheduler extends Executor {
      * @param delayTicks the delay in ticks before calling the supplier
      * @return a Promise which will return when the runnable is complete
      */
-    @Nonnull
-    default Promise<Void> runLater(@Nonnull Runnable runnable, long delayTicks) {
+    @NonNull
+    default Promise<Void> runLater(@NonNull Runnable runnable, long delayTicks) {
         Objects.requireNonNull(runnable, "runnable");
         return Promise.supplyingDelayed(getContext(), Delegates.runnableToSupplier(runnable), delayTicks);
     }
@@ -142,8 +142,8 @@ public interface Scheduler extends Executor {
      * @param unit     the unit of delay
      * @return a Promise which will return when the runnable is complete
      */
-    @Nonnull
-    default Promise<Void> runLater(@Nonnull Runnable runnable, long delay, @Nonnull TimeUnit unit) {
+    @NonNull
+    default Promise<Void> runLater(@NonNull Runnable runnable, long delay, @NonNull TimeUnit unit) {
         Objects.requireNonNull(runnable, "runnable");
         return Promise.supplyingDelayed(getContext(), Delegates.runnableToSupplier(runnable), delay, unit);
     }
@@ -156,8 +156,8 @@ public interface Scheduler extends Executor {
      * @param intervalTicks the interval at which the task will repeat
      * @return a task instance
      */
-    @Nonnull
-    Task runRepeating(@Nonnull Consumer<Task> consumer, long delayTicks, long intervalTicks);
+    @NonNull
+    Task runRepeating(@NonNull Consumer<Task> consumer, long delayTicks, long intervalTicks);
 
     /**
      * Schedule a repeating task to run
@@ -169,8 +169,8 @@ public interface Scheduler extends Executor {
      * @param intervalUnit the
      * @return a task instance
      */
-    @Nonnull
-    Task runRepeating(@Nonnull Consumer<Task> consumer, long delay, @Nonnull TimeUnit delayUnit, long interval, @Nonnull TimeUnit intervalUnit);
+    @NonNull
+    Task runRepeating(@NonNull Consumer<Task> consumer, long delay, @NonNull TimeUnit delayUnit, long interval, @NonNull TimeUnit intervalUnit);
 
     /**
      * Schedule a repeating task to run
@@ -180,8 +180,8 @@ public interface Scheduler extends Executor {
      * @param intervalTicks the interval at which the task will repeat
      * @return a task instance
      */
-    @Nonnull
-    default Task runRepeating(@Nonnull Runnable runnable, long delayTicks, long intervalTicks) {
+    @NonNull
+    default Task runRepeating(@NonNull Runnable runnable, long delayTicks, long intervalTicks) {
         return runRepeating(Delegates.runnableToConsumer(runnable), delayTicks, intervalTicks);
     }
 
@@ -195,8 +195,8 @@ public interface Scheduler extends Executor {
      * @param intervalUnit the
      * @return a task instance
      */
-    @Nonnull
-    default Task runRepeating(@Nonnull Runnable runnable, long delay, @Nonnull TimeUnit delayUnit, long interval, @Nonnull TimeUnit intervalUnit) {
+    @NonNull
+    default Task runRepeating(@NonNull Runnable runnable, long delay, @NonNull TimeUnit delayUnit, long interval, @NonNull TimeUnit intervalUnit) {
         return runRepeating(Delegates.runnableToConsumer(runnable), delay, delayUnit, interval, intervalUnit);
     }
 

@@ -1,7 +1,8 @@
 package com.pepej.papi.command.argument;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Optional;
 
 public class SimpleArgument implements Argument {
@@ -19,7 +20,7 @@ public class SimpleArgument implements Argument {
         return this.index;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Optional<String> value() {
         return this.value;

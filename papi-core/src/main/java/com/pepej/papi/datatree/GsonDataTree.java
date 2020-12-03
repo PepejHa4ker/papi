@@ -3,8 +3,8 @@ package com.pepej.papi.datatree;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -20,9 +20,9 @@ public class GsonDataTree implements DataTree {
         return this.element;
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public GsonDataTree resolve(@Nonnull Object... path) {
+    public GsonDataTree resolve(@NonNull Object... path) {
         if (path.length == 0) {
             return this;
         }
@@ -47,21 +47,21 @@ public class GsonDataTree implements DataTree {
         return new GsonDataTree(o);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Stream<Map.Entry<String, GsonDataTree>> asObject() {
         return this.element.getAsJsonObject().entrySet().stream()
                            .map(entry -> Maps.immutableEntry(entry.getKey(), new GsonDataTree(entry.getValue())));
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Stream<GsonDataTree> asArray() {
         return StreamSupport.stream(this.element.getAsJsonArray().spliterator(), false)
                             .map(GsonDataTree::new);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Stream<Map.Entry<Integer, GsonDataTree>> asIndexedArray() {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<Map.Entry<Integer, GsonDataTree>>() {
@@ -80,13 +80,13 @@ public class GsonDataTree implements DataTree {
         }, Spliterator.ORDERED | Spliterator.IMMUTABLE), false);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public String asString() {
         return this.element.getAsString();
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Number asNumber() {
         return this.element.getAsNumber();

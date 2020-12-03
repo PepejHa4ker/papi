@@ -1,6 +1,8 @@
 package com.pepej.papi.utils;
 
 import com.pepej.papi.interfaces.Delegate;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.concurrent.Callable;
 import java.util.function.*;
@@ -10,46 +12,46 @@ import java.util.function.*;
  */
 public final class Delegates {
 
-    public static <T> Consumer<T> runnableToConsumer(Runnable runnable) {
+    public static <T> Consumer<T> runnableToConsumer(@NonNull final Runnable runnable) {
         return new RunnableToConsumer<>(runnable);
     }
 
-    public static Supplier<Void> runnableToSupplier(Runnable runnable) {
+    public static Supplier<Void> runnableToSupplier(@NonNull final Runnable runnable) {
         return new RunnableToSupplier<>(runnable);
     }
 
-    public static <T> Supplier<T> callableToSupplier(Callable<T> callable) {
+    public static <T> Supplier<T> callableToSupplier(@NonNull final Callable<T> callable) {
         return new CallableToSupplier<>(callable);
     }
 
-    public static <T, U> BiConsumer<T, U> consumerToBiConsumerFirst(Consumer<T> consumer) {
+    public static <T, U> BiConsumer<T, U> consumerToBiConsumerFirst(@NonNull final Consumer<T> consumer) {
         return new ConsumerToBiConsumerFirst<>(consumer);
     }
 
-    public static <T, U> BiConsumer<T, U> consumerToBiConsumerSecond(Consumer<U> consumer) {
+    public static <T, U> BiConsumer<T, U> consumerToBiConsumerSecond(@NonNull final Consumer<U> consumer) {
         return new ConsumerToBiConsumerSecond<>(consumer);
     }
 
-    public static <T, U> BiPredicate<T, U> predicateToBiPredicateFirst(Predicate<T> predicate) {
+    public static <T, U> BiPredicate<T, U> predicateToBiPredicateFirst(@NonNull final Predicate<T> predicate) {
         return new PredicateToBiPredicateFirst<>(predicate);
     }
 
-    public static <T, U> BiPredicate<T, U> predicateToBiPredicateSecond(Predicate<U> predicate) {
+    public static <T, U> BiPredicate<T, U> predicateToBiPredicateSecond(@NonNull final Predicate<U> predicate) {
         return new PredicateToBiPredicateSecond<>(predicate);
     }
 
-    public static <T, U> Function<T, U> consumerToFunction(Consumer<T> consumer) {
+    public static <T, U> Function<T, U> consumerToFunction(@NonNull final Consumer<T> consumer) {
         return new ConsumerToFunction<>(consumer);
     }
 
-    public static <T, U> Function<T, U> runnableToFunction(Runnable runnable) {
+    public static <T, U> Function<T, U> runnableToFunction(@NonNull final Runnable runnable) {
         return new RunnableToFunction<>(runnable);
     }
 
     private static abstract class AbstractDelegate<T> implements Delegate<T> {
         final T delegate;
 
-        AbstractDelegate(T delegate) {
+        AbstractDelegate(@NonNull final T delegate) {
             this.delegate = delegate;
         }
 
@@ -60,18 +62,18 @@ public final class Delegates {
     }
 
     private static final class RunnableToConsumer<T> extends AbstractDelegate<Runnable> implements Consumer<T> {
-        RunnableToConsumer(Runnable delegate) {
+        RunnableToConsumer(@NonNull final Runnable delegate) {
             super(delegate);
         }
 
         @Override
-        public void accept(T t) {
+        public void accept(@NonNull final T t) {
             this.delegate.run();
         }
     }
 
     private static final class CallableToSupplier<T> extends AbstractDelegate<Callable<T>> implements Supplier<T> {
-        CallableToSupplier(Callable<T> delegate) {
+        CallableToSupplier(@NonNull final Callable<T> delegate) {
             super(delegate);
         }
 
@@ -88,11 +90,12 @@ public final class Delegates {
     }
 
     private static final class RunnableToSupplier<T> extends AbstractDelegate<Runnable> implements Supplier<T> {
-        RunnableToSupplier(Runnable delegate) {
+        RunnableToSupplier(@NonNull final Runnable delegate) {
             super(delegate);
         }
 
         @Override
+        @Nullable
         public T get() {
             this.delegate.run();
             return null;
@@ -100,68 +103,70 @@ public final class Delegates {
     }
 
     private static final class ConsumerToBiConsumerFirst<T, U> extends AbstractDelegate<Consumer<T>> implements BiConsumer<T, U> {
-        ConsumerToBiConsumerFirst(Consumer<T> delegate) {
+        ConsumerToBiConsumerFirst(@NonNull final Consumer<T> delegate) {
             super(delegate);
         }
 
         @Override
-        public void accept(T t, U u) {
+        public void accept(@NonNull final T t, @NonNull final U u) {
             this.delegate.accept(t);
         }
     }
 
-    private static final class ConsumerToBiConsumerSecond<T, U>extends AbstractDelegate<Consumer<U>> implements BiConsumer<T, U> {
-        ConsumerToBiConsumerSecond(Consumer<U> delegate) {
+    private static final class ConsumerToBiConsumerSecond<T, U> extends AbstractDelegate<Consumer<U>> implements BiConsumer<T, U> {
+        ConsumerToBiConsumerSecond(@NonNull final Consumer<U> delegate) {
             super(delegate);
         }
 
         @Override
-        public void accept(T t, U u) {
+        public void accept(@NonNull final T t, @NonNull final U u) {
             this.delegate.accept(u);
         }
     }
 
     private static final class PredicateToBiPredicateFirst<T, U> extends AbstractDelegate<Predicate<T>> implements BiPredicate<T, U> {
-        PredicateToBiPredicateFirst(Predicate<T> delegate) {
+        PredicateToBiPredicateFirst(@NonNull final Predicate<T> delegate) {
             super(delegate);
         }
 
         @Override
-        public boolean test(T t, U u) {
+        public boolean test(@NonNull final T t, @NonNull final U u) {
             return this.delegate.test(t);
         }
     }
 
     private static final class PredicateToBiPredicateSecond<T, U> extends AbstractDelegate<Predicate<U>> implements BiPredicate<T, U> {
-        PredicateToBiPredicateSecond(Predicate<U> delegate) {
+        PredicateToBiPredicateSecond(@NonNull final Predicate<U> delegate) {
             super(delegate);
         }
 
         @Override
-        public boolean test(T t, U u) {
+        public boolean test(@NonNull final T t, @NonNull final U u) {
             return this.delegate.test(u);
         }
     }
 
     private static final class ConsumerToFunction<T, R> extends AbstractDelegate<Consumer<T>> implements Function<T, R> {
-        ConsumerToFunction(Consumer<T> delegate) {
+        ConsumerToFunction(@NonNull final Consumer<T> delegate) {
             super(delegate);
         }
 
+        @Nullable
         @Override
-        public R apply(T t) {
+        public R apply(@NonNull final T t) {
             this.delegate.accept(t);
             return null;
         }
     }
 
     private static final class RunnableToFunction<T, R> extends AbstractDelegate<Runnable> implements Function<T, R> {
-        RunnableToFunction(Runnable delegate) {
+        RunnableToFunction(@NonNull final Runnable delegate) {
             super(delegate);
         }
 
+        @Nullable
         @Override
-        public R apply(T t) {
+        public R apply(@NonNull final T t) {
             this.delegate.run();
             return null;
         }

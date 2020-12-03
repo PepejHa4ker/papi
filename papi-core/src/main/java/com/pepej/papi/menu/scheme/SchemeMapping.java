@@ -1,9 +1,9 @@
 package com.pepej.papi.menu.scheme;
 
 import com.pepej.papi.menu.Item;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -17,7 +17,7 @@ public interface SchemeMapping {
      * @param key the mapping key
      * @return an item if present, otherwise an empty optional
      */
-    @Nonnull
+    @NonNull
     default Optional<Item> get(int key) {
         return Optional.ofNullable(getNullable(key));
     }
@@ -44,7 +44,7 @@ public interface SchemeMapping {
      *
      * @return a copy of this mapping.
      */
-    @Nonnull
+    @NonNull
     SchemeMapping copy();
 
 }

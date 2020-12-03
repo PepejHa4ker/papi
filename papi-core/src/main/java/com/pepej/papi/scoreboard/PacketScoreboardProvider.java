@@ -1,8 +1,7 @@
 package com.pepej.papi.scoreboard;
 
 import com.pepej.papi.plugin.PapiPlugin;
-
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Implementation of {@link ScoreboardProvider} for {@link PacketScoreboard}s.
@@ -15,7 +14,7 @@ public final class PacketScoreboardProvider implements ScoreboardProvider {
         this.plugin = plugin;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public synchronized PacketScoreboard getScoreboard() {
         if (this.scoreboard == null) {

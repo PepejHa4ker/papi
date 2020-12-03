@@ -1,6 +1,7 @@
 package com.pepej.papi.maven;
 
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.lang.annotation.*;
 
 /**
@@ -17,7 +18,7 @@ public @interface MavenLibrary {
      *
      * @return the group id of the library
      */
-    @Nonnull
+    @NonNull
     String groupId();
 
     /**
@@ -25,7 +26,7 @@ public @interface MavenLibrary {
      *
      * @return the artifact id of the library
      */
-    @Nonnull
+    @NonNull
     String artifactId();
 
     /**
@@ -33,7 +34,7 @@ public @interface MavenLibrary {
      *
      * @return the version of the library
      */
-    @Nonnull
+    @NonNull
     String version();
 
     /**
@@ -41,7 +42,7 @@ public @interface MavenLibrary {
      *
      * @return the repo where the library can be obtained from
      */
-    @Nonnull
+    @NonNull
     Repository repo() default @Repository(url = "https://repo1.maven.org/maven2");
 
 }

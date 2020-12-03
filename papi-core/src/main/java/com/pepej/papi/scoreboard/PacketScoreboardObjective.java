@@ -12,8 +12,8 @@ import com.pepej.papi.reflect.MinecraftVersions;
 import com.pepej.papi.text.Text;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**

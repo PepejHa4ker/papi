@@ -7,8 +7,8 @@ import com.pepej.papi.event.functional.SubscriptionBuilder;
 import com.pepej.papi.utils.Delegates;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -31,8 +31,8 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
      * @return a {@link SingleSubscriptionBuilder} to construct the event handler
      * @throws NullPointerException if eventClass is null
      */
-    @Nonnull
-    static <T extends Event> SingleSubscriptionBuilder<T> newBuilder(@Nonnull Class<T> eventClass) {
+    @NonNull
+    static <T extends Event> SingleSubscriptionBuilder<T> newBuilder(@NonNull Class<T> eventClass) {
         return newBuilder(eventClass, EventPriority.NORMAL);
     }
 
@@ -45,8 +45,8 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
      * @return a {@link SingleSubscriptionBuilder} to construct the event handler
      * @throws NullPointerException if eventClass or priority is null
      */
-    @Nonnull
-    static <T extends Event> SingleSubscriptionBuilder<T> newBuilder(@Nonnull Class<T> eventClass, @Nonnull EventPriority priority) {
+    @NonNull
+    static <T extends Event> SingleSubscriptionBuilder<T> newBuilder(@NonNull Class<T> eventClass, @NonNull EventPriority priority) {
         Objects.requireNonNull(eventClass, "eventClass");
         Objects.requireNonNull(priority, "priority");
         return new SingleSubscriptionBuilderImpl<>(eventClass, priority);
@@ -54,31 +54,31 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
 
     // override return type - we return SingleSubscriptionBuilder, not SubscriptionBuilder
 
-    @Nonnull
+    @NonNull
     @Override
-    default SingleSubscriptionBuilder<T> expireIf(@Nonnull Predicate<T> predicate) {
+    default SingleSubscriptionBuilder<T> expireIf(@NonNull Predicate<T> predicate) {
         return expireIf(Delegates.predicateToBiPredicateSecond(predicate), ExpiryTestStage.PRE, ExpiryTestStage.POST_HANDLE);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    default SingleSubscriptionBuilder<T> expireAfter(long duration, @Nonnull TimeUnit unit) {
+    default SingleSubscriptionBuilder<T> expireAfter(long duration, @NonNull TimeUnit unit) {
         Objects.requireNonNull(unit, "unit");
         Preconditions.checkArgument(duration >= 1, "duration < 1");
         long expiry = Math.addExact(System.currentTimeMillis(), unit.toMillis(duration));
         return expireIf((handler, event) -> System.currentTimeMillis() > expiry, ExpiryTestStage.PRE);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     default SingleSubscriptionBuilder<T> expireAfter(long maxCalls) {
         Preconditions.checkArgument(maxCalls >= 1, "maxCalls < 1");
         return expireIf((handler, event) -> handler.getCallCounter() >= maxCalls, ExpiryTestStage.PRE, ExpiryTestStage.POST_HANDLE);
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    SingleSubscriptionBuilder<T> filter(@Nonnull Predicate<T> predicate);
+    SingleSubscriptionBuilder<T> filter(@NonNull Predicate<T> predicate);
 
     /**
      * Add a expiry predicate.
@@ -87,8 +87,8 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
      * @param testPoints when to test the expiry predicate
      * @return ths builder instance
      */
-    @Nonnull
-    SingleSubscriptionBuilder<T> expireIf(@Nonnull BiPredicate<SingleSubscription<T>, T> predicate, @Nonnull ExpiryTestStage... testPoints);
+    @NonNull
+    SingleSubscriptionBuilder<T> expireIf(@NonNull BiPredicate<SingleSubscription<T>, T> predicate, @NonNull ExpiryTestStage... testPoints);
 
     /**
      * Sets the exception consumer for the handler.
@@ -99,15 +99,15 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
      * @return the builder instance
      * @throws NullPointerException if the consumer is null
      */
-    @Nonnull
-    SingleSubscriptionBuilder<T> exceptionConsumer(@Nonnull BiConsumer<? super T, Throwable> consumer);
+    @NonNull
+    SingleSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<? super T, Throwable> consumer);
 
     /**
      * Sets that the handler should accept subclasses of the event type.
      *
      * @return the builder instance
      */
-    @Nonnull
+    @NonNull
     SingleSubscriptionBuilder<T> handleSubclasses();
 
     /**
@@ -115,7 +115,7 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
      *
      * @return the handler list
      */
-    @Nonnull
+    @NonNull
     SingleHandlerList<T> handlers();
 
     /**
@@ -125,8 +125,8 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
      * @return a registered {@link SingleSubscription} instance.
      * @throws NullPointerException if the handler is null
      */
-    @Nonnull
-    default SingleSubscription<T> handler(@Nonnull Consumer<? super T> handler) {
+    @NonNull
+    default SingleSubscription<T> handler(@NonNull Consumer<? super T> handler) {
         return handlers().consumer(handler).register();
     }
 
@@ -137,8 +137,8 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
      * @return a registered {@link SingleSubscription} instance.
      * @throws NullPointerException if the handler is null
      */
-    @Nonnull
-    default SingleSubscription<T> biHandler(@Nonnull BiConsumer<SingleSubscription<T>, ? super T> handler) {
+    @NonNull
+    default SingleSubscription<T> biHandler(@NonNull BiConsumer<SingleSubscription<T>, ? super T> handler) {
         return handlers().biConsumer(handler).register();
     }
 

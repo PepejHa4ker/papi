@@ -1,7 +1,7 @@
 package com.pepej.papi.npc;
 
-import com.pepej.papi.Events;
-import com.pepej.papi.Schedulers;
+import com.pepej.papi.events.Events;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.metadata.ExpiringValue;
 import com.pepej.papi.metadata.Metadata;
 import com.pepej.papi.metadata.MetadataKey;
@@ -27,9 +27,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.server.PluginEnableEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -128,15 +128,15 @@ public class CitizensNpcFactory implements NpcFactory {
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CitizensNpc spawnNpc(@Nonnull Location location, @Nonnull String nametag, @Nonnull String skinPlayer) {
+    public CitizensNpc spawnNpc(@NonNull Location location, @NonNull String nametag, @NonNull String skinPlayer) {
         return spawnNpc(location.clone(), nametag, npc -> npc.setSkin(skinPlayer));
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public CitizensNpc spawnNpc(@Nonnull Location location, @Nonnull String nametag, @Nonnull String skinTextures, @Nonnull String skinSignature) {
+    public CitizensNpc spawnNpc(@NonNull Location location, @NonNull String nametag, @NonNull String skinTextures, @NonNull String skinSignature) {
         return spawnNpc(location.clone(), nametag, npc -> npc.setSkin(skinTextures, skinSignature));
     }
 
@@ -221,7 +221,7 @@ public class CitizensNpcFactory implements NpcFactory {
             this.trait.clickCallback = clickCallback;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public MetadataMap getMeta() {
             return this.trait.meta;
@@ -229,7 +229,7 @@ public class CitizensNpcFactory implements NpcFactory {
 
         @Override
         @Deprecated
-        public void setSkin(@Nonnull String skinPlayer) {
+        public void setSkin(@NonNull String skinPlayer) {
             try {
                 this.npc.data().set(NPC.PLAYER_SKIN_UUID_METADATA, skinPlayer);
                 this.npc.data().set(NPC.PLAYER_SKIN_USE_LATEST, true);
@@ -246,7 +246,7 @@ public class CitizensNpcFactory implements NpcFactory {
         }
 
         @Override
-        public void setSkin(@Nonnull String textures, @Nonnull String signature) {
+        public void setSkin(@NonNull String textures, @NonNull String signature) {
             try {
                 this.npc.data().set(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_METADATA, textures);
                 this.npc.data().set(NPC.PLAYER_SKIN_TEXTURE_PROPERTIES_SIGN_METADATA, signature);
@@ -267,7 +267,7 @@ public class CitizensNpcFactory implements NpcFactory {
         }
 
         @Override
-        public void setName(@Nonnull String name) {
+        public void setName(@NonNull String name) {
             this.npc.setName(name);
         }
 
@@ -276,13 +276,13 @@ public class CitizensNpcFactory implements NpcFactory {
             this.npc.data().set(NPC.NAMEPLATE_VISIBLE_METADATA, show);
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public Location getInitialSpawn() {
             return this.initialSpawn;
         }
 
-        @Nonnull
+        @NonNull
         @Override
         public NPC getNpc() {
             return this.npc;

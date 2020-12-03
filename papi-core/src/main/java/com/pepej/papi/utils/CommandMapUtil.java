@@ -5,8 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -76,8 +76,8 @@ public final class CommandMapUtil {
      * @param <T> the command executor class type
      * @return the command executor
      */
-    @Nonnull
-    public static <T extends CommandExecutor> T registerCommand(@Nonnull Plugin plugin, @Nonnull T command, @Nonnull String... aliases) {
+    @NonNull
+    public static <T extends CommandExecutor> T registerCommand(@NonNull Plugin plugin, @NonNull T command, @NonNull String... aliases) {
         return registerCommand(plugin, command, null, null, null, aliases);
     }
 
@@ -93,8 +93,8 @@ public final class CommandMapUtil {
      * @param <T> the command executor class type
      * @return the command executor
      */
-    @Nonnull
-    public static <T extends CommandExecutor> T registerCommand(@Nonnull Plugin plugin, @Nonnull T command, String permission, String permissionMessage, String description, @Nonnull String... aliases) {
+    @NonNull
+    public static <T extends CommandExecutor> T registerCommand(@NonNull Plugin plugin, @NonNull T command, String permission, String permissionMessage, String description, @NonNull String... aliases) {
         Preconditions.checkArgument(aliases.length != 0, "No aliases");
         for (String alias : aliases) {
             try {
@@ -132,8 +132,8 @@ public final class CommandMapUtil {
      * @param <T> the command executor class type
      * @return the command executor
      */
-    @Nonnull
-    public static <T extends CommandExecutor> T unregisterCommand(@Nonnull T command) {
+    @NonNull
+    public static <T extends CommandExecutor> T unregisterCommand(@NonNull T command) {
         CommandMap map = getCommandMap();
         try {
             //noinspection unchecked

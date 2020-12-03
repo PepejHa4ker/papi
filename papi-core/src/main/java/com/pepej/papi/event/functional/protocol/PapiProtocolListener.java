@@ -6,8 +6,8 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.pepej.papi.event.ProtocolSubscription;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.protocol.Protocol;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -111,7 +111,7 @@ class PapiProtocolListener extends PacketAdapter implements ProtocolSubscription
         }
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public Set<PacketType> getPackets() {
         return this.types;

@@ -1,8 +1,7 @@
 package com.pepej.papi.interfaces;
 
 import com.google.common.reflect.TypeToken;
-
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents an object that knows it's own type parameter.
@@ -11,7 +10,7 @@ import javax.annotation.Nonnull;
  */
 public interface TypeAware<T> {
 
-    @Nonnull
+    @NonNull
     TypeToken<T> getType();
 
 }

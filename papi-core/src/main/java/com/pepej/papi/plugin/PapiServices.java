@@ -19,7 +19,7 @@ final class PapiServices {
     private PapiServices() {
     }
 
-    static void setup(PapiBukkitPlugin plugin) {
+    static void setup(PapiJavaPlugin plugin) {
         plugin.provideService(HologramFactory.class, new BukkitHologramFactory());
         plugin.provideService(BungeeCord.class, new BungeeCordImpl(plugin));
         if (plugin.isPluginPresent("ProtocolLib")) {
@@ -27,12 +27,10 @@ final class PapiServices {
             plugin.provideService(ScoreboardProvider.class, scoreboardProvider);
             plugin.provideService(PacketScoreboardProvider.class, scoreboardProvider);
 
-            SignPromptFactory signPromptFactory = new PacketSignPromptFactory();
-            plugin.provideService(SignPromptFactory.class, signPromptFactory);
+            plugin.provideService(SignPromptFactory.class, new PacketSignPromptFactory());
 
             try {
-                IndividualHologramFactory hologramFactory = new PacketIndividualHologramFactory();
-                plugin.provideService(IndividualHologramFactory.class, hologramFactory);
+                plugin.provideService(IndividualHologramFactory.class, new PacketIndividualHologramFactory());
             } catch (Throwable t) {
                 // ignore??
             }
@@ -43,8 +41,7 @@ final class PapiServices {
             plugin.provideService(CitizensNpcFactory.class, npcManager);
         }
         if (classExists("org.bukkit.boss.BossBar")) {
-            BossBarFactory bossBarFactory = new BukkitBossBarFactory(plugin.getServer());
-            plugin.provideService(BossBarFactory.class, bossBarFactory);
+            plugin.provideService(BossBarFactory.class, new BukkitBossBarFactory(plugin.getServer()));
         }
     }
 
