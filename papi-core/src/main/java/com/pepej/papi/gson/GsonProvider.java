@@ -5,7 +5,7 @@ import com.pepej.papi.datatree.DataTree;
 import com.pepej.papi.gson.typeadapters.BukkitSerializableAdapterFactory;
 import com.pepej.papi.gson.typeadapters.GsonSerializableAdapterFactory;
 import com.pepej.papi.gson.typeadapters.JsonElementTreeSerializer;
-import net.kyori.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Reader;
@@ -16,22 +16,25 @@ import java.util.Objects;
  */
 public final class GsonProvider {
 
-    private static final Gson STANDARD_GSON = GsonComponentSerializer.populate(new GsonBuilder())
-                                                                     .registerTypeHierarchyAdapter(DataTree.class, JsonElementTreeSerializer.INSTANCE)
-                                                                     .registerTypeAdapterFactory(GsonSerializableAdapterFactory.INSTANCE)
-                                                                     .registerTypeAdapterFactory(BukkitSerializableAdapterFactory.INSTANCE)
-                                                                     .serializeNulls()
-                                                                     .disableHtmlEscaping()
-                                                                     .create();
 
-    private static final Gson PRETTY_PRINT_GSON = GsonComponentSerializer.populate(new GsonBuilder())
-                                                                         .registerTypeHierarchyAdapter(DataTree.class, JsonElementTreeSerializer.INSTANCE)
-                                                                         .registerTypeAdapterFactory(GsonSerializableAdapterFactory.INSTANCE)
-                                                                         .registerTypeAdapterFactory(BukkitSerializableAdapterFactory.INSTANCE)
-                                                                         .serializeNulls()
-                                                                         .disableHtmlEscaping()
+    private static final GsonBuilder GSON_BUILDER = new GsonBuilder()
+            .registerTypeHierarchyAdapter(DataTree.class, JsonElementTreeSerializer.INSTANCE)
+            .registerTypeAdapterFactory(GsonSerializableAdapterFactory.INSTANCE)
+            .registerTypeAdapterFactory(BukkitSerializableAdapterFactory.INSTANCE)
+            .serializeNulls()
+            .disableHtmlEscaping();
+
+    private static final Gson STANDARD_GSON = GsonComponentSerializer.gson()
+            .populator()
+            .apply(GSON_BUILDER)
+            .create();
+
+    private static final Gson PRETTY_PRINT_GSON = GsonComponentSerializer.gson()
+                                                                         .populator()
+                                                                         .apply(GSON_BUILDER)
                                                                          .setPrettyPrinting()
                                                                          .create();
+
 
     private static final JsonParser PARSER = new JsonParser();
 

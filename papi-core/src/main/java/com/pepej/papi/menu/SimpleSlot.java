@@ -15,8 +15,8 @@ import java.util.function.Consumer;
  */
 public class SimpleSlot implements Slot {
 
-    // the parent gui
-    private final Gui gui;
+    // the parent menu
+    private final Menu menu;
 
     // the id of this slot
     private final int id;
@@ -24,8 +24,8 @@ public class SimpleSlot implements Slot {
     // the click handlers for this slot
     protected final Map<ClickType, Set<Consumer<InventoryClickEvent>>> handlers;
 
-    public SimpleSlot(@NonNull Gui gui, int id) {
-        this.gui = gui;
+    public SimpleSlot(@NonNull Menu menu, int id) {
+        this.menu = menu;
         this.id = id;
         this.handlers = Collections.synchronizedMap(new EnumMap<>(ClickType.class));
     }
@@ -44,12 +44,12 @@ public class SimpleSlot implements Slot {
     /**
      * Gets the GUI this slot references
      *
-     * @return the parent gui
+     * @return the parent menu
      */
     @NonNull
     @Override
-    public Gui gui() {
-        return this.gui;
+    public Menu gui() {
+        return this.menu;
     }
 
     /**
@@ -85,7 +85,7 @@ public class SimpleSlot implements Slot {
     @Nullable
     @Override
     public ItemStack getItem() {
-        return this.gui.getHandle().getItem(this.id);
+        return this.menu.getHandle().getItem(this.id);
     }
 
     /**
@@ -108,7 +108,7 @@ public class SimpleSlot implements Slot {
     @Override
     public Slot setItem(@NonNull ItemStack item) {
         Objects.requireNonNull(item, "item");
-        this.gui.getHandle().setItem(this.id, item);
+        this.menu.getHandle().setItem(this.id, item);
         return this;
     }
 
@@ -132,7 +132,7 @@ public class SimpleSlot implements Slot {
     @NonNull
     @Override
     public Slot clearItem() {
-        this.gui.getHandle().clear(this.id);
+        this.menu.getHandle().clear(this.id);
         return this;
     }
 

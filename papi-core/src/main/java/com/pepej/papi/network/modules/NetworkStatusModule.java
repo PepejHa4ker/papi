@@ -1,7 +1,7 @@
 package com.pepej.papi.network.modules;
 
-import com.pepej.papi.event.bus.EventBus;
-import com.pepej.papi.event.bus.Subscribers;
+import com.pepej.papi.event.bus.api.EventBus;
+import com.pepej.papi.event.bus.api.Subscribers;
 import com.pepej.papi.network.Network;
 import com.pepej.papi.network.event.NetworkEvent;
 import com.pepej.papi.network.event.ServerConnectEvent;

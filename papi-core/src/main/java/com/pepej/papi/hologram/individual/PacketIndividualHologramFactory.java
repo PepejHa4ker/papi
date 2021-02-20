@@ -11,17 +11,15 @@ import com.pepej.papi.hologram.HologramLine;
 import com.pepej.papi.protocol.Protocol;
 import com.pepej.papi.reflect.MinecraftVersion;
 import com.pepej.papi.reflect.MinecraftVersions;
-import com.pepej.papi.reflect.ServerReflection;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.serialize.Position;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.text.Text;
 import com.pepej.papi.utils.entityspawner.EntitySpawner;
-import lombok.SneakyThrows;
+import lombok.Data;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -29,36 +27,12 @@ import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class PacketIndividualHologramFactory implements IndividualHologramFactory {
-    private static final Method GET_HANDLE_METHOD;
-    private static final Method GET_ID_METHOD;
-
-    static {
-        try {
-            Class<?> entityClass = ServerReflection.nmsClass("Entity");
-            GET_ID_METHOD = entityClass.getDeclaredMethod("getId");
-            GET_ID_METHOD.setAccessible(true);
-
-            Class<?> craftEntityClass = ServerReflection.obcClass("entity.CraftEntity");
-            GET_HANDLE_METHOD = craftEntityClass.getDeclaredMethod("getHandle");
-            GET_HANDLE_METHOD.setAccessible(true);
-        } catch (Exception e) {
-            throw new ExceptionInInitializerError(e);
-        }
-    }
-
-    @SneakyThrows
-    private static int getEntityId(Entity entity) {
-        Object handle = GET_HANDLE_METHOD.invoke(entity);
-        return (int) GET_ID_METHOD.invoke(handle);
-       
-    }
 
     @NonNull
     @Override
@@ -66,6 +40,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
         return new PacketHologram(position, lines);
     }
 
+    @Data
     private static final class HologramEntity {
         private ArmorStand armorStand;
         private HologramLine line;
@@ -76,31 +51,6 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
         private HologramEntity(HologramLine line) {
             this.line = line;
         }
-
-        public ArmorStand getArmorStand() {
-            return this.armorStand;
-        }
-
-        public void setArmorStand(ArmorStand armorStand) {
-            this.armorStand = armorStand;
-        }
-
-        public HologramLine getLine() {
-            return this.line;
-        }
-
-        public void setLine(HologramLine line) {
-            this.line = line;
-        }
-
-        public int getId() {
-            return this.entityId;
-        }
-
-        public void setId(int entityId) {
-            this.entityId = entityId;
-        }
-
         public Map<Integer, WrappedWatchableObject> getCachedMetadata() {
             return this.cachedMetadata;
         }
@@ -109,17 +59,23 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
     private static final class PacketHologram implements IndividualHologram {
 
         private Position position;
-        private final List<HologramLine> lines = new ArrayList<>();
-        private final List<HologramEntity> spawnedEntities = new ArrayList<>();
-        private final Set<Player> viewers = Collections.synchronizedSet(new HashSet<>());
-        private boolean spawned = false;
+        private final List<HologramLine> lines;
+        private final List<HologramEntity> spawnedEntities;
+        private final Set<Player> viewers;
+        private boolean spawned;
 
-        private CompositeTerminable listeners = null;
+        private CompositeTerminable listener;
 
-        PacketHologram(Position position, List<HologramLine> lines) {
-            this.position = Objects.requireNonNull(position, "position");
+        PacketHologram(@NonNull Position position, @NonNull List<@NonNull HologramLine> lines) {
+            Objects.requireNonNull(position, "position");
+            this.position = position;
             updateLines(lines);
+            this.lines = new ArrayList<>();
+            spawnedEntities = new ArrayList<>();
+            viewers = Collections.synchronizedSet(new HashSet<>());
+
         }
+
 
         private Position getNewLinePosition() {
             if (this.spawnedEntities.isEmpty()) {
@@ -134,7 +90,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
         @Override
         public void spawn() {
             // ensure listening
-            if (this.listeners == null) {
+            if (this.listener == null) {
                 setupPacketListeners();
             }
 
@@ -181,8 +137,8 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
 
                     // spawn the armorstand
                     EntitySpawner.INSTANCE.spawn(loc, ArmorStand.class, as -> {
-                        int eid = getEntityId(as);
-                        holoEntity.setId(eid);
+                        int eid = as.getEntityId();
+                        holoEntity.setEntityId(eid);
                         holoEntity.setArmorStand(as);
 
                         as.setSmall(true);
@@ -221,10 +177,10 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
             this.spawnedEntities.clear();
             this.spawned = false;
 
-            if (this.listeners != null) {
-                this.listeners.closeAndReportException();
+            if (this.listener != null) {
+                this.listener.closeAndReportException();
             }
-            this.listeners = null;
+            this.listener = null;
         }
 
         @Override
@@ -257,6 +213,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
             return spawnedEntities.get(line).armorStand;
         }
 
+
         @Override
         public void updatePosition(@NonNull Position position) {
             Objects.requireNonNull(position, "position");
@@ -279,25 +236,21 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
 
         @Override
         public void addExpiring(final long ticksDelay) {
-            Schedulers.async().runLater(this::close, ticksDelay);
+            Schedulers.sync().runLater(this::close, ticksDelay).bindWith(listener);
 
         }
 
         @Override
         public void addExpiring(final long delay, final TimeUnit unit) {
-            Schedulers.async().runLater(this::close, delay, unit);
+            Schedulers.sync().runLater(this::close, delay, unit).bindWith(listener);
         }
 
 
 
         @Override
-        public void updateLines(@NonNull List<HologramLine> lines) {
+        public void updateLines(@NonNull List<@NonNull HologramLine> lines) {
             Objects.requireNonNull(lines, "lines");
             Preconditions.checkArgument(!lines.isEmpty(), "lines cannot be empty");
-            for (HologramLine line : lines) {
-                Preconditions.checkArgument(line != null, "null line");
-            }
-
             if (this.lines.equals(lines)) {
                 return;
             }
@@ -326,7 +279,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
                 spawnPacket.getModifier().writeDefaults();
 
                 // write entity id
-                spawnPacket.getIntegers().write(0, entity.getId());
+                spawnPacket.getIntegers().write(0, entity.getEntityId());
 
                 // write unique id
                 if (modern) {
@@ -340,12 +293,12 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
                     spawnPacket.getDoubles().write(0, loc.getX());
                     spawnPacket.getDoubles().write(1, loc.getY());
                     spawnPacket.getDoubles().write(2, loc.getZ());
-                }
-                else {
+                } else {
                     spawnPacket.getIntegers().write(1, (int) Math.floor(loc.getX() * 32));
                     spawnPacket.getIntegers().write(2, (int) Math.floor(loc.getY() * 32));
                     spawnPacket.getIntegers().write(3, (int) Math.floor(loc.getZ() * 32));
                 }
+
                 spawnPacket.getIntegers().write(modern ? 4 : 7, (int) ((loc.getPitch()) * 256.0F / 360.0F));
                 spawnPacket.getIntegers().write(modern ? 5 : 8, (int) ((loc.getYaw()) * 256.0F / 360.0F));
 
@@ -363,7 +316,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
                 PacketContainer metadataPacket = new PacketContainer(PacketType.Play.Server.ENTITY_METADATA);
 
                 // write entity id
-                metadataPacket.getIntegers().write(0, entity.getId());
+                metadataPacket.getIntegers().write(0, entity.getEntityId());
 
                 // write metadata
                 List<WrappedWatchableObject> watchableObjects = new ArrayList<>();
@@ -400,7 +353,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
             PacketContainer destroyPacket = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
 
             // set ids
-            int[] ids = this.spawnedEntities.stream().mapToInt(HologramEntity::getId).toArray();
+            int[] ids = this.spawnedEntities.stream().mapToInt(HologramEntity::getEntityId).toArray();
             destroyPacket.getIntegerArrays().write(0, ids);
 
             Protocol.sendPacket(player, destroyPacket);
@@ -418,7 +371,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
 
         private HologramEntity getHologramEntity(int entityId) {
             for (HologramEntity entity : PacketHologram.this.spawnedEntities) {
-                if (entity.getId() == entityId) {
+                if (entity.getEntityId() == entityId) {
                     return entity;
                 }
             }
@@ -426,17 +379,17 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
         }
 
         private void setupPacketListeners() {
-            this.listeners = CompositeTerminable.create();
+            this.listener = CompositeTerminable.create();
 
             // remove players when they quit
             Events.subscribe(PlayerQuitEvent.class)
                   .handler(e -> this.viewers.remove(e.getPlayer()))
-                  .bindWith(this.listeners);
+                  .bindWith(this.listener);
 
             Events.subscribe(PluginDisableEvent.class)
                   .filter(e -> e.getPlugin().getName().equals("papi"))
                   .handler(event -> onPluginDisable(event.getPlugin()))
-                  .bindWith(this.listeners);
+                  .bindWith(this.listener);
             Protocol.subscribe(ListenerPriority.HIGH, PacketType.Play.Server.ENTITY_METADATA)
                     .handler(e -> {
                         PacketContainer packet = e.getPacket();
@@ -481,9 +434,9 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
                         packet.getWatchableCollectionModifier().write(0, metadata);
                         e.setPacket(packet);
                     })
-                    .bindWith(this.listeners);
+                    .bindWith(this.listener);
 
-            Protocol.subscribe(ListenerPriority.HIGHEST, PacketType.Play.Server.SPAWN_ENTITY)
+            Protocol.subscribe(ListenerPriority.MONITOR, PacketType.Play.Server.SPAWN_ENTITY)
                     .handler(e -> {
                         PacketContainer packet = e.getPacket();
                         Player player = e.getPlayer();
@@ -501,7 +454,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
                             e.setCancelled(true);
                         }
                     })
-                    .bindWith(this.listeners);
+                    .bindWith(this.listener);
 
         }
     }

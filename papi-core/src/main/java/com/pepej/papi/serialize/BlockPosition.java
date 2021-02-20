@@ -1,12 +1,12 @@
 package com.pepej.papi.serialize;
 
-import com.flowpowered.math.vector.Vector3i;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pepej.papi.Papi;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
+import com.pepej.papi.math.vector.Vector3i;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;

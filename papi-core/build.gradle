@@ -1,19 +1,41 @@
-plugins {
-    id 'java'
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
+    }
 }
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
 
 
 repositories {
     maven { url "https://repo.dmulloy2.net/nexus/repository/public/" }
     maven { url "https://repo.citizensnpcs.co" }
     maven { url "https://repo.codemc.org/repository/maven-public" }
+    maven { url 'https://libraries.minecraft.net' }
+
 }
 
 dependencies {
-    testCompile("junit:junit:4.12")
+    testImplementation(platform('org.junit:junit-bom:5.7.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+
     //spigot core
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
+    //mojang authlib
+    compileOnly("com.mojang:authlib:1.5.21")
+
     //protocols
     compileOnly("com.comphenix.protocol:ProtocolLib:4.5.0")
     //npcs
@@ -26,27 +48,31 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
-    //math
-    compile("com.flowpowered:flow-math:1.0.0")
+    //asm
+    implementation('org.ow2.asm:asm:8.0.1')
+
+    implementation("org.spongepowered:configurate-hocon:3.7.2")
+    implementation("org.spongepowered:configurate-yaml:3.7.2")
+    implementation("org.spongepowered:configurate-core:3.7.2")
+    implementation("org.spongepowered:configurate-gson:3.7.2")
 
     //text
-    compile("net.kyori:text-serializer-gson:3.0.4")
-    compile("net.kyori:text-serializer-legacy:3.0.4")
-    compile("net.kyori:text-adapter-bukkit:3.0.5")
-
-    //config
-    compile("ninja.leaping.configurate:configurate-yaml:3.3")
-    compile("ninja.leaping.configurate:configurate-json:3.3")
-    compile("ninja.leaping.configurate:configurate-gson:3.3")
-    compile("ninja.leaping.configurate:configurate-hocon:3.3")
+    implementation("net.kyori:adventure-api:4.4.0")
+    implementation("net.kyori:adventure-serializer-configurate3:4.4.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT")
+    implementation("net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT")
+    implementation("net.kyori:adventure-text-feature-pagination:4.0.0-SNAPSHOT")
 
 }
-
 shadowJar {
-    destinationDir = file("C:\\Users\\pepej\\Desktop\\locahost\\plugins")
-    archiveName = "Papi-Core-1.4.jar"
+    relocate("net.kyori.adventure", "com.pepej.papi.adventure")
+    relocate("net.kyori.examination", "com.pepej.papi.adventure")
+    relocate("ninja.leaping.configurate", "com.pepej.papi.config.configurate")
+    relocate("com.typesafe.config", "com.pepej.papi.config.typesafe")
+    relocate("org.checkerframework", "com.pepej.papi.checker")
+    relocate("com.google", "com.pepej.papi.google")
+    archiveName = "Papi-Core-2.1.0.jar"
+
 }
-
-
 
 

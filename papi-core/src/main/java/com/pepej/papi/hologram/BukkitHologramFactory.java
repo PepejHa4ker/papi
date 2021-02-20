@@ -95,7 +95,7 @@ public class BukkitHologramFactory implements HologramFactory {
                 }
             }
 
-            // now enough armorstands are spawned, we can now update the text
+            // now enough armor stands are spawned, we can now update the text
             for (int i = 0; i < this.lines.size(); i++) {
                 String line = this.lines.get(i);
 
@@ -109,7 +109,7 @@ public class BukkitHologramFactory implements HologramFactory {
                         chunk.load();
                     }
 
-                    // remove any armorstands already at this location. (leftover from a server restart)
+                    // remove any armor stands already at this location. (leftover from a server restart)
                     loc.getWorld().getNearbyEntities(loc, 1.0, 1.0, 1.0).forEach(e -> {
                         if (e.getType() == EntityType.ARMOR_STAND && locationsEqual(e.getLocation(), loc)) {
                             e.remove();

@@ -2,6 +2,7 @@ package com.pepej.papi.internal;
 
 import com.pepej.papi.Papi;
 import com.pepej.papi.plugin.PapiPlugin;
+import com.pepej.papi.utils.Log;
 import lombok.Synchronized;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -15,11 +16,11 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toSet;
 
 /**
- * Provides the instance which loaded the helper classes into the server
+ * Provides the instance which loaded the papi classes into the server
  */
 public final class LoaderUtils {
-    private static PapiPlugin plugin = null;
-    private static Thread mainThread = null;
+    private static PapiPlugin plugin;
+    private static Thread mainThread;
 
     @NonNull
     @Synchronized
@@ -33,7 +34,7 @@ public final class LoaderUtils {
             String pkg = LoaderUtils.class.getPackage().getName();
             pkg = pkg.substring(0, pkg.length() - 9);
 
-            Bukkit.getLogger().info("[Papi] papi (" + pkg + ") bound to plugin " + plugin.getName() + " - " + plugin.getClass().getName());
+            Log.info("papi (%s) bound to plugin %s - %s", pkg, plugin.getName(), plugin.getClass().getSimpleName());
 
             setup();
         }
@@ -49,7 +50,7 @@ public final class LoaderUtils {
                      .collect(toSet());
     }
 
-    public static Set<PapiPlugin> getPapiPlugins() {
+    public static Set<PapiPlugin> getPapiBasedPlugins() {
         return Stream.concat(
                 Stream.of(getPlugin()),
                 Arrays.stream(Papi.plugins().getPlugins())

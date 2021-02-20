@@ -1,6 +1,7 @@
 package com.pepej.papi.terminable.composite;
 
 import com.pepej.papi.terminable.Terminable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.Deque;
@@ -16,7 +17,7 @@ public class AbstractCompositeTerminable implements CompositeTerminable {
     }
 
     @Override
-    public CompositeTerminable with(AutoCloseable autoCloseable) {
+    public CompositeTerminable with(@NonNull AutoCloseable autoCloseable) {
         Objects.requireNonNull(autoCloseable, "autoCloseable");
         this.closeables.push(autoCloseable);
         return this;
@@ -25,7 +26,8 @@ public class AbstractCompositeTerminable implements CompositeTerminable {
     @Override
     public void close() throws CompositeClosingException {
         List<Exception> caught = new ArrayList<>();
-        for (AutoCloseable ac; (ac = this.closeables.poll()) != null; ) {
+        AutoCloseable ac;
+        while ((ac = this.closeables.poll()) != null) {
             try {
                 ac.close();
             } catch (Exception e) {

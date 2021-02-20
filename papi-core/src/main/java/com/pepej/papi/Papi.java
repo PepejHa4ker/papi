@@ -14,12 +14,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Optional;
 
 /**
- * Base class for helper, which mainly just proxies calls to {@link Bukkit#getServer()} for convenience.
+ * Base class for papi, which mainly just proxies calls to {@link Bukkit#getServer()} for convenience.
  */
 public final class Papi {
 
     /**
-     * Gets the plugin which is "hosting" helper.
+     * Gets the plugin which is "hosting" papi.
      *
      * @return the host plugin
      */

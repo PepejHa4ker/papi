@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 /**
  * Uses {@link ScriptController} and papi to provide a javascript plugin environment for Bukkit.
  */
-@PapiImplementationPlugin
+@PapiImplementationPlugin(moduleName = "papi-js")
 @Plugin(name = "papi-js", version = "1.1", description = "JavaScript plugins powered by papi", depends = @PluginDependency("papi"))
 public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
     private static final String[] DEFAULT_IMPORT_INCLUDES = new String[]{

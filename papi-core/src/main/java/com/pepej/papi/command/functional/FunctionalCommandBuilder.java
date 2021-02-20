@@ -17,14 +17,14 @@ import java.util.function.Predicate;
 public interface FunctionalCommandBuilder<T extends CommandSender> {
 
     // Default failure messages
-    String DEFAULT_NO_PERMISSION_MESSAGE = "&cSorry, but you can't do this.";
-    String DEFAULT_NOT_OP_MESSAGE = "&cOnly server operators are able to use this command.";
-    String DEFAULT_NOT_PLAYER_MESSAGE = "&cOnly players are able to use this command.";
-    String DEFAULT_NOT_CONSOLE_MESSAGE = "&cThis command is only available through the server console.";
-    String DEFAULT_INVALID_USAGE_MESSAGE = "&cInvalid usage. Try: {usage}.";
-    String DEFAULT_INVALID_ARGUMENT_MESSAGE = "&cInvalid argument '{arg}' at index {index}.";
-    String DEFAULT_INVALID_SENDER_MESSAGE = "&cYou are not able to use this command.";
-    String DEFAULT_COOLDOWN_MESSAGE = "&cYou can't use this command yet.";
+    String DEFAULT_NO_PERMISSION_MESSAGE = "&cУ Вас недостаточно прав для использования этой команды.";
+    String DEFAULT_NOT_OP_MESSAGE = "&cТолько администраторы сервера могут использовать эту команду.";
+    String DEFAULT_NOT_PLAYER_MESSAGE = "&cТолько игроки могут использовать эту команду.";
+    String DEFAULT_NOT_CONSOLE_MESSAGE = "&cЭта команда доступна только через консоль сервера.";
+    String DEFAULT_INVALID_USAGE_MESSAGE = "&cПравильное использование. Попробуйте: {usage}.";
+    String DEFAULT_INVALID_ARGUMENT_MESSAGE = "&cНедействительный аргумент '{arg}' в позиции {index}.";
+    String DEFAULT_INVALID_SENDER_MESSAGE = "&cВы не можете использовать эту команду.";
+    String DEFAULT_COOLDOWN_MESSAGE = "&cВы не можете использовать эту команду еще &6{cooldown}.";
 
     static FunctionalCommandBuilder<CommandSender> newBuilder() {
         return new FunctionalCommandBuilderImpl<>();
@@ -39,12 +39,12 @@ public interface FunctionalCommandBuilder<T extends CommandSender> {
     FunctionalCommandBuilder<T> description(String description);
 
     /**
-     * Asserts that some function returns true.
+     * Asserts that some predicate returns true.
      *
      * @param test the test to run
      * @return the builder instance
      */
-    FunctionalCommandBuilder<T> assertFunction(Predicate<? super CommandContext<? extends T>> test);
+    FunctionalCommandBuilder<T> assertPredicate(Predicate<? super CommandContext<? extends T>> test);
 
     /**
      * Asserts that the sender has the specified permission, and sends them the default failure message

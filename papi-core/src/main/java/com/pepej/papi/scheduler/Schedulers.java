@@ -157,7 +157,7 @@ public final class Schedulers {
                 this.backingTask.accept(this);
                 this.counter.incrementAndGet();
             } catch (Throwable e) {
-                Log.severe("[SCHEDULER] Exception thrown whilst executing task");
+                Log.severe("&a[SCHEDULER]&c Exception thrown whilst executing task");
                 e.printStackTrace();
             }
 
@@ -214,7 +214,7 @@ public final class Schedulers {
                 this.backingTask.accept(this);
                 this.counter.incrementAndGet();
             } catch (Throwable e) {
-                Log.severe("[SCHEDULER] Exception thrown whilst executing task");
+                Log.severe("&a[SCHEDULER] &cException thrown whilst executing task");
                 e.printStackTrace();
             }
         }

@@ -1,12 +1,12 @@
 package com.pepej.papi.serialize;
 
-import com.flowpowered.math.vector.*;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pepej.papi.gson.JsonBuilder;
+import com.pepej.papi.math.vector.*;
 
 /**
- * Utility for serializing and deserializing flowpowered Vector instances
+ * Utility for serializing and deserializing Vector instances
  */
 public final class VectorSerializers {
 

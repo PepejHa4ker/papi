@@ -13,4 +13,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PapiImplementationPlugin {
+
+
+    /**
+     * Returns the name of papi submodule
+     * @return the papi submodule name
+     */
+    String moduleName();
 }

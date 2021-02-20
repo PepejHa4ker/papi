@@ -12,8 +12,10 @@ public class ServerConnectEvent implements NetworkEvent {
     private final Server server;
 
     public ServerConnectEvent(String id, Server server) {
-        this.id = Objects.requireNonNull(id, "id");
-        this.server = Objects.requireNonNull(server, "server");
+        Objects.requireNonNull(id, "id");
+        Objects.requireNonNull(server, "server");
+        this.id = id;
+        this.server = server;
     }
 
     /**

@@ -79,7 +79,7 @@ public interface CompositeTerminable extends Terminable, TerminableConsumer {
      * @throws NullPointerException if the closable is null
      * @return this (for chaining)
      */
-    CompositeTerminable with(AutoCloseable autoCloseable);
+    CompositeTerminable with(@NonNull AutoCloseable autoCloseable);
 
     /**
      * Binds all given {@link AutoCloseable} with this composite closable.
@@ -93,13 +93,11 @@ public interface CompositeTerminable extends Terminable, TerminableConsumer {
      * @param autoCloseables the closables to bind
      * @return this (for chaining)
      */
-    default CompositeTerminable withAll(AutoCloseable... autoCloseables) {
+    default CompositeTerminable withAll(@NonNull AutoCloseable... autoCloseables) {
         for (AutoCloseable autoCloseable : autoCloseables) {
-            if (autoCloseable == null) {
-                continue;
-            }
             bind(autoCloseable);
         }
+
         return this;
     }
 
@@ -115,13 +113,11 @@ public interface CompositeTerminable extends Terminable, TerminableConsumer {
      * @param autoCloseables the closables to bind
      * @return this (for chaining)
      */
-    default CompositeTerminable withAll(Iterable<? extends AutoCloseable> autoCloseables) {
+    default CompositeTerminable withAll(Iterable<? extends @NonNull AutoCloseable> autoCloseables) {
         for (AutoCloseable autoCloseable : autoCloseables) {
-            if (autoCloseable == null) {
-                continue;
-            }
             bind(autoCloseable);
         }
+
         return this;
     }
 

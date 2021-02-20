@@ -1,4 +1,5 @@
-package com.pepej.papi.command.argument;import com.google.common.reflect.TypeToken;
+package com.pepej.papi.command.argument;
+import com.google.common.reflect.TypeToken;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;

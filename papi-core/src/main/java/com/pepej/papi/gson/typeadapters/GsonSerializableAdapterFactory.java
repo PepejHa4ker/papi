@@ -48,7 +48,6 @@ public final class GsonSerializableAdapterFactory implements TypeAdapterFactory 
                 }
 
                 try {
-                    //noinspection unchecked
                     return (GsonSerializable) deserializeMethod.invoke(null, element);
                 } catch (Exception e) {
                     throw new IOException(e);

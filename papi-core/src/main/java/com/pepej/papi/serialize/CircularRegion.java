@@ -51,7 +51,7 @@ public class CircularRegion implements GsonSerializable {
      */
     public boolean inRegion(Position pos) {
         Objects.requireNonNull(pos, "pos");
-        return pos.toVector().distanceSquared(this.center.toVector()) < this.radius * this.radius;
+        return pos.toVector().lengthSquared(this.center.toVector()) < this.radius * this.radius;
     }
 
     /**

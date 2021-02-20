@@ -12,7 +12,5 @@ dependencies {
 }
 
 shadowJar {
-    destinationDir = file("C:\\Users\\pepej\\Desktop\\locahost\\plugins")
-
     archiveName = "Papi-Js-1.1.jar"
 }

@@ -84,4 +84,8 @@ public final class Protocol {
         }
     }
 
+    private Protocol() {
+        throw new UnsupportedOperationException("This class cannot be initialized");
+    }
+
 }

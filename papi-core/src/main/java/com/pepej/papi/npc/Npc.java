@@ -60,6 +60,7 @@ public interface Npc {
      */
     void setShowNametag(boolean show);
 
+
     /**
      * Gets the location where this NPC was initially spawned at
      *

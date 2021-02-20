@@ -1,6 +1,8 @@
 package com.pepej.papi.random;
 
 
+import org.checkerframework.checker.index.qual.NonNegative;
+
 /**
  * Represents an object which has a weight
  */
@@ -18,6 +20,8 @@ public interface Weighted {
      *
      * @return The weight
      */
+    @NonNegative
     double getWeight();
+
 
 }

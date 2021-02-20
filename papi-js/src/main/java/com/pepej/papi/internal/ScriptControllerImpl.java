@@ -13,7 +13,6 @@ import java.util.function.Supplier;
 public final class ScriptControllerImpl implements ScriptController {
 
     @Deprecated
-    @SuppressWarnings("DeprecatedIsStillUsed")
     public static ScriptController.Builder builder() {
         return new Builder();
     }

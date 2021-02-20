@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The Metadata registries provided by helper.
+ * The Metadata registries provided by papi.
  *
  * These instances can be accessed through {@link Metadata}.
  */
@@ -159,5 +159,4 @@ final class StandardMetadataRegistries {
     private StandardMetadataRegistries() {
         throw new UnsupportedOperationException("This class cannot be instantiated");
     }
-
 }

@@ -1,6 +1,6 @@
 package com.pepej.papi.random;
 
-import com.flowpowered.math.GenericMath;
+import com.pepej.papi.math.GenericMath;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Random;

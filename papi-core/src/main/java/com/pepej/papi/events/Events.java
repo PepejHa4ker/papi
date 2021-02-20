@@ -2,11 +2,12 @@ package com.pepej.papi.events;
 
 import com.google.common.reflect.TypeToken;
 import com.pepej.papi.Papi;
-import com.pepej.papi.scheduler.Schedulers;
-import com.pepej.papi.events.command.CommandCallEvent;
 import com.pepej.papi.event.functional.merged.MergedSubscriptionBuilder;
 import com.pepej.papi.event.functional.single.SingleSubscriptionBuilder;
+import com.pepej.papi.events.command.CommandCallEvent;
+import com.pepej.papi.events.player.AsyncPlayerFirstJoinEvent;
 import com.pepej.papi.events.server.ServerUpdateEvent;
+import com.pepej.papi.scheduler.Schedulers;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -29,31 +30,32 @@ public final class Events {
     private static final Map<String, Class<? extends Event>> eventRegistry = new HashMap<>();
 
     static {
-        register("command:call", CommandCallEvent.class);
-        register("block:break", BlockBreakEvent.class);
-        register("block:place", BlockPlaceEvent.class);
-        register("player:death", PlayerDeathEvent.class);
-        register("player:interact", PlayerInteractEvent.class);
-        register("player:interact_at_entity", PlayerInteractAtEntityEvent.class);
-        register("player:interact_entity", PlayerInteractEntityEvent.class);
-        register("player:respawn", PlayerRespawnEvent.class);
-        register("player:join", PlayerJoinEvent.class);
-        register("player:drop", PlayerDropItemEvent.class);
-        register("player:gamemode", PlayerGameModeChangeEvent.class);
-        register("player:quit", PlayerQuitEvent.class);
-        register("player:chat", AsyncPlayerChatEvent.class);
-        register("player:move", PlayerMoveEvent.class);
-        register("player:sneak", PlayerToggleSneakEvent.class);
-        register("player:login", PlayerLoginEvent.class);
-        register("player:teleport", PlayerTeleportEvent.class);
-        register("player:sprint", PlayerToggleSprintEvent.class);
-        register("entity:interact", EntityInteractEvent.class);
-        register("entity:spawn", EntitySpawnEvent.class);
-        register("entity:teleport", EntityTeleportEvent.class);
-        register("server:update", ServerUpdateEvent.class);
+        bind("command:call", CommandCallEvent.class);
+        bind("block:break", BlockBreakEvent.class);
+        bind("block:place", BlockPlaceEvent.class);
+        bind("player:death", PlayerDeathEvent.class);
+        bind("player:interact", PlayerInteractEvent.class);
+        bind("player:asyncjoin", AsyncPlayerFirstJoinEvent.class);
+        bind("player:interact_at_entity", PlayerInteractAtEntityEvent.class);
+        bind("player:interact_entity", PlayerInteractEntityEvent.class);
+        bind("player:respawn", PlayerRespawnEvent.class);
+        bind("player:join", PlayerJoinEvent.class);
+        bind("player:drop", PlayerDropItemEvent.class);
+        bind("player:gamemode", PlayerGameModeChangeEvent.class);
+        bind("player:quit", PlayerQuitEvent.class);
+        bind("player:chat", AsyncPlayerChatEvent.class);
+        bind("player:move", PlayerMoveEvent.class);
+        bind("player:sneak", PlayerToggleSneakEvent.class);
+        bind("player:login", PlayerLoginEvent.class);
+        bind("player:teleport", PlayerTeleportEvent.class);
+        bind("player:sprint", PlayerToggleSprintEvent.class);
+        bind("entity:interact", EntityInteractEvent.class);
+        bind("entity:spawn", EntitySpawnEvent.class);
+        bind("entity:teleport", EntityTeleportEvent.class);
+        bind("server:update", ServerUpdateEvent.class);
     }
 
-    private static void register(String name, Class<? extends Event> eventType) {
+    private static void bind(String name, Class<? extends Event> eventType) {
         if (eventRegistry.containsKey(name)) {
             throw new IllegalStateException("Event type " + name + " is already registered!");
         }
@@ -99,6 +101,7 @@ public final class Events {
     public static <T extends Event> SingleSubscriptionBuilder<T> subscribe(@NonNull Class<T> eventClass) {
         return SingleSubscriptionBuilder.newBuilder(eventClass);
     }
+
 
     /**
      * Makes a MergedSubscriptionBuilder for a given super type

@@ -6,7 +6,6 @@ import com.pepej.papi.command.Command;
 import com.pepej.papi.command.context.CommandContext;
 import com.pepej.papi.cooldown.Cooldown;
 import com.pepej.papi.cooldown.CooldownMap;
-import com.pepej.papi.utils.Players;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -41,9 +40,9 @@ class FunctionalCommandBuilderImpl<T extends CommandSender> implements Functiona
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public FunctionalCommandBuilder<T> assertFunction(Predicate<? super CommandContext<? extends T>> test) {
+    public FunctionalCommandBuilder<T> assertPredicate(Predicate<? super CommandContext<? extends T>> test) {
+        //noinspection unchecked
         this.predicates.add((Predicate<CommandContext<?>>) test);
         return this;
     }
@@ -174,8 +173,8 @@ class FunctionalCommandBuilderImpl<T extends CommandSender> implements Functiona
     }
 
     @Override
-    public Command handler(FunctionalCommandHandler handler) {
+    public Command handler(FunctionalCommandHandler<T> handler) {
         Objects.requireNonNull(handler, "handler");
-        return new FunctionalCommand(this.predicates.build(), handler, permission, permissionMessage, description);
+        return new FunctionalCommand<>(this.predicates.build(), handler, permission, permissionMessage, description);
     }
 }

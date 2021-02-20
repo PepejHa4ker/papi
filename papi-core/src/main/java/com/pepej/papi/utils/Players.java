@@ -3,9 +3,9 @@ package com.pepej.papi.utils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.pepej.papi.Papi;
+import com.pepej.papi.Services;
+import com.pepej.papi.npc.NpcFactory;
 import com.pepej.papi.text.Text;
-import net.kyori.text.Component;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -106,7 +106,10 @@ public final class Players {
     public static void forEachIfPlayer(@NonNull final Iterable<Object> objects, Consumer<Player> consumer) {
         for (Object o : objects) {
             if (o instanceof Player) {
-                consumer.accept(((Player) o));
+                Player player = (Player) o;
+                if (!Services.load(NpcFactory.class).isPapiNPC(player)) {
+                    consumer.accept(player);
+                }
             }
         }
     }
@@ -120,7 +123,7 @@ public final class Players {
      */
     public static Stream<Player> streamInRange(@NonNull final Location center, final double radius) {
         return center.getWorld().getNearbyEntities(center, radius, radius, radius).stream()
-                     .filter(e -> e instanceof Player)
+                     .filter(e -> e instanceof Player && !Services.load(NpcFactory.class).isPapiNPC(e))
                      .map(e -> ((Player) e));
     }
 

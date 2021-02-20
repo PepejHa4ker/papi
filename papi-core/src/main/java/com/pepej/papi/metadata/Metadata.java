@@ -2,11 +2,8 @@ package com.pepej.papi.metadata;
 
 
 import com.pepej.papi.events.Events;
+import com.pepej.papi.metadata.type.*;
 import com.pepej.papi.scheduler.Schedulers;
-import com.pepej.papi.metadata.type.BlockMetadataRegistry;
-import com.pepej.papi.metadata.type.EntityMetadataRegistry;
-import com.pepej.papi.metadata.type.PlayerMetadataRegistry;
-import com.pepej.papi.metadata.type.WorldMetadataRegistry;
 import com.pepej.papi.serialize.BlockPosition;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -14,8 +11,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -126,7 +123,7 @@ public final class Metadata {
      * been cached in this registry.
      *
      * A map will only be returned if the object is an instance of
-     * {@link Player}, {@link UUID}, {@link Entity}, {@link Block} or {@link World}.
+     * {@link Player}, {@link UUID}, {@link Entity}, {@link Block}, {@link World} or {@link ItemStack}.
      *
      * @param obj the object
      * @return a metadata map

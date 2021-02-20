@@ -29,8 +29,10 @@ public class Item {
     private final ItemStack itemStack;
 
     public Item(@NonNull Map<ClickType, Consumer<InventoryClickEvent>> handlers, @NonNull ItemStack itemStack) {
-        this.handlers = ImmutableMap.copyOf(Objects.requireNonNull(handlers, "handlers"));
-        this.itemStack = Objects.requireNonNull(itemStack, "itemStack");
+        Objects.requireNonNull(handlers, "handlers");
+        Objects.requireNonNull(itemStack, "itemStack");
+        this.handlers = ImmutableMap.copyOf(handlers);
+        this.itemStack = itemStack;
     }
 
     /**
@@ -53,6 +55,7 @@ public class Item {
         return this.itemStack;
     }
 
+
     /**
      * Aids creation of {@link Item} instances.
      */
@@ -70,7 +73,8 @@ public class Item {
             Objects.requireNonNull(type, "type");
             if (handler != null) {
                 this.handlers.put(type, handler);
-            } else {
+            }
+            else {
                 this.handlers.remove(type);
             }
             return this;
@@ -81,7 +85,8 @@ public class Item {
             Objects.requireNonNull(type, "type");
             if (handler != null) {
                 this.handlers.put(type, transformRunnable(handler));
-            } else {
+            }
+            else {
                 this.handlers.remove(type);
             }
             return this;

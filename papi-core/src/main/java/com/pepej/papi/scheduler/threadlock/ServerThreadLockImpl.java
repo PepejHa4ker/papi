@@ -1,8 +1,7 @@
 package com.pepej.papi.scheduler.threadlock;
 
-import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.promise.ThreadContext;
-import org.bukkit.Bukkit;
+import com.pepej.papi.scheduler.Schedulers;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -22,10 +21,10 @@ final class ServerThreadLockImpl implements ServerThreadLock {
         }
 
         // synchronize with the main thread, then countdown
-        Bukkit.getScheduler().scheduleSyncDelayedTask(LoaderUtils.getPlugin(), this::signal);
+        Schedulers.sync().run(this::signal);
 
         // wait for the main thread to become synchronized
-        await();
+        this.await();
     }
 
     @Override

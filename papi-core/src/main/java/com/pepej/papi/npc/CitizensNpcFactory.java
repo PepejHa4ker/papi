@@ -1,11 +1,11 @@
 package com.pepej.papi.npc;
 
 import com.pepej.papi.events.Events;
-import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.metadata.ExpiringValue;
 import com.pepej.papi.metadata.Metadata;
 import com.pepej.papi.metadata.MetadataKey;
 import com.pepej.papi.metadata.MetadataMap;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCClickEvent;
@@ -30,6 +30,8 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -40,9 +42,13 @@ import java.util.function.Consumer;
  */
 public class CitizensNpcFactory implements NpcFactory {
     private static final MetadataKey<Boolean> RECENT_NPC_CLICK_KEY = MetadataKey.createBooleanKey("papi-recent-npc-click");
-
     private NPCRegistry npcRegistry;
+    private CitizensNpc papiNpc;
     private final CompositeTerminable registry = CompositeTerminable.create();
+    private final List<NPC> spawnedNpcs = new ArrayList<>();
+    public CitizensNpc getPapiNpc() {
+        return papiNpc;
+    }
 
     public CitizensNpcFactory() {
 
@@ -51,11 +57,13 @@ public class CitizensNpcFactory implements NpcFactory {
               .filter(e -> e.getPlugin().getName().equals("Citizens"))
               .expireAfter(1) // only call once
               .handler(e -> init());
+
+
     }
 
     private void init() {
         // create npc registry
-        this.npcRegistry = CitizensAPI.createNamedNPCRegistry("com/pepej/papi", new MemoryNPCDataStore());
+        this.npcRegistry = CitizensAPI.createNamedNPCRegistry("papi", new MemoryNPCDataStore());
 
         // ensure our trait is registered
         registerTrait();
@@ -80,7 +88,8 @@ public class CitizensNpcFactory implements NpcFactory {
         Schedulers.sync().runRepeating(this::tickNpcs, 10L, 10L).bindWith(this.registry);
     }
 
-    private boolean isPapiNPC(Entity entity) {
+    @Override
+    public boolean isPapiNPC(@NonNull Entity entity) {
         NPC npc = this.npcRegistry.getNPC(entity);
         return npc != null && npc.hasTrait(ClickableTrait.class);
     }
@@ -96,7 +105,7 @@ public class CitizensNpcFactory implements NpcFactory {
 
     // returns true if the action should be blocked
     private boolean processMetadata(Player p) {
-        return !Metadata.provideForPlayer(p).putIfAbsent(RECENT_NPC_CLICK_KEY, ExpiringValue.of(true, 100, TimeUnit.MILLISECONDS));
+        return !Metadata.provideForPlayer(p).putIfAbsent(RECENT_NPC_CLICK_KEY, ExpiringValue.of(true, 1, TimeUnit.SECONDS));
     }
 
     private void tickNpcs() {
@@ -104,6 +113,7 @@ public class CitizensNpcFactory implements NpcFactory {
             if (!npc.isSpawned() || !npc.hasTrait(ClickableTrait.class)) continue;
 
             Npc papiNpc = npc.getTrait(ClickableTrait.class).npc;
+
 
             // ensure npcs stay in the same position
             Location loc = npc.getEntity().getLocation();
@@ -113,6 +123,7 @@ public class CitizensNpcFactory implements NpcFactory {
 
             // don't let players stand near npcs
             for (Entity entity : npc.getStoredLocation().getWorld().getNearbyEntities(npc.getStoredLocation(), 1.0, 1.0, 1.0)) {
+
                 if (!(entity instanceof Player) || this.npcRegistry.isNPC(entity)) continue;
 
                 final Player p = (Player) entity;
@@ -121,6 +132,7 @@ public class CitizensNpcFactory implements NpcFactory {
                     continue;
                 }
 
+                //push back
                 if (npc.getEntity().getLocation().distance(p.getLocation()) < 3.5) {
                     p.setVelocity(p.getLocation().getDirection().multiply(-0.5).setY(0.4));
                 }
@@ -151,18 +163,19 @@ public class CitizensNpcFactory implements NpcFactory {
         npc.addTrait(trait);
 
         // create a new papiNpc instance
-        CitizensNpc papiNpc = new NpcImpl(npc, trait, location.clone());
+        papiNpc = new NpcImpl(npc, trait, location.clone());
         trait.npc = papiNpc;
-
         // apply the skin and spawn it
         skin.accept(papiNpc);
         npc.spawn(location);
-
+        spawnedNpcs.add(npc);
         return papiNpc;
     }
 
     @Override
     public void close() {
+        spawnedNpcs.forEach(NPC::destroy);
+        spawnedNpcs.forEach(NPC::despawn);
 
     }
 
@@ -177,12 +190,13 @@ public class CitizensNpcFactory implements NpcFactory {
     }
 
     private static final class ClickableTrait extends Trait {
-        private final MetadataMap meta = MetadataMap.create();
-        private Consumer<Player> clickCallback = null;
-        private Npc npc = null;
+        private final MetadataMap meta;
+        private Consumer<Player> clickCallback;
+        private Npc npc;
 
         public ClickableTrait() {
             super("papi_clickable");
+            meta = MetadataMap.create();
         }
 
         @Override
@@ -205,13 +219,14 @@ public class CitizensNpcFactory implements NpcFactory {
         }
     }
 
-    private static final class NpcImpl implements CitizensNpc {
+    public static final class NpcImpl implements CitizensNpc {
         private final NPC npc;
         private final ClickableTrait trait;
         private final Location initialSpawn;
 
         private NpcImpl(NPC npc, ClickableTrait trait, Location initialSpawn) {
             this.npc = npc;
+            this.npc.data().setPersistent(NPC.COLLIDABLE_METADATA, false);
             this.trait = trait;
             this.initialSpawn = initialSpawn;
         }
@@ -265,6 +280,8 @@ public class CitizensNpcFactory implements NpcFactory {
                 e.printStackTrace();
             }
         }
+
+
 
         @Override
         public void setName(@NonNull String name) {

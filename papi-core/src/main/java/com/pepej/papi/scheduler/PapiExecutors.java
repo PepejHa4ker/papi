@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  */
 public final class PapiExecutors {
     private static final Consumer<Throwable> EXCEPTION_CONSUMER = throwable -> {
-        Log.severe("[SCHEDULER] Exception thrown whilst executing task");
+        Log.severe("&a[SCHEDULER]&c Exception thrown whilst executing task");
         throwable.printStackTrace();
     };
 

@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Represents a slot in a {@link Gui}.
+ * Represents a slot in a {@link Menu}.
  *
- * All changes made to this object are applied to the backing Gui instance, and vice versa.
+ * All changes made to this object are applied to the backing Menu instance, and vice versa.
  */
 public interface Slot {
 
@@ -22,7 +22,7 @@ public interface Slot {
      * @return the parent gui
      */
     @NonNull
-    Gui gui();
+    Menu gui();
 
     /**
      * Gets the id of this slot

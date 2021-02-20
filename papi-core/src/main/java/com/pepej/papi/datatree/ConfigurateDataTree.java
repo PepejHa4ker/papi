@@ -30,7 +30,7 @@ public class ConfigurateDataTree implements DataTree {
     @NonNull
     @Override
     public Stream<Map.Entry<String, ConfigurateDataTree>> asObject() {
-        Preconditions.checkState(this.node.hasMapChildren(), "node does not have map children");
+        Preconditions.checkState(this.node.isMap(), "node does not have map children");
         return this.node.getChildrenMap().entrySet().stream()
                         .map(entry -> Maps.immutableEntry(entry.getKey().toString(), new ConfigurateDataTree(entry.getValue())));
     }
@@ -38,14 +38,14 @@ public class ConfigurateDataTree implements DataTree {
     @NonNull
     @Override
     public Stream<ConfigurateDataTree> asArray() {
-        Preconditions.checkState(this.node.hasListChildren(), "node does not have list children");
+        Preconditions.checkState(this.node.isList(), "node does not have list children");
         return this.node.getChildrenList().stream().map(ConfigurateDataTree::new);
     }
 
     @NonNull
     @Override
     public Stream<Map.Entry<Integer, ConfigurateDataTree>> asIndexedArray() {
-        Preconditions.checkState(this.node.hasListChildren(), "node does not have list children");
+        Preconditions.checkState(this.node.isList(), "node does not have list children");
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<Map.Entry<Integer, ConfigurateDataTree>>() {
             private final Iterator<? extends ConfigurationNode> iterator = ConfigurateDataTree.this.node.getChildrenList().iterator();
             private int index = 0;
@@ -65,13 +65,13 @@ public class ConfigurateDataTree implements DataTree {
     @NonNull
     @Override
     public String asString() {
-        return this.node.getValue(Types::asString);
+        return Objects.requireNonNull(this.node.getValue(Types::asString));
     }
 
     @NonNull
     @Override
     public Number asNumber() {
-        return this.node.getValue(Types::asDouble);
+        return Objects.requireNonNull(this.node.getValue(Types::asDouble));
     }
 
     @Override

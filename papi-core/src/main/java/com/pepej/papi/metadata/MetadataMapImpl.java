@@ -147,7 +147,6 @@ final class MetadataMapImpl implements MetadataMap {
         }
     }
 
-    @NonNull
     @Override
     public <T> boolean ifPresent(@NonNull MetadataKey<T> key, @NonNull Consumer<? super T> action) {
         Objects.requireNonNull(key, "key");

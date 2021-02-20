@@ -1,10 +1,10 @@
 package com.pepej.papi.serialize;
 
-import com.flowpowered.math.vector.Vector3d;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
+import com.pepej.papi.math.vector.Vector3d;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -12,7 +12,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Objects;
 
-;
+
 
 /**
  * An immutable and serializable vector + direction object

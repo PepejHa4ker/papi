@@ -1,6 +1,5 @@
 package com.pepej.papi.serialize;
 
-import com.flowpowered.math.vector.Vector2i;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -8,6 +7,7 @@ import com.pepej.papi.Papi;
 import com.pepej.papi.cache.Lazy;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
+import com.pepej.papi.math.vector.Vector2i;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;

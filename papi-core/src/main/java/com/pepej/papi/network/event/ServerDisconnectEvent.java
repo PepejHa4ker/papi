@@ -16,7 +16,8 @@ public class ServerDisconnectEvent implements NetworkEvent {
     }
 
     public ServerDisconnectEvent(String id, String reason) {
-        this.id = Objects.requireNonNull(id, "id");
+        Objects.requireNonNull(id, "id");
+        this.id = id;
         this.reason = reason;
     }
 

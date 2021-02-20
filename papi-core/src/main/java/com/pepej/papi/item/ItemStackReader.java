@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class ItemStackReader {
 
     /**
-     * The default helper {@link ItemStackReader} implementation.
+     * The default papier {@link ItemStackReader} implementation.
      */
     public static final ItemStackReader DEFAULT = new ItemStackReader();
 

@@ -3,6 +3,7 @@ package com.pepej.papi.command;
 import com.pepej.papi.command.context.CommandContext;
 import com.pepej.papi.terminable.Terminable;
 import com.pepej.papi.terminable.TerminableConsumer;
+import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 
@@ -25,8 +26,8 @@ public interface Command extends Terminable {
      * @param aliases the aliases for the command
      */
     default void registerAndBind(@NonNull TerminableConsumer consumer, @NonNull String... aliases) {
-        register(aliases);
-        bindWith(consumer);
+        this.register(aliases);
+        this.bindWith(consumer);
     }
 
     /**
@@ -34,6 +35,6 @@ public interface Command extends Terminable {
      *
      * @param context the contexts for the command
      */
-    void call(@NonNull CommandContext<?> context) throws CommandInterruptException;
+    void call(@NonNull CommandContext<? extends CommandSender> context) throws CommandInterruptException;
 
 }

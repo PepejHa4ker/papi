@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static com.pepej.papi.text.Text.colorize;
+
 
 /**
  * Represents the context for a given command execution
@@ -29,9 +31,10 @@ public interface CommandContext<T extends CommandSender> {
      * @param message the message to send
      */
     default void reply(String... message) {
-        Players.msg(sender(), message);
+        for (String msg : message) {
+            sender().sendMessage(colorize(msg));
+        }
     }
-
     default void replyError(String... message) {
         Players.msg(sender(), Players.MessageType.ERROR, message);
     }

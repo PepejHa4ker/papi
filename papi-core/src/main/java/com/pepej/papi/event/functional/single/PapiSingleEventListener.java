@@ -44,11 +44,11 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
         this.exceptionConsumer = builder.exceptionConsumer;
         this.handleSubclasses = builder.handleSubclasses;
 
-        this.filters = builder.filters.toArray(new Predicate[builder.filters.size()]);
-        this.preExpiryTests = builder.preExpiryTests.toArray(new BiPredicate[builder.preExpiryTests.size()]);
-        this.midExpiryTests = builder.midExpiryTests.toArray(new BiPredicate[builder.midExpiryTests.size()]);
-        this.postExpiryTests = builder.postExpiryTests.toArray(new BiPredicate[builder.postExpiryTests.size()]);
-        this.handlers = handlers.toArray(new BiConsumer[handlers.size()]);
+        this.filters = builder.filters.toArray(new Predicate[0]);
+        this.preExpiryTests = builder.preExpiryTests.toArray(new BiPredicate[0]);
+        this.midExpiryTests = builder.midExpiryTests.toArray(new BiPredicate[0]);
+        this.postExpiryTests = builder.postExpiryTests.toArray(new BiPredicate[0]);
+        this.handlers = handlers.toArray(new BiConsumer[0]);
     }
 
     void register(Plugin plugin) {

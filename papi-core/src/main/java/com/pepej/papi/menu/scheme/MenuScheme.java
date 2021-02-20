@@ -1,7 +1,7 @@
 package com.pepej.papi.menu.scheme;
 
 import com.google.common.collect.ImmutableList;
-import com.pepej.papi.menu.Gui;
+import com.pepej.papi.menu.Menu;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.ArrayList;
@@ -77,6 +77,13 @@ public class MenuScheme {
         return this;
     }
 
+    public MenuScheme schemes(int... schemes) {
+        for (int schemeid : schemes) {
+            scheme(schemeid);
+        }
+        return this;
+    }
+
     public MenuScheme scheme(int... schemeIds) {
         for (int schemeId : schemeIds) {
             if (!this.mapping.hasMappingFor(schemeId)) {
@@ -87,7 +94,7 @@ public class MenuScheme {
         return this;
     }
 
-    public void apply(Gui gui) {
+    public void apply(Menu menu) {
         // the index of the item slot in the inventory
         int invIndex = 0;
 
@@ -101,7 +108,7 @@ public class MenuScheme {
             // iterate the values in the mask (0 --> 8)
             for (boolean b : mask) {
 
-                // increment the index in the gui. we're handling a new item.
+                // increment the index in the menu. we're handling a new item.
                 int index = invIndex++;
 
                 // if this index is masked.
@@ -110,8 +117,8 @@ public class MenuScheme {
                     // this is the value from the scheme map for this slot.
                     int schemeMappingId = scheme[schemeIndex++];
 
-                    // lookup the value for this location, and apply it to the gui
-                    this.mapping.get(schemeMappingId).ifPresent(item -> gui.setItem(index, item));
+                    // lookup the value for this location, and apply it to the menu
+                    this.mapping.get(schemeMappingId).ifPresent(item -> menu.setItem(index, item));
                 }
             }
         }
@@ -128,7 +135,7 @@ public class MenuScheme {
             // iterate the values in the mask (0 --> 8)
             for (boolean b : mask) {
 
-                // increment the index in the gui. we're handling a new item.
+                // increment the index in the menu. we're handling a new item.
                 int index = invIndex++;
 
                 // if this index is masked.
@@ -145,7 +152,7 @@ public class MenuScheme {
         return ImmutableList.copyOf(getMaskedIndexes());
     }
 
-    public MenuPopulator newPopulator(Gui gui) {
+    public MenuPopulator newPopulator(Menu gui) {
         return new MenuPopulator(gui, this);
     }
 

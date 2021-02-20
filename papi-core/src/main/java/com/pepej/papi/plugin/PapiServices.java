@@ -29,10 +29,12 @@ final class PapiServices {
 
             plugin.provideService(SignPromptFactory.class, new PacketSignPromptFactory());
 
+
             try {
                 plugin.provideService(IndividualHologramFactory.class, new PacketIndividualHologramFactory());
             } catch (Throwable t) {
                 // ignore??
+
             }
         }
         if (plugin.isPluginPresent("Citizens")) {

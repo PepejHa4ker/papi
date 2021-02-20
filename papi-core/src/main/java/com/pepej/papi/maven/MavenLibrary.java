@@ -14,12 +14,21 @@ import java.lang.annotation.*;
 public @interface MavenLibrary {
 
     /**
+     * The full name of the library. (like gradle style)
+     *
+     * @return the full id of the library
+     */
+
+    @NonNull
+    String value() default "";
+
+    /**
      * The group id of the library
      *
      * @return the group id of the library
      */
     @NonNull
-    String groupId();
+    String groupId() default "";
 
     /**
      * The artifact id of the library
@@ -27,7 +36,7 @@ public @interface MavenLibrary {
      * @return the artifact id of the library
      */
     @NonNull
-    String artifactId();
+    String artifactId() default "";
 
     /**
      * The version of the library
@@ -35,7 +44,7 @@ public @interface MavenLibrary {
      * @return the version of the library
      */
     @NonNull
-    String version();
+    String version() default "";
 
     /**
      * The repo where the library can be obtained from

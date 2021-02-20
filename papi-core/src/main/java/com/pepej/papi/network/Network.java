@@ -1,7 +1,7 @@
 package com.pepej.papi.network;
 
 import com.pepej.papi.Services;
-import com.pepej.papi.event.bus.EventBus;
+import com.pepej.papi.event.bus.api.EventBus;
 import com.pepej.papi.messaging.InstanceData;
 import com.pepej.papi.messaging.Messenger;
 import com.pepej.papi.network.event.NetworkEvent;

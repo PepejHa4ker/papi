@@ -43,7 +43,7 @@ public interface ScriptLoadingExecutor extends Executor {
      * @param unit the unit of the time
      * @return an {@link AutoCloseable}, which will cancel the task when
      *         {@link AutoCloseable#close() closed}.
-     * @see java.util.concurrent.ScheduledExecutorService#scheduleAtFixedRate(Runnable, long, long, TimeUnit)
+     * @see ScheduledExecutorService#scheduleAtFixedRate(Runnable, long, long, TimeUnit)
      */
     AutoCloseable scheduleAtFixedRate(Runnable task, long time, TimeUnit unit);
 

@@ -36,11 +36,11 @@ class PapiProtocolListener extends PacketAdapter implements ProtocolSubscription
         this.types = builder.types;
         this.exceptionConsumer = builder.exceptionConsumer;
 
-        this.filters = builder.filters.toArray(new Predicate[builder.filters.size()]);
-        this.preExpiryTests = builder.preExpiryTests.toArray(new BiPredicate[builder.preExpiryTests.size()]);
-        this.midExpiryTests = builder.midExpiryTests.toArray(new BiPredicate[builder.midExpiryTests.size()]);
-        this.postExpiryTests = builder.postExpiryTests.toArray(new BiPredicate[builder.postExpiryTests.size()]);
-        this.handlers = handlers.toArray(new BiConsumer[handlers.size()]);
+        this.filters = builder.filters.toArray(new Predicate[0]);
+        this.preExpiryTests = builder.preExpiryTests.toArray(new BiPredicate[0]);
+        this.midExpiryTests = builder.midExpiryTests.toArray(new BiPredicate[0]);
+        this.postExpiryTests = builder.postExpiryTests.toArray(new BiPredicate[0]);
+        this.handlers = handlers.toArray(new BiConsumer[0]);
 
         Protocol.manager().addPacketListener(this);
     }

@@ -57,7 +57,7 @@ public final class Proxies {
      */
     @NonNull
     public static <T> T create(@NonNull ClassLoader loader, @NonNull Class<T> interfaceType, @NonNull List<Class<?>> interfaces, @NonNull InvocationHandler handler) {
-        return create(loader, interfaceType, interfaces.toArray(new Class<?>[interfaces.size()]), handler);
+        return create(loader, interfaceType, interfaces.toArray(new Class<?>[0]), handler);
     }
 
     /**
@@ -87,7 +87,7 @@ public final class Proxies {
      */
     @NonNull
     public static Object create(@NonNull ClassLoader loader, @NonNull List<Class<?>> interfaces, @NonNull InvocationHandler handler) {
-        return create(loader, interfaces.toArray(new Class<?>[interfaces.size()]), handler);
+        return create(loader, interfaces.toArray(new Class<?>[0]), handler);
     }
 
     /**

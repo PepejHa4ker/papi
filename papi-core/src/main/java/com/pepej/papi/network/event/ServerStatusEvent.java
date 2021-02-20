@@ -11,7 +11,8 @@ public class ServerStatusEvent implements NetworkEvent {
     private final Server server;
 
     public ServerStatusEvent(Server server) {
-        this.server = Objects.requireNonNull(server, "server");
+        Objects.requireNonNull(server, "server");
+        this.server = server;
     }
 
     /**

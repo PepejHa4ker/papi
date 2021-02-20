@@ -167,12 +167,16 @@ final class PapiPromise<V> implements Promise<V> {
         }
     }
 
-    private boolean complete(V value) {
-        return !this.cancelled.get() && this.fut.complete(value);
+    private void complete(V value) {
+        if (!this.cancelled.get()) {
+            this.fut.complete(value);
+        }
     }
 
-    private boolean completeExceptionally(@NonNull Throwable t) {
-        return !this.cancelled.get() && this.fut.completeExceptionally(t);
+    private void completeExceptionally(@NonNull Throwable t) {
+        if (!this.cancelled.get()) {
+            this.fut.completeExceptionally(t);
+        }
     }
 
     private void markAsSupplied() {
@@ -615,10 +619,10 @@ final class PapiPromise<V> implements Promise<V> {
                 return;
             }
             try {
-                PapiPromise.this.fut.complete(this.supplier.call());
+                fut.complete(this.supplier.call());
             } catch (Throwable t) {
                 EXCEPTION_CONSUMER.accept(t);
-                PapiPromise.this.fut.completeExceptionally(t);
+                fut.completeExceptionally(t);
             }
         }
     }
@@ -644,7 +648,7 @@ final class PapiPromise<V> implements Promise<V> {
         }
     }
 
-    private final class ApplyRunnable<U> implements Runnable, Delegate<Function> {
+    private final class ApplyRunnable<U> implements Runnable, Delegate<Function<? super V, ? extends U>> {
         private final PapiPromise<U> promise;
         private final Function<? super V, ? extends U> function;
         private final V value;
@@ -653,7 +657,7 @@ final class PapiPromise<V> implements Promise<V> {
             this.function = function;
             this.value = value;
         }
-        @Override public Function getDelegate() { return this.function; }
+        @Override public Function<? super V, ? extends U> getDelegate() { return this.function; }
 
         @Override
         public void run() {
@@ -669,7 +673,7 @@ final class PapiPromise<V> implements Promise<V> {
         }
     }
 
-    private final class ComposeRunnable<U> implements Runnable, Delegate<Function> {
+    private final class ComposeRunnable<U> implements Runnable, Delegate<Function<? super V, ? extends Promise<U>>> {
         private final PapiPromise<U> promise;
         private final Function<? super V, ? extends Promise<U>> function;
         private final V value;
@@ -680,7 +684,7 @@ final class PapiPromise<V> implements Promise<V> {
             this.value = value;
             this.sync = sync;
         }
-        @Override public Function getDelegate() { return this.function; }
+        @Override public Function<? super V, ? extends Promise<U>> getDelegate() { return this.function; }
 
         @Override
         public void run() {
@@ -705,7 +709,7 @@ final class PapiPromise<V> implements Promise<V> {
         }
     }
 
-    private final class ExceptionallyRunnable<U> implements Runnable, Delegate<Function> {
+    private final class ExceptionallyRunnable<U> implements Runnable, Delegate<Function<Throwable, ? extends U>> {
         private final PapiPromise<U> promise;
         private final Function<Throwable, ? extends U> function;
         private final Throwable t;
@@ -714,7 +718,7 @@ final class PapiPromise<V> implements Promise<V> {
             this.function = function;
             this.t = t;
         }
-        @Override public Function getDelegate() { return this.function; }
+        @Override public Function<Throwable, ? extends U> getDelegate() { return this.function; }
 
         @Override
         public void run() {

@@ -3,6 +3,7 @@ package com.pepej.papi.npc;
 
 import com.pepej.papi.terminable.Terminable;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -34,6 +35,14 @@ public interface NpcFactory extends Terminable {
      */
     @NonNull
     Npc spawnNpc(@NonNull Location location, @NonNull String nametag, @NonNull String skinTextures, @NonNull String skinSignature);
+
+    /**
+     * check if NPC spawned by papi
+     *
+     * @param entity the entity to check
+     * @return true if entity has been spawned by papi
+     */
+    boolean isPapiNPC(@NonNull Entity entity);
 
     @Override
     void close();

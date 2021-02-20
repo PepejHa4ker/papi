@@ -224,28 +224,28 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public Promise<Map.Entry<String, Integer>> ip(@NonNull Player player) {
+    public @NonNull Promise<Map.Entry<String, Integer>> ip(@NonNull Player player) {
         Promise<Map.Entry<String, Integer>> fut = Promise.empty();
         sendMessage(new IPAgent(player, fut));
         return fut;
     }
 
     @Override
-    public Promise<Integer> playerCount(@NonNull String serverName) {
+    public @NonNull Promise<Integer> playerCount(@NonNull String serverName) {
         Promise<Integer> fut = Promise.empty();
         sendMessage(new PlayerCountAgent(serverName, fut));
         return fut;
     }
 
     @Override
-    public Promise<List<String>> playerList(@NonNull String serverName) {
+    public @NonNull Promise<List<String>> playerList(@NonNull String serverName) {
         Promise<List<String>> fut = Promise.empty();
         sendMessage(new PlayerListAgent(serverName, fut));
         return fut;
     }
 
     @Override
-    public Promise<List<String>> getServers() {
+    public @NonNull Promise<List<String>> getServers() {
         Promise<List<String>> fut = Promise.empty();
         sendMessage(new GetServersAgent(fut));
         return fut;
@@ -257,28 +257,28 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public Promise<String> getServer() {
+    public @NonNull Promise<String> getServer() {
         Promise<String> fut = Promise.empty();
         sendMessage(new GetServerAgent(fut));
         return fut;
     }
 
     @Override
-    public Promise<UUID> uuid(@NonNull Player player) {
+    public @NonNull Promise<UUID> uuid(@NonNull Player player) {
         Promise<UUID> fut = Promise.empty();
         sendMessage(new UUIDAgent(player, fut));
         return fut;
     }
 
     @Override
-    public Promise<UUID> uuidOther(@NonNull String playerName) {
+    public @NonNull Promise<UUID> uuidOther(@NonNull String playerName) {
         Promise<UUID> fut = Promise.empty();
         sendMessage(new UUIDOtherAgent(playerName, fut));
         return fut;
     }
 
     @Override
-    public Promise<Map.Entry<String, Integer>> serverIp(@NonNull String serverName) {
+    public @NonNull Promise<Map.Entry<String, Integer>> serverIp(@NonNull String serverName) {
         Promise<Map.Entry<String, Integer>> fut = Promise.empty();
         sendMessage(new ServerIPAgent(serverName, fut));
         return fut;
@@ -290,7 +290,7 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public void forward(@NonNull String serverName, @NonNull String channelName, @NonNull byte[] data) {
+    public void forward(@NonNull String serverName, @NonNull String channelName, byte[] data) {
         sendMessage(new ForwardAgent(serverName, channelName, data));
     }
 
@@ -300,7 +300,7 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public void forwardToPlayer(@NonNull String playerName, @NonNull String channelName, @NonNull byte[] data) {
+    public void forwardToPlayer(@NonNull String playerName, @NonNull String channelName, byte[] data) {
         sendMessage(new ForwardToPlayerAgent(playerName, channelName, data));
     }
 

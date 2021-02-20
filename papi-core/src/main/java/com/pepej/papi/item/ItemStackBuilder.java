@@ -1,8 +1,9 @@
 package com.pepej.papi.item;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import com.pepej.papi.menu.Item;
 import com.pepej.papi.text.Text;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,12 +14,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -45,9 +45,31 @@ public final class ItemStackBuilder {
         return ItemStackReader.DEFAULT.read(config);
     }
 
+    public static ItemStackBuilder head(String headSignature) {
+        ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        if (headSignature.isEmpty()) {
+            throw new IllegalArgumentException(("headSignature cannot be null"));
+        }
+
+        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        profile.getProperties().put("textures", new Property("textures", headSignature));
+        Field profileField;
+        try {
+            profileField = headMeta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(headMeta, profile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        head.setItemMeta(headMeta);
+        return new ItemStackBuilder(head).hideAttributes();
+    }
+
     private ItemStackBuilder(ItemStack itemStack) {
         this.itemStack = Objects.requireNonNull(itemStack, "itemStack");
     }
+
 
     public ItemStackBuilder transform(Consumer<ItemStack> is) {
         is.accept(this.itemStack);
@@ -64,11 +86,49 @@ public final class ItemStackBuilder {
     }
 
     public ItemStackBuilder name(String name) {
-        return transformMeta(meta -> meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name)));
+        return transformMeta(meta -> meta.setDisplayName(Text.colorize(name)));
+    }
+
+    public ItemStackBuilder nameClickable(String name) {
+        return transformMeta(meta -> meta.setDisplayName(Text.colorize(name + " &7(Клик)")));
     }
 
     public ItemStackBuilder type(Material material) {
         return transform(itemStack -> itemStack.setType(material));
+    }
+
+    public ItemStackBuilder loreUnique(String line) {
+        return transformMeta(meta -> {
+            List<String> lore = meta.getLore() == null ? new ArrayList<>() : meta.getLore();
+            if (!lore.contains(Text.colorize(line))) {
+                lore.add(Text.colorize(line));
+                meta.setLore(lore);
+            }
+        });
+    }
+
+    public ItemStackBuilder loreClickable(String action) {
+        return transformMeta(meta -> {
+            List<String> lore = meta.getLore() == null ? new ArrayList<>() : meta.getLore();
+            lore.add(Text.colorize("&7Кликните, чтобы " + action));
+            meta.setLore(lore);
+        });
+    }
+
+    public ItemStackBuilder loreRightClickable(String action) {
+        return transformMeta(meta -> {
+            List<String> lore = meta.getLore() == null ? new ArrayList<>() : meta.getLore();
+            lore.add(Text.colorize("&7Нажмите ПКМ, чтобы " + action));
+            meta.setLore(lore);
+        });
+    }
+
+    public ItemStackBuilder loreLeftClickable(String action) {
+        return transformMeta(meta -> {
+            List<String> lore = meta.getLore() == null ? new ArrayList<>() : meta.getLore();
+            lore.add(Text.colorize("&7Нажмите ЛКМ, чтобы " + action));
+            meta.setLore(lore);
+        });
     }
 
     public ItemStackBuilder lore(String line) {

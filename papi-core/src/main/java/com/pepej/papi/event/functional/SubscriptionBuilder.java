@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 public interface SubscriptionBuilder<T> {
 
     BiConsumer<Object, Throwable> DEFAULT_EXCEPTION_CONSUMER = (event, throwable) -> {
-        Log.severe("[EVENTS] Exception thrown whilst handling event: " + event.getClass().getName());
+        Log.severe("&a[EVENTS]&c Exception thrown whilst handling &d%s", event.getClass().getSimpleName());
         throwable.printStackTrace();
     };
 

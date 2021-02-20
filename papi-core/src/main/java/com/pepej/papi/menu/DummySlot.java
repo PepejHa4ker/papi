@@ -14,21 +14,21 @@ import java.util.function.Consumer;
  */
 public class DummySlot implements Slot {
 
-    // the parent gui
-    private final Gui gui;
+    // the parent menu
+    private final Menu menu;
 
     // the id of this slot
     private final int id;
 
-    public DummySlot(@NonNull Gui gui, int id) {
-        this.gui = gui;
+    public DummySlot(@NonNull Menu menu, int id) {
+        this.menu = menu;
         this.id = id;
     }
 
     @NonNull
     @Override
-    public Gui gui() {
-        return this.gui;
+    public Menu gui() {
+        return this.menu;
     }
 
     @Override

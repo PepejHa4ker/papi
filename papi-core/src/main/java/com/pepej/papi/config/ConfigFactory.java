@@ -2,10 +2,9 @@ package com.pepej.papi.config;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonElement;
-import com.pepej.papi.config.typeserializers.BukkitTypeSerializer;
-import com.pepej.papi.config.typeserializers.GsonTypeSerializer;
-import com.pepej.papi.config.typeserializers.JsonTreeTypeSerializer;
+import com.pepej.papi.config.typeserializers.*;
 import com.pepej.papi.datatree.DataTree;
+import com.pepej.papi.gson.GsonSerializable;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.gson.GsonConfigurationLoader;
@@ -14,7 +13,6 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMapper;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.objectmapping.serialize.TypeSerializerCollection;
-import ninja.leaping.configurate.objectmapping.serialize.TypeSerializers;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -41,7 +39,7 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
                                                                              .setSource(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
                                                                              .setSink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
 
-            builder.setDefaultOptions(builder.getDefaultOptions().setSerializers(TYPE_SERIALIZERS));
+            builder.setDefaultOptions(builder.getDefaultOptions().withSerializers(TYPE_SERIALIZERS));
             return builder.build();
         }
     };
@@ -55,7 +53,7 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
                                                                              .setSource(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
                                                                              .setSink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
 
-            builder.setDefaultOptions(builder.getDefaultOptions().setSerializers(TYPE_SERIALIZERS));
+            builder.setDefaultOptions(builder.getDefaultOptions().withSerializers(TYPE_SERIALIZERS));
             return builder.build();
         }
     };
@@ -68,19 +66,21 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Confi
                                                                                .setSource(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
                                                                                .setSink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
 
-            builder.setDefaultOptions(builder.getDefaultOptions().setSerializers(TYPE_SERIALIZERS));
+            builder.setDefaultOptions(builder.getDefaultOptions().withSerializers(TYPE_SERIALIZERS));
             return builder.build();
         }
     };
 
     private static final TypeSerializerCollection TYPE_SERIALIZERS;
     static {
-        TypeSerializerCollection helperSerializers = TypeSerializers.getDefaultSerializers();
-        helperSerializers.registerType(TypeToken.of(JsonElement.class), GsonTypeSerializer.INSTANCE);
-        helperSerializers.registerType(TypeToken.of(ConfigurationSerializable.class), BukkitTypeSerializer.INSTANCE);
-        helperSerializers.registerType(TypeToken.of(DataTree.class), JsonTreeTypeSerializer.INSTANCE);
+        TypeSerializerCollection papiSerializers = TypeSerializerCollection.create();
+        papiSerializers.register(TypeToken.of(JsonElement.class), GsonTypeSerializer.INSTANCE);
+        papiSerializers.register(TypeToken.of(GsonSerializable.class), PapiTypeSerializer.INSTANCE);
+        papiSerializers.register(TypeToken.of(ConfigurationSerializable.class), BukkitTypeSerializer.INSTANCE);
+        papiSerializers.register(TypeToken.of(DataTree.class), JsonTreeTypeSerializer.INSTANCE);
+        papiSerializers.register(TypeToken.of(String.class), ColoredStringTypeSerializer.INSTANCE);
 
-        TYPE_SERIALIZERS = helperSerializers.newChild();
+        TYPE_SERIALIZERS = papiSerializers.newChild();
     }
 
     @NonNull

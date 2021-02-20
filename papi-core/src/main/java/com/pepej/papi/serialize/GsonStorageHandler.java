@@ -18,8 +18,8 @@ import java.nio.file.Path;
  * @param <T> the type being stored
  */
 public class GsonStorageHandler<T> extends FileStorageHandler<T> {
-    protected final Type type;
-    protected final Gson gson;
+    private final Type type;
+    private final Gson gson;
 
     public GsonStorageHandler(String fileName, String fileExtension, File dataFolder, Class<T> clazz, Gson gson) {
         this(fileName, fileExtension, dataFolder, TypeToken.of(clazz), gson);

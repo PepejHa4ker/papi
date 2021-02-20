@@ -4,9 +4,9 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Preconditions;
 import com.pepej.papi.events.Events;
 import com.pepej.papi.plugin.PapiPlugin;
-import com.pepej.papi.text.Text;
 import com.pepej.papi.utils.Players;
-import net.kyori.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -36,8 +36,12 @@ public class PacketScoreboard implements Scoreboard {
     private final Map<UUID, Map<String, PacketScoreboardObjective>> playerObjectives = Collections.synchronizedMap(new HashMap<>());
 
     public PacketScoreboard(@NonNull PapiPlugin plugin) {
-        Events.subscribe(PlayerJoinEvent.class).handler(this::handlePlayerJoin).bindWith(plugin);
-        Events.subscribe(PlayerQuitEvent.class).handler(this::handlePlayerQuit).bindWith(plugin);
+        Events.subscribe(PlayerJoinEvent.class)
+              .handler(this::handlePlayerJoin)
+              .bindWith(plugin);
+        Events.subscribe(PlayerQuitEvent.class)
+              .handler(this::handlePlayerQuit)
+              .bindWith(plugin);
     }
 
     private void handlePlayerJoin(PlayerJoinEvent event) {
@@ -61,23 +65,24 @@ public class PacketScoreboard implements Scoreboard {
     private void handlePlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        this.teams.values().forEach(t -> {
-            t.unsubscribe(player, true);
-            t.removePlayer(player);
-        });
-        this.objectives.values().forEach(o -> o.unsubscribe(player, true));
+        for (PacketScoreboardTeam packetScoreboardTeam : this.teams.values()) {
+            packetScoreboardTeam.unsubscribe(player, true);
+            packetScoreboardTeam.removePlayer(player);
+        }
+
+        for (PacketScoreboardObjective packetScoreboardObjective : this.objectives.values()) {
+            packetScoreboardObjective.unsubscribe(player, true);
+        }
 
         Map<String, PacketScoreboardObjective> playerObjectives = this.playerObjectives.remove(player.getUniqueId());
-        if (playerObjectives != null) {
-            playerObjectives.values().forEach(o -> o.unsubscribe(player, true));
-        }
+        if (playerObjectives != null) playerObjectives.values().forEach(o -> o.unsubscribe(player, true));
 
         Map<String, PacketScoreboardTeam> playerTeams = this.playerTeams.remove(player.getUniqueId());
         if (playerTeams != null) {
-            playerTeams.values().forEach(t -> {
+            for (PacketScoreboardTeam t : playerTeams.values()) {
                 t.unsubscribe(player, true);
                 t.removePlayer(player);
-            });
+            }
         }
     }
 
@@ -232,7 +237,7 @@ public class PacketScoreboard implements Scoreboard {
     }
 
     static WrappedChatComponent toComponent(String text) {
-        return WrappedChatComponent.fromJson(GsonComponentSerializer.INSTANCE.serialize(Text.fromLegacy(text)));
+        return WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(Component.text(text)));
     }
 
 }

@@ -2,7 +2,7 @@ package com.pepej.papi.menu.scheme;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.pepej.papi.menu.Gui;
+import com.pepej.papi.menu.Menu;
 import com.pepej.papi.menu.Item;
 import com.pepej.papi.menu.Slot;
 
@@ -12,38 +12,38 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * A utility to help place items into a {@link Gui}
+ * A utility to help place items into a {@link Menu}
  */
 public class MenuPopulator {
 
-    private final Gui gui;
+    private final Menu menu;
     private final ImmutableList<Integer> slots;
     protected List<Integer> remainingSlots;
 
-    public MenuPopulator(Gui gui, MenuScheme scheme) {
-        Objects.requireNonNull(gui, "gui");
+    public MenuPopulator(Menu menu, MenuScheme scheme) {
+        Objects.requireNonNull(menu, "menu");
         Objects.requireNonNull(scheme, "scheme");
 
         this.remainingSlots = scheme.getMaskedIndexes();
         Preconditions.checkArgument(this.remainingSlots.size() > 0, "no slots in scheme");
 
-        this.gui = gui;
+        this.menu = menu;
         this.slots = ImmutableList.copyOf(this.remainingSlots);
     }
 
-    public MenuPopulator(Gui gui, List<Integer> slots) {
-        Objects.requireNonNull(gui, "gui");
+    public MenuPopulator(Menu menu, List<Integer> slots) {
+        Objects.requireNonNull(menu, "menu");
         Objects.requireNonNull(slots, "slots");
 
         Preconditions.checkArgument(slots.size() > 0, "no slots in list");
 
-        this.gui = gui;
+        this.menu = menu;
         this.slots = ImmutableList.copyOf(slots);
         reset();
     }
 
     private MenuPopulator(MenuPopulator other) {
-        this.gui = other.gui;
+        this.menu = other.menu;
         this.slots = other.slots;
         reset();
     }
@@ -84,12 +84,12 @@ public class MenuPopulator {
         }
 
         int slot = this.remainingSlots.remove(0);
-        action.accept(this.gui.getSlot(slot));
+        action.accept(this.menu.getSlot(slot));
         return true;
     }
 
     /**
-     * Places an item onto the {@link Gui} using the next available slot in the populator
+     * Places an item onto the {@link Menu} using the next available slot in the populator
      *
      * @param item the item to place
      * @return the populator
@@ -100,7 +100,7 @@ public class MenuPopulator {
     }
 
     /**
-     * Places an item onto the {@link Gui} using the next available slot in the populator
+     * Places an item onto the {@link Menu} using the next available slot in the populator
      *
      * @param item the item to place
      * @return the populator
@@ -110,7 +110,7 @@ public class MenuPopulator {
     }
 
     /**
-     * Places an item onto the {@link Gui} using the next available slot in the populator
+     * Places an item onto the {@link Menu} using the next available slot in the populator
      *
      * @param item the item to place
      * @return true if there was a slot left in the populator to place this item onto, false otherwise

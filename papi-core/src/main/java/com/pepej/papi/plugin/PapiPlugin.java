@@ -12,15 +12,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.File;
+import java.util.Optional;
 
 public interface PapiPlugin extends Plugin, TerminableConsumer {
-
-
-    void onPluginEnable();
-
-    void onPluginDisable();
-
-    default void onPluginLoad() {}
 
     /**
      * Register a listener with the server.
@@ -74,25 +68,21 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
     /**
      * Provides a service to the ServiceManager, bound to this plugin
      *
+     * @param <T> the service class type
      * @param clazz the service class
      * @param instance the instance
      * @param priority the priority to register the service at
-     * @param <T> the service class type
-     * @return the instance
      */
-    @NonNull
-    <T> T provideService(@NonNull Class<T> clazz, @NonNull T instance, @NonNull ServicePriority priority);
+    <T> void provideService(@NonNull Class<T> clazz, @NonNull T instance, @NonNull ServicePriority priority);
 
     /**
      * Provides a service to the ServiceManager, bound to this plugin at {@link ServicePriority#Normal}.
      *
+     * @param <T> the service class type
      * @param clazz the service class
      * @param instance the instance
-     * @param <T> the service class type
-     * @return the instance
      */
-    @NonNull
-    <T> T provideService(@NonNull Class<T> clazz, @NonNull T instance);
+    <T> void provideService(@NonNull Class<T> clazz, @NonNull T instance);
 
     /**
      * Gets if a given plugin is enabled.
@@ -104,14 +94,24 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
 
     /**
      * Gets a plugin instance for the given plugin name
-     *
+     * The plugin can be null
      * @param name the name of the plugin
      * @param pluginClass the main plugin class
      * @param <T> the main class type
      * @return the plugin
      */
     @Nullable
-    <T> T getPlugin(@NonNull String name, @NonNull Class<T> pluginClass);
+    <T extends Plugin> T getPluginNullable(@NonNull String name, @NonNull Class<T> pluginClass);
+
+    /**
+     * Gets a plugin instance for the given plugin name
+     * @param name the name of the plugin
+     * @param pluginClass the main plugin class
+     * @param <T> the main class type
+     * @return the plugin
+     */
+    @NonNull
+    <T extends Plugin> Optional<T> getPlugin(@NonNull String name, @NonNull Class<T> pluginClass);
 
     /**
      * Gets a bundled file from the plugins resource folder.
