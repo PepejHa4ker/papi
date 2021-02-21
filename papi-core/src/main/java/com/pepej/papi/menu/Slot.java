@@ -22,7 +22,7 @@ public interface Slot {
      * @return the parent gui
      */
     @NonNull
-    Menu gui();
+    Menu menu();
 
     /**
      * Gets the id of this slot
@@ -88,7 +88,7 @@ public interface Slot {
 
     /**
      * Clears all bindings on this slot for a given click type.
-     *
+     * @param type the click type
      * @return this slot
      */
     @NonNull

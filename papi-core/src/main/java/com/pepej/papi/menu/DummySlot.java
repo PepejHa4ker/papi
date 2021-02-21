@@ -27,7 +27,7 @@ public class DummySlot implements Slot {
 
     @NonNull
     @Override
-    public Menu gui() {
+    public Menu menu() {
         return this.menu;
     }
 

@@ -2,11 +2,13 @@ package com.pepej.papi.math.imaginary;
 
 import com.pepej.papi.math.GenericMath;
 import com.pepej.papi.math.HashFunctions;
-import com.pepej.papi.math.TrigonometricMath;
 import com.pepej.papi.math.matrix.Matrix3d;
 import com.pepej.papi.math.vector.Vector3d;
 
 import java.io.Serializable;
+
+import static com.pepej.papi.math.GenericMath.rad;
+import static com.pepej.papi.math.TrigonometricMath.*;
 
 
 /**
@@ -354,7 +356,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
      * @return The angle in degrees for each axis, stored in a vector, in the corresponding component
      */
     public Vector3d getAxesAngleDeg() {
-        return getAxesAnglesRad().mul(TrigonometricMath.RAD_TO_DEG);
+        return getAxesAnglesRad().mul(RAD_TO_DEG);
     }
 
     /**
@@ -368,14 +370,14 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
         double yaw;
         final double test = w * x - y * z;
         if (Math.abs(test) < 0.4999) {
-            roll =  TrigonometricMath.atan2(2 * (w * z + x * y), 1 - 2 * (x * x + z * z));
-            pitch = TrigonometricMath.asin(2 * test);
-            yaw =   TrigonometricMath.atan2(2 * (w * y + z * x), 1 - 2 * (x * x + y * y));
+            roll = atan2(2 * (w * z + x * y), 1 - 2 * (x * x + z * z));
+            pitch = asin(2 * test);
+            yaw = atan2(2 * (w * y + z * x), 1 - 2 * (x * x + y * y));
         } else {
             final int sign = (test < 0) ? -1 : 1;
             roll = 0;
             pitch = sign * Math.PI / 2;
-            yaw = -sign * 2 * TrigonometricMath.atan2(z, w);
+            yaw = -sign * 2 * atan2(z, w);
         }
         if (yaw > 180) {
             yaw -= 360;
@@ -387,7 +389,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
 
     /**
      * Conjugates the quaternion. <br> Conjugation of a quaternion <code>a</code> is an operation returning quaternion <code>a'</code> such that <code>a' * a = a * a' = |a|<sup>2</sup></code> where
-     * <code>|a|<sup>2<sup/></code> is squared length of <code>a</code>.
+     * <code>|a|<sup>2</sup></code> is squared length of <code>a</code>.
      *
      * @return the conjugated quaternion
      */
@@ -456,7 +458,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
         return new Quaterniond(x, y, z, w);
     }
 
-@Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -573,7 +575,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
      * @return The quaternion defined by the angle-axis rotation between the vectors
      */
     public static Quaterniond fromRotationTo(Vector3d from, Vector3d to) {
-        return Quaterniond.fromAngleRadAxis(TrigonometricMath.acos(from.dot(to) / (from.length() * to.length())), from.cross(to));
+        return Quaterniond.fromAngleRadAxis(acos(from.dot(to) / (from.length() * to.length())), from.cross(to));
     }
 
     /**
@@ -584,7 +586,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
      * @return The quaternion defined by the rotation around the axis
      */
     public static Quaterniond fromAngleDegAxis(float angle, Vector3d axis) {
-        return fromAngleRadAxis(Math.toRadians(angle), axis);
+        return fromAngleRadAxis(rad(angle), axis);
     }
 
     /**
@@ -606,7 +608,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
      * @return The quaternion defined by the rotation around the axis
      */
     public static Quaterniond fromAngleDegAxis(double angle, Vector3d axis) {
-        return fromAngleRadAxis(Math.toRadians(angle), axis);
+        return fromAngleRadAxis(rad(angle), axis);
     }
 
     /**
@@ -630,7 +632,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
      * @return The quaternion defined by the rotation around the axis
      */
     public static Quaterniond fromAngleDegAxis(float angle, float x, float y, float z) {
-        return fromAngleRadAxis(Math.toRadians(angle), x, y, z);
+        return fromAngleRadAxis(rad(angle), x, y, z);
     }
 
     /**
@@ -656,7 +658,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
      * @return The quaternion defined by the rotation around the axis
      */
     public static Quaterniond fromAngleDegAxis(double angle, double x, double y, double z) {
-        return fromAngleRadAxis(Math.toRadians(angle), x, y, z);
+        return fromAngleRadAxis(rad(angle), x, y, z);
     }
 
     /**
@@ -670,8 +672,8 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
      */
     public static Quaterniond fromAngleRadAxis(double angle, double x, double y, double z) {
         final double halfAngle = angle / 2;
-        final double q = TrigonometricMath.sin(halfAngle) / Math.sqrt(x * x + y * y + z * z);
-        return new Quaterniond(x * q, y * q, z * q, TrigonometricMath.cos(halfAngle));
+        final double q = sin(halfAngle) / Math.sqrt(x * x + y * y + z * z);
+        return new Quaterniond(x * q, y * q, z * q, cos(halfAngle));
     }
 
     /**

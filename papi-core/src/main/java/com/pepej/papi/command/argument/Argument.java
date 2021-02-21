@@ -74,6 +74,7 @@ public interface Argument {
 
     /**
      * Asserts that the permission is present
+     * @throws CommandInterruptException if command was interrupted
      */
     default void assertPresent() throws CommandInterruptException {
         CommandInterruptException.makeAssertion(isPresent(), "Argument at index " + index() + " is not present.");

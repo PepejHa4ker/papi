@@ -60,6 +60,7 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
      *
      * @param version the version in text form.
      * @throws IllegalArgumentException if unable to parse
+     * @return parsed version
      */
     public static MinecraftVersion parse(String version) throws IllegalArgumentException {
         return parse(version, true);
@@ -72,6 +73,7 @@ public final class MinecraftVersion implements Comparable<MinecraftVersion> {
      * @param version the version in text form.
      * @param parseSnapshot if the implementation should try to parse a snapshot version
      * @throws IllegalArgumentException if unable to parse
+     * @return parsed version
      */
     public static MinecraftVersion parse(String version, boolean parseSnapshot) throws IllegalArgumentException {
         String[] parts = version.split("-");

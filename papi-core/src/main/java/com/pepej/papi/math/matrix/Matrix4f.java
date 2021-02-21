@@ -638,7 +638,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 2 * rot.getX() * rot.getZ() - 2 * rot.getW() * rot.getY(),
                 2 * rot.getY() * rot.getZ() + 2 * rot.getX() * rot.getW(),
                 1 - 2 * rot.getX() * rot.getX() - 2 * rot.getY() * rot.getY(), 0,
-                0, 0, 0, 1);
+                0, 0, 0, 1
+        );
     }
 
     /**

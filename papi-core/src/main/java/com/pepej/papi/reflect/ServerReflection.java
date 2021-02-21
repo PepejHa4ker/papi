@@ -88,6 +88,7 @@ public final class ServerReflection {
      * Prepends the versioned {@link #NMS} prefix to the given class name
      *
      * @param className the name of the class
+     * @throws ClassNotFoundException if target class does not exists
      * @return the class represented by the full class name
      */
     @NonNull
@@ -110,6 +111,7 @@ public final class ServerReflection {
      * Prepends the versioned {@link #OBC} prefix to the given class name
      *
      * @param className the name of the class
+     * @throws ClassNotFoundException if target class does not exists
      * @return the class represented by the full class name
      */
     @NonNull

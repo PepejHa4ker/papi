@@ -73,6 +73,7 @@ public enum PackageVersion {
      *
      * @param className the name of the class
      * @return the class represented by the full class name
+     * @throws ClassNotFoundException if the target class does not exist
      */
     public @NonNull Class<?> nmsClass(@NonNull String className) throws ClassNotFoundException {
         return Class.forName(nms(className));
@@ -94,6 +95,7 @@ public enum PackageVersion {
      *
      * @param className the name of the class
      * @return the class represented by the full class name
+     * @throws ClassNotFoundException if the target class does not exist
      */
     public @NonNull Class<?> obcClass(@NonNull String className) throws ClassNotFoundException {
         return Class.forName(obc(className));

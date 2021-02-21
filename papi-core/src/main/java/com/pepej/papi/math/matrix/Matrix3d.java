@@ -243,7 +243,8 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
         return new Matrix3d(
                 GenericMath.floor(m00), GenericMath.floor(m01), GenericMath.floor(m02),
                 GenericMath.floor(m10), GenericMath.floor(m11), GenericMath.floor(m12),
-                GenericMath.floor(m20), GenericMath.floor(m21), GenericMath.floor(m22));
+                GenericMath.floor(m20), GenericMath.floor(m21), GenericMath.floor(m22)
+        );
     }
 
     @Override
@@ -251,7 +252,8 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
         return new Matrix3d(
                 Math.ceil(m00), Math.ceil(m01), Math.ceil(m02),
                 Math.ceil(m10), Math.ceil(m11), Math.ceil(m12),
-                Math.ceil(m20), Math.ceil(m21), Math.ceil(m22));
+                Math.ceil(m20), Math.ceil(m21), Math.ceil(m22)
+        );
     }
 
     @Override
@@ -259,7 +261,8 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
         return new Matrix3d(
                 Math.round(m00), Math.round(m01), Math.round(m02),
                 Math.round(m10), Math.round(m11), Math.round(m12),
-                Math.round(m20), Math.round(m21), Math.round(m22));
+                Math.round(m20), Math.round(m21), Math.round(m22)
+        );
     }
 
     @Override
@@ -267,7 +270,8 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
         return new Matrix3d(
                 Math.abs(m00), Math.abs(m01), Math.abs(m02),
                 Math.abs(m10), Math.abs(m11), Math.abs(m12),
-                Math.abs(m20), Math.abs(m21), Math.abs(m22));
+                Math.abs(m20), Math.abs(m21), Math.abs(m22)
+        );
     }
 
     @Override
@@ -305,7 +309,8 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
         return new Matrix3d(
                 (m11 * m22 - m21 * m12) / det, -(m01 * m22 - m21 * m02) / det, (m01 * m12 - m02 * m11) / det,
                 -(m10 * m22 - m20 * m12) / det, (m00 * m22 - m20 * m02) / det, -(m00 * m12 - m10 * m02) / det,
-                (m10 * m21 - m20 * m11) / det, -(m00 * m21 - m20 * m01) / det, (m00 * m11 - m01 * m10) / det);
+                (m10 * m21 - m20 * m11) / det, -(m00 * m21 - m20 * m01) / det, (m00 * m11 - m01 * m10) / det
+        );
     }
 
     public Matrix2d toMatrix2() {
@@ -452,7 +457,8 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
         return new Matrix3d(
                 x, 0, 0,
                 0, y, 0,
-                0, 0, z);
+                0, 0, z
+        );
     }
 
     public static Matrix3d createTranslation(Vector2d v) {
@@ -467,7 +473,8 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
         return new Matrix3d(
                 1, 0, x,
                 0, 1, y,
-                0, 0, 1);
+                0, 0, 1
+        );
     }
 
     public static Matrix3d createRotation(Complexd rot) {
@@ -475,7 +482,8 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
         return new Matrix3d(
                 rot.getX(), -rot.getY(), 0,
                 rot.getY(), rot.getX(), 0,
-                0, 0, 1);
+                0, 0, 1
+        );
     }
 
     public static Matrix3d createRotation(Quaterniond rot) {
@@ -489,6 +497,7 @@ public class Matrix3d implements Matrixd, Serializable, Cloneable {
                 2 * rot.getY() * rot.getZ() - 2 * rot.getW() * rot.getX(),
                 2 * rot.getX() * rot.getZ() - 2 * rot.getW() * rot.getY(),
                 2 * rot.getY() * rot.getZ() + 2 * rot.getX() * rot.getW(),
-                1 - 2 * rot.getX() * rot.getX() - 2 * rot.getY() * rot.getY());
+                1 - 2 * rot.getX() * rot.getX() - 2 * rot.getY() * rot.getY()
+        );
     }
 }

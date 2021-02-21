@@ -1,7 +1,5 @@
 package com.pepej.papi.cooldown;
 
-import com.pepej.papi.cooldown.Cooldown;
-
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Map;
@@ -18,8 +16,9 @@ public interface CooldownMap<T> {
 
     /**
      * Creates a new collection with the cooldown properties defined by the base instance
-     *
+      *
      * @param base the cooldown to base off
+     * @param <T> the type
      * @return a new collection
      */
     @NonNull

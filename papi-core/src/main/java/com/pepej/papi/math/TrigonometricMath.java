@@ -7,6 +7,7 @@ public final class TrigonometricMath {
     public static final double TWO_PI = 2 * PI;
     public static final double HALF_DEG_TO_RAD = PI / 360;
     public static final double RAD_TO_DEG = 180 / PI;
+    public static final double DEG_TO_RAD = 180 * PI;
     // Trig
     private static final int SIN_BITS = 22;
     private static final int SIN_SIZE = 1 << SIN_BITS;
@@ -37,7 +38,7 @@ public final class TrigonometricMath {
 
 
     /**
-     * Sine calculation using a table. <p/> <b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
+     * Sine calculation using a table.<b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
      *
      * @param angle the angle in radians
      * @return the sine of the angle
@@ -47,7 +48,7 @@ public final class TrigonometricMath {
     }
 
     /**
-     * Cosine calculation using a table. <p/> <b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
+     * Cosine calculation using a table.<b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
      *
      * @param angle the angle in radians
      * @return the cosine of the angle
@@ -57,7 +58,7 @@ public final class TrigonometricMath {
     }
 
     /**
-     * Tangent calculations using a table.<br> <i>sin(angle) / cos(angle)</i><br><br> <p/> <b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
+     * Tangent calculations using a table.<br><i>sin(angle) / cos(angle)</i><br><br><b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
      *
      * @param angle in radians
      * @return the tangent of the angle
@@ -68,7 +69,7 @@ public final class TrigonometricMath {
     }
 
     /**
-     * Cosecant calculations using a table.<br> <i>1 / sin(angle)</i><br><br> <p/> <b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
+     * Cosecant calculations using a table.<br> <i>1 / sin(angle)</i><br><br><b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
      *
      * @param angle the angle in radians
      * @return the cosecant of the angle
@@ -78,7 +79,7 @@ public final class TrigonometricMath {
     }
 
     /**
-     * Secant calculations using a table:<br> <i>1 / cos(angle)</i><br><br> <p/> <b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
+     * Secant calculations using a table:<br> <i>1 / cos(angle)</i><br><br><b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
      *
      * @param angle the angle in radians
      * @return the secant of the angle
@@ -88,7 +89,7 @@ public final class TrigonometricMath {
     }
 
     /**
-     * Cotangent calculations using a table.<br> <i>cos(angle) / sin(angle)</i><br><br> <p/> <b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
+     * Cotangent calculations using a table.<br> <i>cos(angle) / sin(angle)</i><br><br><b>No interpolation is performed:</b> Accuracy is up to the 6th decimal place
      *
      * @param angle in radians
      * @return the cotangent of the angle

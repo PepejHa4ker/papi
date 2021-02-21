@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MathTest {
 
+
+
     @Test
     public void circleTest() {
         Circle circle = new Circle(2.0);
@@ -40,5 +42,6 @@ public class MathTest {
         Vector2d b = new Vector2d(4,3);
         assertEquals(0.96, a.scalar(b));
     }
+
 
 }

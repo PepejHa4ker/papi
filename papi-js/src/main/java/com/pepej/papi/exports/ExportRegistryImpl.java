@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+@SuppressWarnings("unchecked")
 final class ExportRegistryImpl implements ExportRegistry, Function<String, Export<?>> {
     private final Map<String, Export<?>> exports = new ConcurrentHashMap<>();
 
@@ -16,7 +17,6 @@ final class ExportRegistryImpl implements ExportRegistry, Function<String, Expor
 
     @Override
     public <T> Export<T> get(String name) {
-        //noinspection unchecked
         return (Export<T>) this.exports.computeIfAbsent(name.toLowerCase(), this);
     }
 

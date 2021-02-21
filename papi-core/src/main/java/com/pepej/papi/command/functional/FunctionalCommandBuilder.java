@@ -183,6 +183,7 @@ public interface FunctionalCommandBuilder<T extends CommandSender> {
      * @param cooldownTime the amount of time the sender will have to wait before reusing the command
      * @param unit the unit
      * @param cooldownMessage the message than will be send if sender has cooldown
+     * @return the builder instance
      */
     FunctionalCommandBuilder<T> assertCooldown(int cooldownTime, TimeUnit unit, String cooldownMessage);
 
@@ -190,6 +191,7 @@ public interface FunctionalCommandBuilder<T extends CommandSender> {
      * Tests that the sender has a command cooldown.
      * @param cooldownTime the amount of time the sender will have to wait before reusing the command
      * @param unit the unit
+     * @return the builder instance
      */
     default FunctionalCommandBuilder<T> assertCooldown(int cooldownTime, TimeUnit unit) {
         return assertCooldown(cooldownTime, unit, DEFAULT_COOLDOWN_MESSAGE);

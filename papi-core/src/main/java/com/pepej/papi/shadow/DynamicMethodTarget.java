@@ -21,7 +21,6 @@ public @interface DynamicMethodTarget {
      *
      * <p>An instance of the function is retrieved/constructed on demand by the implementation in
      * the following order.</p>
-     * <p></p>
      * <ul>
      * <li>a static method named {@code getInstance} accepting no parameters and returning an instance of the implementation.</li>
      * <li>via a single enum constant, if the loading function class is an enum following the enum singleton pattern.</li>

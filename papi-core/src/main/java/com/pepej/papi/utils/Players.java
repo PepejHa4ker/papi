@@ -142,6 +142,7 @@ public final class Players {
      * Messages a sender a set of messages.
      *
      * @param sender the sender
+     * @param type the type of messages
      * @param messages the messages to send
      */
 

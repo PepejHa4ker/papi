@@ -18,6 +18,7 @@ public interface ConversationChannelListener<T extends ConversationMessage, R ex
      *
      * @param agent the agent which forwarded the message.
      * @param message the message
+     * @return replied message
      */
     ConversationReply<R> onMessage(@NonNull ConversationChannelAgent<T, R> agent, @NonNull T message);
 

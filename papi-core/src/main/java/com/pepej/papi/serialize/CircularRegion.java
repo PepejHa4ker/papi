@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
-import com.pepej.papi.utils.Maths;
 import org.bukkit.block.Block;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -13,6 +12,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import static com.pepej.papi.math.GenericMath.rad;
+import static com.pepej.papi.math.TrigonometricMath.cos;
+import static com.pepej.papi.math.TrigonometricMath.sin;
 
 public class CircularRegion implements GsonSerializable {
     public static CircularRegion deserialize(JsonElement element) {
@@ -104,10 +107,10 @@ public class CircularRegion implements GsonSerializable {
     public Set<BlockPosition> getOuterBlockPositions() {
         Set<BlockPosition> positions = new HashSet<>((int) getCircumference());
         for (int degree = 0; degree < 360; degree++) {
-            float radian = Maths.toRadians(degree);
+            double radian = rad(degree);
 
-            double x = Maths.cos(radian) * this.radius;
-            double z = Maths.sin(radian) * this.radius;
+            double x = cos(radian) * this.radius;
+            double z = sin(radian) * this.radius;
 
             positions.add(this.center.add((int) x, 0, (int) z).floor());
         }

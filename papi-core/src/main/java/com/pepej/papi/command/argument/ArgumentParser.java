@@ -1,7 +1,6 @@
 package com.pepej.papi.command.argument;
 
 import com.pepej.papi.command.CommandInterruptException;
-import com.pepej.papi.command.argument.Argument;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Optional;
@@ -65,6 +64,7 @@ public interface ArgumentParser<T> {
      * parsing failed.
      *
      * @param s the string
+     * @throws CommandInterruptException if command was interrupted
      * @return the value
      */
     @NonNull
@@ -92,6 +92,7 @@ public interface ArgumentParser<T> {
      * parsing failed.
      *
      * @param argument the argument
+     * @throws CommandInterruptException if command was interrupted
      * @return the value
      */
     @NonNull

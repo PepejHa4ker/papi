@@ -20,6 +20,9 @@ public interface ComposedCooldownMap<I, O> {
      * Creates a new collection with the cooldown properties defined by the base instance
      *
      * @param base the cooldown to base off
+     * @param <I> input type
+     * @param <O> internal type
+     * @param composeFunction the function to compose
      * @return a new collection
      */
     @NonNull

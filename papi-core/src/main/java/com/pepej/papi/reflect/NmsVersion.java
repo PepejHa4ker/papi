@@ -123,6 +123,7 @@ public enum NmsVersion {
      * Prepends the versioned NMS prefix to the given class name
      *
      * @param className the name of the class
+     * @throws ClassNotFoundException if target class does not exist
      * @return the class represented by the full class name
      */
     @NonNull
@@ -145,6 +146,7 @@ public enum NmsVersion {
      * Prepends the versioned OBC prefix to the given class name
      *
      * @param className the name of the class
+     * @throws ClassNotFoundException if target class does not exist
      * @return the class represented by the full class name
      */
     @NonNull

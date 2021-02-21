@@ -52,7 +52,6 @@ public class GenericMath {
         return Math.abs(wrapAngleRad(radian1 - radian2));
     }
 
-
     /**
      * Returns the absolute value of an {@code int} value.
      * If the argument is not negative, the argument is returned.
@@ -126,22 +125,49 @@ public class GenericMath {
     }
 
     /**
+     * Returns the value of the first argument raised to the power of the
+     * @param a the base
+     * @param b the exponent
+     * @return the value {@code a}<sup>{@code b}</sup>.
+     */
+    public static long pow(int a, int b) {
+        int ret = 1;
+        while (b > 0) {
+            if ((b & 1) == 1) {
+                ret *= a;
+            }
+            b >>= 1;
+            a *= a;
+        }
+        return ret;
+    }
+
+     /**
      * Converts an angle measured in degrees to an approximately
-     * equivalent angle measured in radians.  The conversion from
-     * degrees to radians is generally inexact.
+     * equivalent angle measured in radians.
      *
-     * @param  angleDeg an angle, in degrees
-     * @return  the measurement of the angle {@code angleDeg in radians.
+     * @param angleDeg an angle, in degrees
+     * @return the measurement of the angle {@code angleDeg} in radians.
      */
     public static double rad(double angleDeg) {
-        return angleDeg / 180.0 * PI;
+        return angleDeg / DEG_TO_RAD;
+    }
+
+    /**
+     * Converts an angle measured in radians to an approximately
+     * equivalent angle measured in degrees.
+     * @param angleRad an angle, in radians
+     * @return the measurement of the angle {@code angleRad} in degrees.
+     */
+    public static double deg(double angleRad) {
+        return angleRad * RAD_TO_DEG;
     }
 
     /**
      * Wraps the angle between -180 and 180 degrees
      *
      * @param angle to wrap
-     * @return -180 < angle <= 180
+     * @return {@code -180 < angle <= 180}
      */
     public static float wrapAngleDeg(float angle) {
         angle %= 360f;
@@ -158,7 +184,7 @@ public class GenericMath {
      * Wraps the radian between -PI and PI
      *
      * @param angle to wrap
-     * @return -PI < radian <= PI
+     * @return {@code -PI < radian <= PI}
      */
     public static double wrapAngleRad(double angle) {
         angle %= TWO_PI;
@@ -175,7 +201,7 @@ public class GenericMath {
      * Wraps the pitch angle between -90 and 90 degrees
      *
      * @param angle to wrap
-     * @return -90 < angle < 90
+     * @return {@code -90 < angle < 90}
      */
     public static float wrapAnglePitchDeg(float angle) {
         angle = wrapAngleDeg(angle);
@@ -192,7 +218,7 @@ public class GenericMath {
      * Wraps a byte between 0 and 256
      *
      * @param value to wrap
-     * @return 0 < byte < 256
+     * @return {@code 0 <= value <= 256}
      */
     public static byte wrapByte(int value) {
         value %= 256;
@@ -817,7 +843,7 @@ public class GenericMath {
 
     /**
      * Determines if the given number is a power of two. A number is a power of 2 if it is 1 or greater, and it contains no similar bits of the given number - 1.
-     *
+     * @param num the given number
      * @return true if num is a power of two
      */
     public static boolean isPowerOfTwo(int num) {

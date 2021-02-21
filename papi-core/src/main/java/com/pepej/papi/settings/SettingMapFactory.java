@@ -30,6 +30,7 @@ public final class SettingMapFactory<S extends Setting<V>, V extends Setting.Sta
      * @param settingsEnum the setting enum
      * @param statesEnum the states enum
      * @param <S> the class type
+     * @param <V> the type of state the setting has
      * @return a new factory
      */
     public static <S extends Enum<S> & Setting<V>, V extends Enum<V> & Setting.State> SettingMapFactory<S, V> create(Class<S> settingsEnum, Class<V> statesEnum) {
@@ -45,7 +46,9 @@ public final class SettingMapFactory<S extends Setting<V>, V extends Setting.Sta
      * setting class.</p>
      *
      * @param settings the settings
+     * @param states the states
      * @param <S> the class type
+     * @param <V> the type of state the setting has
      * @return a new factory
      */
     public static <S extends Setting<V>, V extends Setting.State> SettingMapFactory<S, V> create(S[] settings, V[] states) {

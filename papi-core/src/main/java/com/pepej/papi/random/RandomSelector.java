@@ -39,6 +39,7 @@ public interface RandomSelector<E> {
      * according to the weigher function.
      *
      * @param elements the elements to pick from
+     * @param weigher the weigher
      * @param <E> the element type
      * @return the selector instance
      */

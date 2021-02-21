@@ -36,7 +36,7 @@ import java.util.function.Function;
  * A simple GUI abstraction
  */
 public abstract class Menu implements TerminableConsumer {
-    public static final MetadataKey<Menu> OPEN_GUI_KEY = MetadataKey.create("open-gui", Menu.class);
+    public static final MetadataKey<Menu> OPEN_MENU_KEY = MetadataKey.create("open-menu", Menu.class);
 
     /**
      * Utility method to get the number of lines needed for x items
@@ -61,22 +61,22 @@ public abstract class Menu implements TerminableConsumer {
         return (count / itemsPerLine + ((count % itemsPerLine != 0) ? 1 : 0));
     }
 
-    // The player holding the GUI
+    // The player holding the menu
     private final Player player;
     // The backing inventory instance
     private final Inventory inventory;
     // The initial title set when the inventory was made.
     private final String initialTitle;
-    // The slots in the gui, lazily loaded
+    // The slots in the menu, lazily loaded
     private final Map<Integer, SimpleSlot> slots;
     // This remains true until after #redraw is called for the first time
     private boolean firstDraw = true;
     // A function used to build a fallback page when this page is closed.
     @Nullable
-    private Function<Player, Menu> fallbackGui = null;
+    private Function<Player, Menu> fallbackMenu = null;
 
-    // Callbacks to be ran when the GUI is invalidated (closed). useful for cancelling tick tasks
-    // Also contains the event handlers bound to this GUI, currently listening to events
+    // Callbacks to be ran when the menu is invalidated (closed). useful for cancelling tick tasks
+    // Also contains the event handlers bound to this menu, currently listening to events
     private final CompositeTerminable compositeTerminable = CompositeTerminable.create();
 
     private boolean valid = false;
@@ -90,7 +90,7 @@ public abstract class Menu implements TerminableConsumer {
     }
 
     /**
-     * Places items on the GUI. Called when the GUI is opened.
+     * Places items on the menu. Called when the menu is opened.
      * Use {@link #isFirstDraw()} to determine if this is the first time redraw has been called.
      */
     public abstract void redraw();
@@ -98,7 +98,7 @@ public abstract class Menu implements TerminableConsumer {
     /**
      * Gets the player viewing this Menu
      *
-     * @return the player viewing this gui
+     * @return the player viewing this menu
      */
     public Player getPlayer() {
         return this.player;
@@ -114,21 +114,21 @@ public abstract class Menu implements TerminableConsumer {
     }
 
     /**
-     * Gets the initial title which was set when this GUI was made
+     * Gets the initial title which was set when this menu was made
      *
-     * @return the initial title used when this GUI was made
+     * @return the initial title used when this menu was made
      */
     public String getInitialTitle() {
         return this.initialTitle;
     }
 
     @Nullable
-    public Function<Player, Menu> getFallbackGui() {
-        return this.fallbackGui;
+    public Function<Player, Menu> getFallbackMenu() {
+        return this.fallbackMenu;
     }
 
-    public void setFallbackGui(@Nullable Function<Player, Menu> fallbackGui) {
-        this.fallbackGui = fallbackGui;
+    public void setFallbackGui(@Nullable Function<Player, Menu> fallbackMenu) {
+        this.fallbackMenu = fallbackMenu;
     }
 
     @NonNull
@@ -254,8 +254,8 @@ public abstract class Menu implements TerminableConsumer {
         if (this.valid) {
             throw new IllegalStateException("Menu is already opened.");
         }
-        this.firstDraw = true;
-        this.invalidated = false;
+        firstDraw = true;
+        invalidated = false;
         try {
             redraw();
         } catch (Exception e) {
@@ -264,11 +264,11 @@ public abstract class Menu implements TerminableConsumer {
             return;
         }
 
-        this.firstDraw = false;
+        firstDraw = false;
         startListening();
         this.player.openInventory(this.inventory);
-        Metadata.provideForPlayer(this.player).put(OPEN_GUI_KEY, this);
-        this.valid = true;
+        Metadata.provideForPlayer(this.player).put(OPEN_MENU_KEY, this);
+        valid = true;
     }
 
     public void close() {
@@ -276,32 +276,32 @@ public abstract class Menu implements TerminableConsumer {
     }
 
     private void invalidate() {
-        this.valid = false;
-        this.invalidated = true;
+        valid = false;
+        invalidated = true;
 
         MetadataMap metadataMap = Metadata.provideForPlayer(this.player);
-        Menu existing = metadataMap.getOrNull(OPEN_GUI_KEY);
+        Menu existing = metadataMap.getOrNull(OPEN_MENU_KEY);
         if (existing == this) {
-            metadataMap.remove(OPEN_GUI_KEY);
+            metadataMap.remove(OPEN_MENU_KEY);
         }
 
         // stop listening
-        this.compositeTerminable.closeAndReportException();
+        compositeTerminable.closeAndReportException();
 
-        // clear all items from the GUI, just in case the menu didn't close properly.
+        // clear all items from the menu, just in case the menu didn't close properly.
         clearItems();
     }
 
     /**
-     * Returns true unless this GUI has been invalidated, through being closed, or the player leaving.
-     * @return true unless this GUI has been invalidated.
+     * Returns true unless this menu has been invalidated, through being closed, or the player leaving.
+     * @return true unless this menu has been invalidated.
      */
     public boolean isValid() {
-        return this.valid;
+        return valid;
     }
 
     /**
-     * Registers the event handlers for this GUI
+     * Registers the event handlers for this menu
      */
     private void startListening() {
         Events.merge(Player.class)
@@ -361,17 +361,17 @@ public abstract class Menu implements TerminableConsumer {
               .bindWith(this);
 
         Events.subscribe(InventoryCloseEvent.class)
-              .filter(e -> e.getPlayer().equals(this.player))
+              .filter(e -> e.getPlayer().equals(player))
               .filter(e -> isValid())
               .handler(e -> {
                   invalidate();
 
-                  if (!e.getInventory().equals(this.inventory)) {
+                  if (!e.getInventory().equals(inventory)) {
                       return;
                   }
 
-                  // Check for a fallback GUI
-                  Function<Player, Menu> fallback = this.fallbackGui;
+                  // Check for a fallback menu
+                  Function<Player, Menu> fallback = fallbackMenu;
                   if (fallback == null) {
                       return;
                   }
@@ -381,12 +381,12 @@ public abstract class Menu implements TerminableConsumer {
                       if (!this.player.isOnline()) {
                           return;
                       }
-                      Menu fallbackMenu = fallback.apply(this.player);
+                      Menu fallbackMenu = fallback.apply(player);
                       if (fallbackMenu == null) {
                           throw new IllegalStateException("Fallback function " + fallback + " returned null");
                       }
                       if (fallbackMenu.valid) {
-                          throw new IllegalStateException("Fallback function " + fallback + " produced a GUI " + fallbackMenu + " which is already open");
+                          throw new IllegalStateException("Fallback function " + fallback + " produced a menu " + fallbackMenu + " which is already open");
                       }
                       fallbackMenu.open();
 

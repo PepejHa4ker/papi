@@ -152,6 +152,7 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param file the name of the file
      * @param configObject the config object
      * @param <T> the config object type
+     * @return configObject
      */
     @NonNull
     <T> T setupConfig(@NonNull String file, @NonNull T configObject);

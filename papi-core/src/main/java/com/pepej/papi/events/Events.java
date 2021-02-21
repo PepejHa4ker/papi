@@ -185,8 +185,9 @@ public final class Events {
 
     /**
      * Submit the event on the current thread
-     *
+     * @param <T> the type of the event
      * @param event the event to call
+     * @return event
      */
     @NonNull
     public static <T extends Event> T callAndReturn(@NonNull T event) {
@@ -196,8 +197,9 @@ public final class Events {
 
     /**
      * Submit the event on a new async thread.
-     *
+     * @param <T> the type of the event
      * @param event the event to call
+     * @return event
      */
     @NonNull
     public static <T extends Event> T callAsyncAndJoin(@NonNull T event) {
@@ -206,8 +208,9 @@ public final class Events {
 
     /**
      * Submit the event on the main server thread.
-     *
+     * @param <T> the type of the event
      * @param event the event to call
+     * @return event
      */
     @NonNull
     public static <T extends Event> T callSyncAndJoin(@NonNull T event) {

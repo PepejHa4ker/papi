@@ -235,6 +235,7 @@ public interface Scoreboard {
      * @param player the player to make the objective for
      * @param title the initial title of the objective
      * @param displaySlot the display slot to use for this objective
+     * @param autoSubscribe auto-subscribe
      * @return the new objective
      */
     default ScoreboardObjective createPlayerObjective(Player player, String title, DisplaySlot displaySlot, boolean autoSubscribe) {

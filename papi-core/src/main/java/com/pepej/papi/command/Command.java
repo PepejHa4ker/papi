@@ -34,6 +34,7 @@ public interface Command extends Terminable {
      * Calls the command handler
      *
      * @param context the contexts for the command
+     * @throws CommandInterruptException if command was interrupted
      */
     void call(@NonNull CommandContext<? extends CommandSender> context) throws CommandInterruptException;
 
