@@ -1,5 +1,8 @@
 package com.pepej.papi.item;
 
+import com.google.common.reflect.TypeToken;
+import lombok.SneakyThrows;
+import ninja.leaping.configurate.ConfigurationNode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -9,7 +12,7 @@ import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 /**
- * Utility for creating {@link ItemStackBuilder}s from {@link ConfigurationSection config} files.
+ * Utility for creating {@link ItemStackBuilder}s from {@link ConfigurationSection bukkit} and {@link ConfigurationNode sponge} config files.
  */
 public class ItemStackReader {
 
@@ -19,9 +22,7 @@ public class ItemStackReader {
     public static final ItemStackReader DEFAULT = new ItemStackReader();
 
     // Allow subclassing
-    protected ItemStackReader() {
-
-    }
+    protected ItemStackReader() {}
 
     /**
      * Reads an {@link ItemStackBuilder} from the given config.
@@ -31,6 +32,25 @@ public class ItemStackReader {
      */
     public final ItemStackBuilder read(ConfigurationSection config) {
         return read(config, VariableReplacer.NOOP);
+    }
+
+    /**
+     * Reads an {@link ItemStackBuilder} from the given {@link ConfigurationNode} config.
+     *
+     * @param config the config to read from
+     * @return the item
+     */
+    public final ItemStackBuilder read(ConfigurationNode config) {
+        return read(config, VariableReplacer.NOOP);
+    }
+
+    public ItemStackBuilder read(ConfigurationNode config, VariableReplacer variableReplacer) {
+        return ItemStackBuilder.of(parseMaterial(config))
+                               .apply(isb -> {
+                                   parseData(config).ifPresent(isb::data);
+                                   parseName(config).map(variableReplacer::replace).ifPresent(isb::name);
+                                   parseLore(config).map(variableReplacer::replace).ifPresent(isb::lore);
+                               });
     }
 
     /**
@@ -49,6 +69,9 @@ public class ItemStackReader {
                                });
     }
 
+    protected Material parseMaterial(ConfigurationNode config) {
+        return parseMaterial(config.getNode("material").getString("air"));
+    }
     protected Material parseMaterial(ConfigurationSection config) {
         return parseMaterial(config.getString("material"));
     }
@@ -60,17 +83,36 @@ public class ItemStackReader {
             throw new IllegalArgumentException("Unable to parse material '" + name + "'");
         }
     }
-
+    protected OptionalInt parseData(ConfigurationNode config) {
+        if (config.getNode("data").getInt() != 0) {
+            return OptionalInt.of(config.getNode("data").getInt(0));
+        }
+        return OptionalInt.empty();
+    }
     protected OptionalInt parseData(ConfigurationSection config) {
         if (config.contains("data")) {
             return OptionalInt.of(config.getInt("data"));
         }
         return OptionalInt.empty();
     }
+    protected Optional<String> parseName(ConfigurationNode config) {
+        if (config.getNode("name").getString() != null) {
+            return Optional.of(config.getNode("name").getString(""));
+        }
+        return Optional.empty();
+    }
 
     protected Optional<String> parseName(ConfigurationSection config) {
         if (config.contains("name")) {
             return Optional.of(config.getString("name"));
+        }
+        return Optional.empty();
+    }
+    @SneakyThrows
+    protected Optional<List<String>> parseLore(ConfigurationNode config) {
+        List<String> lore = config.getNode("lore").getList(new TypeToken<String>() {});
+        if (!lore.isEmpty()) {
+            return Optional.of(lore);
         }
         return Optional.empty();
     }
