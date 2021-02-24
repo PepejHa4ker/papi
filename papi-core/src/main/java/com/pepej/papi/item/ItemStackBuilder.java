@@ -76,8 +76,9 @@ public final class ItemStackBuilder {
         return this;
     }
 
-    public ItemStackBuilder transformMeta(Consumer<ItemMeta> meta) {
-        ItemMeta m = this.itemStack.getItemMeta();
+    public <T extends ItemMeta> ItemStackBuilder transformMeta(Consumer<T> meta) {
+        //noinspection unchecked
+        T m = (T) this.itemStack.getItemMeta();
         if (m != null) {
             meta.accept(m);
             this.itemStack.setItemMeta(m);
@@ -207,9 +208,7 @@ public final class ItemStackBuilder {
         return transform(itemStack -> {
             Material type = itemStack.getType();
             if (type == Material.LEATHER_BOOTS || type == Material.LEATHER_CHESTPLATE || type == Material.LEATHER_HELMET || type == Material.LEATHER_LEGGINGS) {
-                LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
-                meta.setColor(color);
-                itemStack.setItemMeta(meta);
+                this.<LeatherArmorMeta>transformMeta(m -> m.setColor(color));
             }
         });
     }
