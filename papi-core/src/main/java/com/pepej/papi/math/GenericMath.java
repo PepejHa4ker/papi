@@ -150,7 +150,7 @@ public class GenericMath {
      * @return the measurement of the angle {@code angleDeg} in radians.
      */
     public static double rad(double angleDeg) {
-        return angleDeg / DEG_TO_RAD;
+        return angleDeg / 180.0 * PI;
     }
 
     /**
@@ -160,7 +160,7 @@ public class GenericMath {
      * @return the measurement of the angle {@code angleRad} in degrees.
      */
     public static double deg(double angleRad) {
-        return angleRad * RAD_TO_DEG;
+        return angleRad * 180 / PI;
     }
 
     /**

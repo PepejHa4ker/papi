@@ -3,11 +3,13 @@ package com.pepej.papi.math.imaginary;
 
 import com.pepej.papi.math.GenericMath;
 import com.pepej.papi.math.HashFunctions;
-import com.pepej.papi.math.TrigonometricMath;
 import com.pepej.papi.math.vector.Vector2d;
 import com.pepej.papi.math.vector.Vector3d;
 
 import java.io.Serializable;
+
+import static com.pepej.papi.math.GenericMath.*;
+import static com.pepej.papi.math.TrigonometricMath.*;
 
 /**
  * Represent a complex number of the form <code>x + yi</code>. The x and y components are stored as doubles. This class is immutable.
@@ -41,7 +43,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @param y The y (imaginary) component
      */
     public Complexd(float x, float y) {
-        this((double) x, (double) y);
+        this(x, (double) y);
     }
 
     /**
@@ -101,7 +103,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return A new complex, which is the sum of both
      */
     public Complexd add(float x, float y) {
-        return add((double) x, (double) y);
+        return add(x, (double) y);
     }
 
     /**
@@ -133,7 +135,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return A new complex, which is the difference of both
      */
     public Complexd sub(float x, float y) {
-        return sub((double) x, (double) y);
+        return sub(x, (double) y);
     }
 
     /**
@@ -154,7 +156,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return A new complex, which has each component multiplied by the scalar
      */
     public Complexd mul(float a) {
-        return mul(a);
+        return mul((double) a);
     }
 
     /**
@@ -186,7 +188,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return A new complex, which is the product of both
      */
     public Complexd mul(float x, float y) {
-        return mul(x, y);
+        return mul((double) x, y);
     }
 
     /**
@@ -209,7 +211,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return A new complex, which has each component divided by the scalar
      */
     public Complexd div(float a) {
-        return div(a);
+        return div((double) a);
     }
 
     /**
@@ -241,7 +243,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The quotient of the two complexes
      */
     public Complexd div(float x, float y) {
-        return div(x, y);
+        return div((double) x, y);
     }
 
     /**
@@ -276,7 +278,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The dot product of the two complexes
      */
     public double dot(float x, float y) {
-        return dot(x, y);
+        return dot((double) x, y);
     }
 
     /**
@@ -305,7 +307,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The angle in radians of the direction vector of this complex
      */
     public double getAngleRad() {
-        return TrigonometricMath.atan2(y, x);
+        return atan2(y, x);
     }
 
     /**
@@ -314,7 +316,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The angle in degrees of the direction vector of this complex
      */
     public double getAngleDeg() {
-        return Math.toDegrees(getAngleRad());
+        return deg(getAngleRad());
     }
 
     /**
@@ -338,7 +340,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
     @Override
     public Complexd invert() {
         final double lengthSquared = lengthSquared();
-        if (Math.abs(lengthSquared) < GenericMath.DBL_EPSILON) {
+        if (abs(lengthSquared) < GenericMath.DBL_EPSILON) {
             throw new ArithmeticException("Cannot invert a complex of length zero");
         }
         return conjugate().div(lengthSquared);
@@ -361,7 +363,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      */
     @Override
     public double length() {
-        return Math.sqrt(lengthSquared());
+        return sqrt(lengthSquared());
     }
 
     /**
@@ -372,7 +374,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
     @Override
     public Complexd normalize() {
         final double length = length();
-        if (Math.abs(length) < GenericMath.DBL_EPSILON) {
+        if (abs(length) < GenericMath.DBL_EPSILON) {
             throw new ArithmeticException("Cannot normalize the zero complex");
         }
         return new Complexd(x / length, y / length);
@@ -452,7 +454,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The complex defined by the angle between the vectors
      */
     public static Complexd fromRotationTo(Vector2d from, Vector2d to) {
-        return fromAngleRad(TrigonometricMath.acos(from.dot(to) / (from.length() * to.length())));
+        return fromAngleRad(acos(from.dot(to) / (from.length() * to.length())));
     }
 
     /**
@@ -463,7 +465,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The complex defined by the angle between the vectors
      */
     public static Complexd fromRotationTo(Vector3d from, Vector3d to) {
-        return fromAngleRad(TrigonometricMath.acos(from.dot(to) / (from.length() * to.length())));
+        return fromAngleRad(acos(from.dot(to) / (from.length() * to.length())));
     }
 
     /**
@@ -473,7 +475,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The complex defined by the angle
      */
     public static Complexd fromAngleDeg(float angle) {
-        return fromAngleRad(Math.toRadians(angle));
+        return fromAngleRad(rad(angle));
     }
 
     /**
@@ -493,7 +495,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The complex defined by the angle
      */
     public static Complexd fromAngleDeg(double angle) {
-        return fromAngleRad((double) Math.toRadians(angle));
+        return fromAngleRad(rad(angle));
     }
 
     /**
@@ -503,6 +505,6 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
      * @return The complex defined by the angle
      */
     public static Complexd fromAngleRad(double angle) {
-        return new Complexd(TrigonometricMath.cos(angle), TrigonometricMath.sin(angle));
+        return new Complexd(cos(angle), sin(angle));
     }
 }

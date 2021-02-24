@@ -43,14 +43,16 @@ public class Matrix3f implements Matrixf, Serializable, Cloneable {
         this(
                 m.m00, m.m01, m.m02,
                 m.m10, m.m11, m.m12,
-                m.m20, m.m21, m.m22);
+                m.m20, m.m21, m.m22
+        );
     }
 
     public Matrix3f(Matrix4f m) {
         this(
                 m.get(0, 0), m.get(0, 1), m.get(0, 2),
                 m.get(1, 0), m.get(1, 1), m.get(1, 2),
-                m.get(2, 0), m.get(2, 1), m.get(2, 2));
+                m.get(2, 0), m.get(2, 1), m.get(2, 2)
+        );
     }
 
     public Matrix3f(MatrixNf m) {
@@ -155,7 +157,8 @@ public class Matrix3f implements Matrixf, Serializable, Cloneable {
         return new Matrix3f(
                 m00 - m.m00, m01 - m.m01, m02 - m.m02,
                 m10 - m.m10, m11 - m.m11, m12 - m.m12,
-                m20 - m.m20, m21 - m.m21, m22 - m.m22);
+                m20 - m.m20, m21 - m.m21, m22 - m.m22
+        );
     }
 
     public Matrix3f mul(double a) {

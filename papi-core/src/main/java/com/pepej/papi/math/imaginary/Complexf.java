@@ -3,12 +3,13 @@ package com.pepej.papi.math.imaginary;
 
 import com.pepej.papi.math.GenericMath;
 import com.pepej.papi.math.HashFunctions;
-import com.pepej.papi.math.TrigonometricMath;
 import com.pepej.papi.math.vector.Vector2f;
 import com.pepej.papi.math.vector.Vector3f;
 
 import java.io.Serializable;
 
+import static com.pepej.papi.math.GenericMath.*;
+import static com.pepej.papi.math.TrigonometricMath.*;
 /**
  * Represent a complex number of the form <code>x + yi</code>. The x and y components are stored as floats. This class is immutable.
  */
@@ -305,7 +306,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
      * @return The angle in radians of the direction vector of this complex
      */
     public float getAngleRad() {
-        return (float) TrigonometricMath.atan2(y, x);
+        return (float) atan2(y, x);
     }
 
     /**
@@ -314,7 +315,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
      * @return The angle in degrees of the direction vector of this complex
      */
     public float getAngleDeg() {
-        return (float) Math.toDegrees(getAngleRad());
+        return (float) rad(getAngleRad());
     }
 
     /**
@@ -338,7 +339,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
     @Override
     public Complexf invert() {
         final float lengthSquared = lengthSquared();
-        if (Math.abs(lengthSquared) < GenericMath.FLT_EPSILON) {
+        if (abs(lengthSquared) < GenericMath.FLT_EPSILON) {
             throw new ArithmeticException("Cannot invert a complex of length zero");
         }
         return conjugate().div(lengthSquared);
@@ -361,7 +362,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
      */
     @Override
     public float magnitude() {
-        return (float) Math.sqrt(lengthSquared());
+        return (float) sqrt(lengthSquared());
     }
 
     /**
@@ -372,7 +373,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
     @Override
     public Complexf normalize() {
         final float length = magnitude();
-        if (Math.abs(length) < GenericMath.FLT_EPSILON) {
+        if (abs(length) < GenericMath.FLT_EPSILON) {
             throw new ArithmeticException("Cannot normalize the zero complex");
         }
         return new Complexf(x / length, y / length);
@@ -452,7 +453,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
      * @return The complex defined by the angle between the vectors
      */
     public static Complexf fromRotationTo(Vector2f from, Vector2f to) {
-        return fromAngleRad(TrigonometricMath.acos(from.dot(to) / (from.length() * to.length())));
+        return fromAngleRad(acos(from.dot(to) / (from.length() * to.length())));
     }
 
     /**
@@ -463,7 +464,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
      * @return The complex defined by the angle between the vectors
      */
     public static Complexf fromRotationTo(Vector3f from, Vector3f to) {
-        return fromAngleRad(TrigonometricMath.acos(from.dot(to) / (from.length() * to.length())));
+        return fromAngleRad(acos(from.dot(to) / (from.length() * to.length())));
     }
 
     /**
@@ -473,7 +474,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
      * @return The complex defined by the angle
      */
     public static Complexf fromAngleDeg(double angle) {
-        return fromAngleRad(Math.toRadians(angle));
+        return fromAngleRad(rad(angle));
     }
 
     /**
@@ -493,7 +494,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
      * @return The complex defined by the angle
      */
     public static Complexf fromAngleDeg(float angle) {
-        return fromAngleRad((float) Math.toRadians(angle));
+        return fromAngleRad((float) rad(angle));
     }
 
     /**
@@ -503,6 +504,6 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
      * @return The complex defined by the angle
      */
     public static Complexf fromAngleRad(float angle) {
-        return new Complexf(TrigonometricMath.cos(angle), TrigonometricMath.sin(angle));
+        return new Complexf(cos(angle), sin(angle));
     }
 }

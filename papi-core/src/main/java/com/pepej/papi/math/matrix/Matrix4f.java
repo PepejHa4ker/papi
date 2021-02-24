@@ -16,7 +16,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
             0, 0, 0, 0,
             0, 0, 0, 0,
             0, 0, 0, 0,
-            0, 0, 0, 0);
+            0, 0, 0, 0
+    );
     public static final Matrix4f IDENTITY = new Matrix4f();
     private final float m00, m01, m02, m03;
     private final float m10, m11, m12, m13;
@@ -30,7 +31,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,
-                0, 0, 0, 1);
+                0, 0, 0, 1
+        );
     }
 
     public Matrix4f(Matrix2f m) {
@@ -38,7 +40,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m.get(0, 0), m.get(0, 1), 0, 0,
                 m.get(1, 0), m.get(1, 1), 0, 0,
                 0, 0, 0, 0,
-                0, 0, 0, 0);
+                0, 0, 0, 0
+        );
     }
 
     public Matrix4f(Matrix3f m) {
@@ -46,7 +49,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m.get(0, 0), m.get(0, 1), m.get(0, 2), 0,
                 m.get(1, 0), m.get(1, 1), m.get(1, 2), 0,
                 m.get(2, 0), m.get(2, 1), m.get(2, 2), 0,
-                0, 0, 0, 0);
+                0, 0, 0, 0
+        );
     }
 
     public Matrix4f(Matrix4f m) {
@@ -54,7 +58,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m.m00, m.m01, m.m02, m.m03,
                 m.m10, m.m11, m.m12, m.m13,
                 m.m20, m.m21, m.m22, m.m23,
-                m.m30, m.m31, m.m32, m.m33);
+                m.m30, m.m31, m.m32, m.m33
+        );
     }
 
     public Matrix4f(MatrixNf m) {
@@ -204,7 +209,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m00 + m.m00, m01 + m.m01, m02 + m.m02, m03 + m.m03,
                 m10 + m.m10, m11 + m.m11, m12 + m.m12, m13 + m.m13,
                 m20 + m.m20, m21 + m.m21, m22 + m.m22, m23 + m.m23,
-                m30 + m.m30, m31 + m.m31, m32 + m.m32, m33 + m.m33);
+                m30 + m.m30, m31 + m.m31, m32 + m.m32, m33 + m.m33
+        );
     }
 
     public Matrix4f sub(Matrix4f m) {
@@ -212,7 +218,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m00 - m.m00, m01 - m.m01, m02 - m.m02, m03 - m.m03,
                 m10 - m.m10, m11 - m.m11, m12 - m.m12, m13 - m.m13,
                 m20 - m.m20, m21 - m.m21, m22 - m.m22, m23 - m.m23,
-                m30 - m.m30, m31 - m.m31, m32 - m.m32, m33 - m.m33);
+                m30 - m.m30, m31 - m.m31, m32 - m.m32, m33 - m.m33
+        );
     }
 
     public Matrix4f mul(double a) {
@@ -225,7 +232,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m00 * a, m01 * a, m02 * a, m03 * a,
                 m10 * a, m11 * a, m12 * a, m13 * a,
                 m20 * a, m21 * a, m22 * a, m23 * a,
-                m30 * a, m31 * a, m32 * a, m33 * a);
+                m30 * a, m31 * a, m32 * a, m33 * a
+        );
     }
 
     public Matrix4f mul(Matrix4f m) {
@@ -245,7 +253,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m30 * m.m00 + m31 * m.m10 + m32 * m.m20 + m33 * m.m30,
                 m30 * m.m01 + m31 * m.m11 + m32 * m.m21 + m33 * m.m31,
                 m30 * m.m02 + m31 * m.m12 + m32 * m.m22 + m33 * m.m32,
-                m30 * m.m03 + m31 * m.m13 + m32 * m.m23 + m33 * m.m33);
+                m30 * m.m03 + m31 * m.m13 + m32 * m.m23 + m33 * m.m33
+        );
     }
 
     public Matrix4f div(double a) {
@@ -258,7 +267,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m00 / a, m01 / a, m02 / a, m03 / a,
                 m10 / a, m11 / a, m12 / a, m13 / a,
                 m20 / a, m21 / a, m22 / a, m23 / a,
-                m30 / a, m31 / a, m32 / a, m33 / a);
+                m30 / a, m31 / a, m32 / a, m33 / a
+        );
     }
 
     public Matrix4f div(Matrix4f m) {
@@ -275,7 +285,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 Math.pow(m00, pow), Math.pow(m01, pow), Math.pow(m02, pow), Math.pow(m03, pow),
                 Math.pow(m10, pow), Math.pow(m11, pow), Math.pow(m12, pow), Math.pow(m13, pow),
                 Math.pow(m20, pow), Math.pow(m21, pow), Math.pow(m22, pow), Math.pow(m23, pow),
-                Math.pow(m30, pow), Math.pow(m31, pow), Math.pow(m32, pow), Math.pow(m33, pow));
+                Math.pow(m30, pow), Math.pow(m31, pow), Math.pow(m32, pow), Math.pow(m33, pow)
+        );
     }
 
     public Matrix4f translate(Vector3f v) {
@@ -331,7 +342,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m00 * x + m01 * y + m02 * z + m03 * w,
                 m10 * x + m11 * y + m12 * z + m13 * w,
                 m20 * x + m21 * y + m22 * z + m23 * w,
-                m30 * x + m31 * y + m32 * z + m33 * w);
+                m30 * x + m31 * y + m32 * z + m33 * w
+        );
     }
 
     @Override
@@ -340,7 +352,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 GenericMath.floor(m00), GenericMath.floor(m01), GenericMath.floor(m02), GenericMath.floor(m03),
                 GenericMath.floor(m10), GenericMath.floor(m11), GenericMath.floor(m12), GenericMath.floor(m13),
                 GenericMath.floor(m20), GenericMath.floor(m21), GenericMath.floor(m22), GenericMath.floor(m23),
-                GenericMath.floor(m30), GenericMath.floor(m31), GenericMath.floor(m32), GenericMath.floor(m33));
+                GenericMath.floor(m30), GenericMath.floor(m31), GenericMath.floor(m32), GenericMath.floor(m33)
+        );
     }
 
     @Override
@@ -349,7 +362,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 Math.ceil(m00), Math.ceil(m01), Math.ceil(m02), Math.ceil(m03),
                 Math.ceil(m10), Math.ceil(m11), Math.ceil(m12), Math.ceil(m13),
                 Math.ceil(m20), Math.ceil(m21), Math.ceil(m22), Math.ceil(m23),
-                Math.ceil(m30), Math.ceil(m31), Math.ceil(m32), Math.ceil(m33));
+                Math.ceil(m30), Math.ceil(m31), Math.ceil(m32), Math.ceil(m33)
+        );
     }
 
     @Override
@@ -358,7 +372,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 Math.round(m00), Math.round(m01), Math.round(m02), Math.round(m03),
                 Math.round(m10), Math.round(m11), Math.round(m12), Math.round(m13),
                 Math.round(m20), Math.round(m21), Math.round(m22), Math.round(m23),
-                Math.round(m30), Math.round(m31), Math.round(m32), Math.round(m33));
+                Math.round(m30), Math.round(m31), Math.round(m32), Math.round(m33)
+        );
     }
 
     @Override
@@ -367,7 +382,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 Math.abs(m00), Math.abs(m01), Math.abs(m02), Math.abs(m03),
                 Math.abs(m10), Math.abs(m11), Math.abs(m12), Math.abs(m13),
                 Math.abs(m20), Math.abs(m21), Math.abs(m22), Math.abs(m23),
-                Math.abs(m30), Math.abs(m31), Math.abs(m32), Math.abs(m33));
+                Math.abs(m30), Math.abs(m31), Math.abs(m32), Math.abs(m33)
+        );
     }
 
     @Override
@@ -376,7 +392,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 -m00, -m01, -m02, -m03,
                 -m10, -m11, -m12, -m13,
                 -m20, -m21, -m22, -m23,
-                -m30, -m31, -m32, -m33);
+                -m30, -m31, -m32, -m33
+        );
     }
 
     @Override
@@ -385,7 +402,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 m00, m10, m20, m30,
                 m01, m11, m21, m31,
                 m02, m12, m22, m32,
-                m03, m13, m23, m33);
+                m03, m13, m23, m33
+        );
     }
 
     @Override
@@ -395,10 +413,11 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
 
     @Override
     public float determinant() {
-        return m00 * (m11 * m22 * m33 + m21 * m32 * m13 + m31 * m12 * m23 - m31 * m22 * m13 - m11 * m32 * m23 - m21 * m12 * m33)
-                - m10 * (m01 * m22 * m33 + m21 * m32 * m03 + m31 * m02 * m23 - m31 * m22 * m03 - m01 * m32 * m23 - m21 * m02 * m33)
-                + m20 * (m01 * m12 * m33 + m11 * m32 * m03 + m31 * m02 * m13 - m31 * m12 * m03 - m01 * m32 * m13 - m11 * m02 * m33)
-                - m30 * (m01 * m12 * m23 + m11 * m22 * m03 + m21 * m02 * m13 - m21 * m12 * m03 - m01 * m22 * m13 - m11 * m02 * m23);
+        return m00 * det3(m11, m12, m13, m21, m22, m23, m31, m32, m33) -
+                m01 * det3(m10, m12, m13, m20, m22, m23, m30, m32, m33) +
+                m02 * det3(m10, m11, m13, m20, m21, m23, m30, m31, m33) -
+                m03 * det3(m10, m11, m12, m20, m21, m22, m30, m31, m32);
+
     }
 
     @Override
@@ -415,7 +434,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 det3(m10, m20, m30, m11, m21, m31, m13, m23, m33) / det, -det3(m00, m20, m30, m01, m21, m31, m03, m23, m33) / det,
                 det3(m00, m10, m30, m01, m11, m31, m03, m13, m33) / det, -det3(m00, m10, m20, m01, m11, m21, m03, m13, m23) / det,
                 -det3(m10, m20, m30, m11, m21, m31, m12, m22, m32) / det, det3(m00, m20, m30, m01, m21, m31, m02, m22, m32) / det,
-                -det3(m00, m10, m30, m01, m11, m31, m02, m12, m32) / det, det3(m00, m10, m20, m01, m11, m21, m02, m12, m22) / det);
+                -det3(m00, m10, m30, m01, m11, m31, m02, m12, m32) / det, det3(m00, m10, m20, m01, m11, m21, m02, m12, m22) / det
+        );
     }
 
     public Matrix2f toMatrix2() {
@@ -658,7 +678,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 s.getX(), s.getY(), s.getZ(), 0,
                 u.getX(), u.getY(), u.getZ(), 0,
                 -f.getX(), -f.getY(), -f.getZ(), 0,
-                0, 0, 0, 1);
+                0, 0, 0, 1
+        );
         return mat.translate(eye.negate());
     }
 
@@ -690,7 +711,8 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 scale / aspect, 0, 0, 0,
                 0, scale, 0, 0,
                 0, 0, (far + near) / (near - far), 2 * far * near / (near - far),
-                0, 0, -1, 0);
+                0, 0, -1, 0
+        );
     }
 
     /**
@@ -726,12 +748,15 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
                 2 / (right - left), 0, 0, -(right + left) / (right - left),
                 0, 2 / (top - bottom), 0, -(top + bottom) / (top - bottom),
                 0, 0, -2 / (far - near), -(far + near) / (far - near),
-                0, 0, 0, 1);
+                0, 0, 0, 1
+        );
     }
 
     private static float det3(float m00, float m01, float m02,
             float m10, float m11, float m12,
             float m20, float m21, float m22) {
-        return m00 * (m11 * m22 - m12 * m21) - m01 * (m10 * m22 - m12 * m20) + m02 * (m10 * m21 - m11 * m20);
+        return m00 * (m11 * m22 - m12 * m21) -
+                m01 * (m10 * m22 - m12 * m20) +
+                m02 * (m10 * m21 - m11 * m20);
     }
 }

@@ -207,15 +207,16 @@ public class Matrix2d implements Matrixd, Serializable, Cloneable {
     @Override
     public Matrix2d abs() {
         return new Matrix2d(
-                Math.abs(m00), Math.abs(m01),
-                Math.abs(m10), Math.abs(m11));
+                GenericMath.abs(m00), GenericMath.abs(m01),
+                GenericMath.abs(m10), GenericMath.abs(m11));
     }
 
     @Override
     public Matrix2d negate() {
         return new Matrix2d(
                 -m00, -m01,
-                -m10, -m11);
+                -m10, -m11
+        );
     }
 
     @Override
@@ -238,7 +239,7 @@ public class Matrix2d implements Matrixd, Serializable, Cloneable {
     @Override
     public Matrix2d invert() {
         final double det = determinant();
-        if (Math.abs(det) < GenericMath.DBL_EPSILON) {
+        if (GenericMath.abs(det) < GenericMath.DBL_EPSILON) {
             throw new ArithmeticException("Cannot inverse a matrix with a zero determinant");
         }
         return new Matrix2d(

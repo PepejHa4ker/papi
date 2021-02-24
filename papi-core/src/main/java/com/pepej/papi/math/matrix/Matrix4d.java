@@ -76,7 +76,8 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
                 m31 = m.get(3, 1);
                 m32 = m.get(3, 2);
                 m33 = m.get(3, 3);
-            } else {
+            }
+            else {
                 m03 = 0;
                 m13 = 0;
                 m23 = 0;
@@ -85,7 +86,8 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
                 m32 = 0;
                 m33 = 0;
             }
-        } else {
+        }
+        else {
             m02 = 0;
             m12 = 0;
             m20 = 0;
@@ -105,19 +107,21 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
             float m00, float m01, float m02, float m03,
             float m10, float m11, float m12, float m13,
             float m20, float m21, float m22, float m23,
-            float m30, float m31, float m32, float m33) {
+            float m30, float m31, float m32, float m33
+    ) {
         this(
-                (double) m00, (double) m01, (double) m02, (double) m03,
-                (double) m10, (double) m11, (double) m12, (double) m13,
-                (double) m20, (double) m21, (double) m22, (double) m23,
-                (double) m30, (double) m31, (double) m32, (double) m33);
+                m00, m01, m02, m03,
+                m10, m11, m12, m13,
+                m20, m21, m22, m23,
+                m30, m31, m32, (double) m33);
     }
 
     public Matrix4d(
             double m00, double m01, double m02, double m03,
             double m10, double m11, double m12, double m13,
             double m20, double m21, double m22, double m23,
-            double m30, double m31, double m32, double m33) {
+            double m30, double m31, double m32, double m33
+    ) {
         this.m00 = m00;
         this.m01 = m01;
         this.m02 = m02;
@@ -139,54 +143,54 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
     @Override
     public double get(int row, int col) {
         switch (row) {
-        case 0:
-            switch (col) {
             case 0:
-                return m00;
+                switch (col) {
+                    case 0:
+                        return m00;
+                    case 1:
+                        return m01;
+                    case 2:
+                        return m02;
+                    case 3:
+                        return m03;
+                }
             case 1:
-                return m01;
+                switch (col) {
+                    case 0:
+                        return m10;
+                    case 1:
+                        return m11;
+                    case 2:
+                        return m12;
+                    case 3:
+                        return m13;
+                }
             case 2:
-                return m02;
+                switch (col) {
+                    case 0:
+                        return m20;
+                    case 1:
+                        return m21;
+                    case 2:
+                        return m22;
+                    case 3:
+                        return m23;
+                }
             case 3:
-                return m03;
-            }
-        case 1:
-            switch (col) {
-            case 0:
-                return m10;
-            case 1:
-                return m11;
-            case 2:
-                return m12;
-            case 3:
-                return m13;
-            }
-        case 2:
-            switch (col) {
-            case 0:
-                return m20;
-            case 1:
-                return m21;
-            case 2:
-                return m22;
-            case 3:
-                return m23;
-            }
-        case 3:
-            switch (col) {
-            case 0:
-                return m30;
-            case 1:
-                return m31;
-            case 2:
-                return m32;
-            case 3:
-                return m33;
-            }
+                switch (col) {
+                    case 0:
+                        return m30;
+                    case 1:
+                        return m31;
+                    case 2:
+                        return m32;
+                    case 3:
+                        return m33;
+                }
         }
         throw new IllegalArgumentException(
                 (row < 0 || row > 2 ? "row must be greater than zero and smaller than 3. " : "") +
-                (col < 0 || col > 2 ? "col must be greater than zero and smaller than 3." : ""));
+                        (col < 0 || col > 2 ? "col must be greater than zero and smaller than 3." : ""));
     }
 
     @Override
@@ -385,10 +389,11 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
 
     @Override
     public double determinant() {
-        return m00 * (m11 * m22 * m33 + m21 * m32 * m13 + m31 * m12 * m23 - m31 * m22 * m13 - m11 * m32 * m23 - m21 * m12 * m33)
-                - m10 * (m01 * m22 * m33 + m21 * m32 * m03 + m31 * m02 * m23 - m31 * m22 * m03 - m01 * m32 * m23 - m21 * m02 * m33)
-                + m20 * (m01 * m12 * m33 + m11 * m32 * m03 + m31 * m02 * m13 - m31 * m12 * m03 - m01 * m32 * m13 - m11 * m02 * m33)
-                - m30 * (m01 * m12 * m23 + m11 * m22 * m03 + m21 * m02 * m13 - m21 * m12 * m03 - m01 * m22 * m13 - m11 * m02 * m23);
+        return m00 * det3(m11, m12, m13, m21, m22, m23, m31, m32, m33) -
+                m01 * det3(m10, m12, m13, m20, m22, m23, m30, m32, m33) +
+                m02 * det3(m10, m11, m13, m20, m21, m23, m30, m31, m33) -
+                m03 * det3(m10, m11, m12, m20, m21, m22, m30, m31, m32);
+
     }
 
     @Override
@@ -433,7 +438,8 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
                     m02, m12, m22, m32,
                     m03, m13, m23, m33
             };
-        } else {
+        }
+        else {
             return new double[]{
                     m00, m01, m02, m03,
                     m10, m11, m12, m13,
@@ -625,8 +631,8 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
      * Creates a "look at" matrix for the given eye point.
      *
      * @param eye The position of the camera
-     * @param at The point that the camera is looking at
-     * @param up The "up" vector
+     * @param at  The point that the camera is looking at
+     * @param up  The "up" vector
      * @return A rotational transform that corresponds to a camera looking at the given point
      */
     public static Matrix4d createLookAt(Vector3d eye, Vector3d at, Vector3d up) {
@@ -645,10 +651,10 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
     /**
      * Creates a perspective projection matrix with the given (x) FOV, aspect, near and far planes
      *
-     * @param fov The field of view in the x direction
+     * @param fov    The field of view in the x direction
      * @param aspect The aspect ratio, usually width/height
-     * @param near The near plane, cannot be 0
-     * @param far the far plane, far cannot equal near
+     * @param near   The near plane, cannot be 0
+     * @param far    the far plane, far cannot equal near
      * @return A perspective projection matrix built from the given values
      */
     public static Matrix4d createPerspective(double fov, double aspect, double near, double far) {
@@ -663,12 +669,12 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
     /**
      * Creates an orthographic viewing frustum built from the provided values
      *
-     * @param right the right most plane of the viewing frustum
-     * @param left the left most plane of the viewing frustum
-     * @param top the top plane of the viewing frustum
+     * @param right  the right most plane of the viewing frustum
+     * @param left   the left most plane of the viewing frustum
+     * @param top    the top plane of the viewing frustum
      * @param bottom the bottom plane of the viewing frustum
-     * @param near the near plane of the viewing frustum
-     * @param far the far plane of the viewing frustum
+     * @param near   the near plane of the viewing frustum
+     * @param far    the far plane of the viewing frustum
      * @return A viewing frustum built from the provided values
      */
     public static Matrix4d createOrthographic(double right, double left, double top, double bottom,
@@ -680,9 +686,11 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
                 0, 0, 0, 1);
     }
 
-    private static double det3(double m00, double m01, double m02,
+    private static double det3(
+            double m00, double m01, double m02,
             double m10, double m11, double m12,
-            double m20, double m21, double m22) {
+            double m20, double m21, double m22
+    ) {
         return m00 * (m11 * m22 - m12 * m21) - m01 * (m10 * m22 - m12 * m20) + m02 * (m10 * m21 - m11 * m20);
     }
 }
