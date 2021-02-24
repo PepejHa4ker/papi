@@ -137,6 +137,10 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         return listener;
     }
 
+    public final <T extends CommandExecutor> T registerCommand(@NonNull T command, @NonNull String... aliases) {
+        return registerCommand(command, null, null, null, aliases);
+    }
+
     @NonNull
     @Override
     public final <T extends CommandExecutor> T registerCommand(@NonNull T command, String permission, String permissionMessage, String description, @NonNull String... aliases) {

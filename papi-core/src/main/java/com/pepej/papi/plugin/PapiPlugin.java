@@ -53,9 +53,7 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @return the command executor
      */
     @NonNull
-    default <T extends CommandExecutor> T registerCommand(@NonNull T command, @NonNull String... aliases) {
-        return registerCommand(command, null, null, null, aliases);
-    }
+    <T extends CommandExecutor> T registerCommand(@NonNull T command, @NonNull String... aliases);
 
     /**
      * Registers a CommandExecutor with the server
