@@ -17,29 +17,29 @@ final class MetadataKeyImpl<T> implements MetadataKey<T> {
 
     @Override
     public String getId() {
-        return this.id;
+        return id;
     }
 
     @NonNull
     @Override
     public TypeToken<T> getType() {
-        return this.type;
+        return type;
     }
 
     @Override
     public T cast(Object object) throws ClassCastException {
         Objects.requireNonNull(object, "object");
         //noinspection unchecked
-        return (T) this.type.getRawType().cast(object);
+        return (T) type.getRawType().cast(object);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MetadataKeyImpl && ((MetadataKeyImpl) obj).getId().equals(this.id);
+        return obj instanceof MetadataKeyImpl && ((MetadataKeyImpl) obj).getId().equals(id);
     }
 
     @Override
     public int hashCode() {
-        return this.id.hashCode();
+        return id.hashCode();
     }
 }
