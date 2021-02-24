@@ -26,6 +26,21 @@ public final class StringUtils {
         return !isEmpty(s);
     }
 
+    public static String plural(int count, String single, String pluralA, String pluralB) {
+
+        int h = count % 100;
+        int t = count % 10;
+        if (h > 10 && h < 20) {
+            return pluralB;
+        }
+        if (t > 1 && t < 5) {
+            return pluralA;
+        }
+        if (t == 1) {
+            return single;
+        }
+        return pluralB;
+    }
     public static String getRandomString() {
         String uuid = UUID.randomUUID().toString();
         return uuid.replace("-", "");
