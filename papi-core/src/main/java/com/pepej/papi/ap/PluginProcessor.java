@@ -54,8 +54,7 @@ public class PluginProcessor extends AbstractProcessor {
         String version = plugin.version();
         if (!version.isEmpty()) {
             data.put("version", version);
-        }
-        else {
+        } else {
             data.put("version", new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(new Date(System.currentTimeMillis())));
         }
 

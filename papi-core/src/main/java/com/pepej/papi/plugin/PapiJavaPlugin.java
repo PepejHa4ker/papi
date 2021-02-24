@@ -60,15 +60,6 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         onPluginLoad();
     }
 
-    protected void onPluginEnable() {
-    }
-
-    protected void onPluginDisable() {
-    }
-
-    protected void onPluginLoad() {
-    }
-
     @Override
     public final void onEnable() {
         if (isLoaderPlugin) {
@@ -89,24 +80,24 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
 
 
         Events.subscribe(PlayerJoinEvent.class)
-              .filter(e -> !e.getPlayer().hasPlayedBefore())
+              .filterNot(e -> e.getPlayer().hasPlayedBefore())
               .handler(event -> Events.callAsync(AsyncPlayerFirstJoinEvent.of(event.getPlayer(), System.currentTimeMillis())))
-              .bindWith(this.terminableRegistry);
+              .bindWith(terminableRegistry);
 
         Arrays.stream(ServerUpdateEvent.Type.values()).forEach(value -> Schedulers.builder()
                                                                                   .async()
                                                                                   .every(value.getDelayTicks())
                                                                                   .run(() -> Events.call(ServerUpdateEvent.of(value)))
-                                                                                  .bindWith(this.terminableRegistry));
+                                                                                  .bindWith(terminableRegistry));
         Schedulers.builder()
                   .async()
                   .after(10, TimeUnit.SECONDS)
                   .every(30, TimeUnit.SECONDS)
-                  .run(this.terminableRegistry::cleanup)
-                  .bindWith(this.terminableRegistry);
+                  .run(terminableRegistry::cleanup)
+                  .bindWith(terminableRegistry);
 
         // setup services
-        if (this.isLoaderPlugin) {
+        if (isLoaderPlugin) {
             PapiServices.setup(this);
         }
     }
@@ -118,9 +109,9 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         onPluginDisable();
 
         // terminate the registry
-        this.terminableRegistry.closeAndReportException();
+        terminableRegistry.closeAndReportException();
 
-        if (this.isLoaderPlugin) {
+        if (isLoaderPlugin) {
             // shutdown the scheduler
             PapiExecutors.shutdown();
         }
@@ -229,7 +220,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         Objects.requireNonNull(file, "file");
         Objects.requireNonNull(configObject, "configObject");
         File f = getRelativeFile(file);
-        ConfigFactory.yaml().load(f, configObject);
+        ConfigFactory.gson().load(f, configObject);
         return configObject;
     }
 

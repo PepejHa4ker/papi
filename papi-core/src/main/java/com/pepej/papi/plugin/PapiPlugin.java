@@ -17,6 +17,22 @@ import java.util.Optional;
 public interface PapiPlugin extends Plugin, TerminableConsumer {
 
     /**
+     * Method that calls when plugin is loading
+     */
+    default void onPluginLoad() {}
+
+    /**
+     * Method that calls when plugin is enabling
+     */
+    default void onPluginEnable() {}
+
+    /**
+     * Method that calls when plugin is disabling
+     */
+    default void onPluginDisable() {}
+
+
+    /**
      * Register a listener with the server.
      *
      * <p>{@link Events} should be used instead of this method in most cases.</p>
