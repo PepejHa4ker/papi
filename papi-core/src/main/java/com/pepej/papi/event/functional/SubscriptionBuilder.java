@@ -65,4 +65,16 @@ public interface SubscriptionBuilder<T> {
     @NonNull
     SubscriptionBuilder<T> filter(@NonNull Predicate<T> predicate);
 
+    /**
+     * Adds a filter to the handler.
+     *
+     * <p>An event will only be handled if it not passes all filters. Filters are evaluated in the order they are
+     * registered.
+     *
+     * @param predicate the filter
+     * @return the builder instance
+     */
+    @NonNull
+    SubscriptionBuilder<T> filterNot(@NonNull Predicate<T> predicate);
+
 }

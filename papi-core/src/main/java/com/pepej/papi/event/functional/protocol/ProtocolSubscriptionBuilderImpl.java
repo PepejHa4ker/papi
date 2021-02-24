@@ -65,6 +65,14 @@ class ProtocolSubscriptionBuilderImpl implements ProtocolSubscriptionBuilder {
 
     @NonNull
     @Override
+    public ProtocolSubscriptionBuilder filterNot(@NonNull Predicate<PacketEvent> predicate) {
+        Objects.requireNonNull(predicate, "predicate");
+        this.filters.add(predicate.negate());
+        return this;
+    }
+
+    @NonNull
+    @Override
     public ProtocolSubscriptionBuilder exceptionConsumer(@NonNull BiConsumer<? super PacketEvent, Throwable> exceptionConsumer) {
         Objects.requireNonNull(exceptionConsumer, "exceptionConsumer");
         this.exceptionConsumer = exceptionConsumer;

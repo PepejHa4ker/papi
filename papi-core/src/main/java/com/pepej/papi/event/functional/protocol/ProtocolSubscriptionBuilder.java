@@ -37,8 +37,8 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
     /**
      * Makes a HandlerBuilder for the given packets
      *
-     * @param priority   the priority to listen at
-     * @param packets the packets to handle
+     * @param priority the priority to listen at
+     * @param packets  the packets to handle
      * @return a {@link ProtocolSubscriptionBuilder} to construct the event handler
      */
     @NonNull
@@ -72,14 +72,37 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
         return expireIf((handler, event) -> handler.getCallCounter() >= maxCalls, ExpiryTestStage.PRE, ExpiryTestStage.POST_HANDLE);
     }
 
+    /**
+     * Adds a filter to the handler.
+     *
+     * <p>An event will only be handled if it passes all filters. Filters are evaluated in the order they are
+     * registered.
+     *
+     * @param predicate the filter
+     * @return the builder instance
+     */
     @NonNull
     @Override
     ProtocolSubscriptionBuilder filter(@NonNull Predicate<PacketEvent> predicate);
 
     /**
+     * Adds a filter to the handler.
+     *
+     * <p>An event will only be handled if it not passes all filters. Filters are evaluated in the order they are
+     * registered.
+     *
+     * @param predicate the filter
+     * @return the builder instance
+     */
+    @NonNull
+    @Override
+    ProtocolSubscriptionBuilder filterNot(@NonNull Predicate<PacketEvent> predicate);
+
+
+    /**
      * Add a expiry predicate.
      *
-     * @param predicate the expiry test
+     * @param predicate  the expiry test
      * @param testPoints when to test the expiry predicate
      * @return ths builder instance
      */

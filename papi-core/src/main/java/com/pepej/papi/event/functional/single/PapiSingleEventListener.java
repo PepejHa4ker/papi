@@ -2,10 +2,7 @@ package com.pepej.papi.event.functional.single;
 
 import com.pepej.papi.Papi;
 import com.pepej.papi.event.SingleSubscription;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -27,6 +24,7 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
 
     private final BiConsumer<? super T, Throwable> exceptionConsumer;
     private final boolean handleSubclasses;
+    private final boolean ignoreCancelled;
 
     private final Predicate<T>[] filters;
     private final BiPredicate<SingleSubscription<T>, T>[] preExpiryTests;
@@ -43,7 +41,7 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
         this.priority = builder.priority;
         this.exceptionConsumer = builder.exceptionConsumer;
         this.handleSubclasses = builder.handleSubclasses;
-
+        this.ignoreCancelled = builder.ignoreCancelled;
         this.filters = builder.filters.toArray(new Predicate[0]);
         this.preExpiryTests = builder.preExpiryTests.toArray(new BiPredicate[0]);
         this.midExpiryTests = builder.midExpiryTests.toArray(new BiPredicate[0]);
@@ -52,36 +50,56 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
     }
 
     void register(Plugin plugin) {
-        Papi.plugins().registerEvent(this.eventClass, this, this.priority, this, plugin, false);
+        Papi.plugins().registerEvent(eventClass, this, priority, this, plugin, false);
     }
 
     @Override
     public void execute(Listener listener, Event event) {
         // check we actually want this event
-        if (this.handleSubclasses) {
-            if (!this.eventClass.isInstance(event)) {
+        if (handleSubclasses) {
+            if (!eventClass.isInstance(event)) {
                 return;
             }
-        } else {
-            if (event.getClass() != this.eventClass) {
+        }
+        else {
+            if (event.getClass() != eventClass) {
                 return;
             }
         }
 
         // this handler is disabled, so unregister from the event.
-        if (!this.active.get()) {
+        if (!active.get()) {
             event.getHandlers().unregister(listener);
             return;
         }
 
         // obtain the event instance
-        T eventInstance = this.eventClass.cast(event);
+        T eventInstance = eventClass.cast(event);
+
+        if (eventInstance instanceof Cancellable) {
+            Cancellable cancellable = (Cancellable) eventInstance;
+            if (cancellable.isCancelled()) {
+                if (!ignoreCancelled) {
+                    return;
+                }
+            }
+        }
+
+
+        if (eventInstance instanceof com.pepej.papi.event.bus.api.Cancellable) {
+            com.pepej.papi.event.bus.api.Cancellable c = (com.pepej.papi.event.bus.api.Cancellable) eventInstance;
+            if (c.cancelled()) {
+                if (!ignoreCancelled) {
+                    return;
+                }
+            }
+        }
 
         // check pre-expiry tests
-        for (BiPredicate<SingleSubscription<T>, T> test : this.preExpiryTests) {
+        for (BiPredicate<SingleSubscription<T>, T> test : preExpiryTests) {
             if (test.test(this, eventInstance)) {
                 event.getHandlers().unregister(listener);
-                this.active.set(false);
+                active.set(false);
                 return;
             }
         }
@@ -89,37 +107,37 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
         // begin "handling" of the event
         try {
             // check the filters
-            for (Predicate<T> filter : this.filters) {
+            for (Predicate<T> filter : filters) {
                 if (!filter.test(eventInstance)) {
                     return;
                 }
             }
 
             // check mid-expiry tests
-            for (BiPredicate<SingleSubscription<T>, T> test : this.midExpiryTests) {
+            for (BiPredicate<SingleSubscription<T>, T> test : midExpiryTests) {
                 if (test.test(this, eventInstance)) {
                     event.getHandlers().unregister(listener);
-                    this.active.set(false);
+                    active.set(false);
                     return;
                 }
             }
 
             // call the handler
-            for (BiConsumer<SingleSubscription<T>, ? super T> handler : this.handlers) {
+            for (BiConsumer<SingleSubscription<T>, ? super T> handler : handlers) {
                 handler.accept(this, eventInstance);
             }
 
             // increment call counter
-            this.callCount.incrementAndGet();
+            callCount.incrementAndGet();
         } catch (Throwable t) {
-            this.exceptionConsumer.accept(eventInstance, t);
+            exceptionConsumer.accept(eventInstance, t);
         }
 
         // check post-expiry tests
-        for (BiPredicate<SingleSubscription<T>, T> test : this.postExpiryTests) {
+        for (BiPredicate<SingleSubscription<T>, T> test : postExpiryTests) {
             if (test.test(this, eventInstance)) {
                 event.getHandlers().unregister(listener);
-                this.active.set(false);
+                active.set(false);
                 return;
             }
         }
@@ -133,42 +151,42 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
 
     @Override
     public boolean isActive() {
-        return this.active.get();
+        return active.get();
     }
 
     @Override
     public boolean isClosed() {
-        return !this.active.get();
+        return !active.get();
     }
 
     @Override
     public long getCallCounter() {
-        return this.callCount.get();
+        return callCount.get();
     }
 
     @Override
     public boolean unregister() {
         // already unregistered
-        if (!this.active.getAndSet(false)) {
+        if (!active.getAndSet(false)) {
             return false;
         }
 
         // also remove the handler directly, just in case the event has a really low throughput.
         // (the event would also be unregistered next time it's called - but this obviously assumes
         // the event will be called again soon)
-        unregisterListener(this.eventClass, this);
+        unregisterListener(eventClass, this);
 
         return true;
     }
- 
+
     @Override
     public Collection<Object> getFunctions() {
         List<Object> functions = new ArrayList<>();
-        Collections.addAll(functions, this.filters);
-        Collections.addAll(functions, this.preExpiryTests);
-        Collections.addAll(functions, this.midExpiryTests);
-        Collections.addAll(functions, this.postExpiryTests);
-        Collections.addAll(functions, this.handlers);
+        Collections.addAll(functions, filters);
+        Collections.addAll(functions, preExpiryTests);
+        Collections.addAll(functions, midExpiryTests);
+        Collections.addAll(functions, postExpiryTests);
+        Collections.addAll(functions, handlers);
         return functions;
     }
 
@@ -178,8 +196,7 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
             Method getHandlerListMethod = eventClass.getMethod("getHandlerList");
             HandlerList handlerList = (HandlerList) getHandlerListMethod.invoke(null);
             handlerList.unregister(listener);
-        } catch (Throwable t) {
-            // ignored
+        } catch (Throwable ignored) {
         }
     }
 }

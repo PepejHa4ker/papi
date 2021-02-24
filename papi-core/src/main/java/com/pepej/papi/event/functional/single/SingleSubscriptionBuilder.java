@@ -76,9 +76,38 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
         return expireIf((handler, event) -> handler.getCallCounter() >= maxCalls, ExpiryTestStage.PRE, ExpiryTestStage.POST_HANDLE);
     }
 
+    /**
+     * Adds a filter to the handler.
+     *
+     * <p>An event will only be handled if it passes all filters. Filters are evaluated in the order they are
+     * registered.
+     *
+     * @param predicate the filter
+     * @return the builder instance
+     */
     @NonNull
     @Override
     SingleSubscriptionBuilder<T> filter(@NonNull Predicate<T> predicate);
+
+    /**
+     * Adds a filter to the handler.
+     *
+     * <p>An event will only be handled if it not passes all filters. Filters are evaluated in the order they are
+     * registered.
+     *
+     * @param predicate the filter
+     * @return the builder instance
+     */
+    @NonNull
+    @Override
+    SingleSubscriptionBuilder<T> filterNot(@NonNull Predicate<T> predicate);
+
+    /**
+     * @param state the state
+     * @return the builder instance
+     */
+    @NonNull
+    SingleSubscriptionBuilder<T> ignoreCancelled(boolean state);
 
     /**
      * Add a expiry predicate.

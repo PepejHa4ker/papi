@@ -111,14 +111,38 @@ public interface MergedSubscriptionBuilder<T> extends SubscriptionBuilder<T> {
         return expireIf((handler, event) -> handler.getCallCounter() >= maxCalls, ExpiryTestStage.PRE, ExpiryTestStage.POST_HANDLE);
     }
 
+    /**
+     * Adds a filter to the handler.
+     *
+     * <p>An event will only be handled if it passes all filters. Filters are evaluated in the order they are
+     * registered.
+     *
+     * @param predicate the filter
+     * @return the builder instance
+     */
     @NonNull
     @Override
     MergedSubscriptionBuilder<T> filter(@NonNull Predicate<T> predicate);
 
+
+    /**
+     * Adds a filter to the handler.
+     *
+     * <p>An event will only be handled if it not passes all filters. Filters are evaluated in the order they are
+     * registered.
+     *
+     * @param predicate the filter
+     * @return the builder instance
+     */
+    @NonNull
+    @Override
+    MergedSubscriptionBuilder<T> filterNot(@NonNull Predicate<T> predicate);
+
+
     /**
      * Add a expiry predicate.
      *
-     * @param predicate the expiry test
+     * @param predicate  the expiry test
      * @param testPoints when to test the expiry predicate
      * @return ths builder instance
      */
@@ -133,8 +157,7 @@ public interface MergedSubscriptionBuilder<T> extends SubscriptionBuilder<T> {
      * @param <E>        the event class
      * @return the builder instance
      */
-    @NonNull
-    <E extends Event> MergedSubscriptionBuilder<T> bindEvent(@NonNull Class<E> eventClass, @NonNull Function<E, T> function);
+    @NonNull <E extends Event> MergedSubscriptionBuilder<T> bindEvent(@NonNull Class<E> eventClass, @NonNull Function<E, T> function);
 
     /**
      * Binds this handler to an event
@@ -145,8 +168,7 @@ public interface MergedSubscriptionBuilder<T> extends SubscriptionBuilder<T> {
      * @param <E>        the event class
      * @return the builder instance
      */
-    @NonNull
-    <E extends Event> MergedSubscriptionBuilder<T> bindEvent(@NonNull Class<E> eventClass, @NonNull EventPriority priority, @NonNull Function<E, T> function);
+    @NonNull <E extends Event> MergedSubscriptionBuilder<T> bindEvent(@NonNull Class<E> eventClass, @NonNull EventPriority priority, @NonNull Function<E, T> function);
 
     /**
      * Sets the exception consumer for the handler.

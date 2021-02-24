@@ -78,6 +78,14 @@ class MergedSubscriptionBuilderImpl<T> implements MergedSubscriptionBuilder<T> {
 
     @NonNull
     @Override
+    public MergedSubscriptionBuilder<T> filterNot(@NonNull Predicate<T> predicate) {
+        Objects.requireNonNull(predicate, "predicate");
+        this.filters.add(predicate.negate());
+        return this;
+    }
+
+    @NonNull
+    @Override
     public MergedSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<Event, Throwable> exceptionConsumer) {
         Objects.requireNonNull(exceptionConsumer, "exceptionConsumer");
         this.exceptionConsumer = exceptionConsumer;
