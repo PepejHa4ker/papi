@@ -225,7 +225,7 @@ public @interface ShadowingStrategy {
         }
 
         @Override
-        public @Nullable Object unwrap(@Nullable Object wrapped, @NonNull Class<?> expectedType, @NonNull ShadowFactory shadowFactory) throws Exception {
+        public @Nullable Object unwrap(@Nullable Object wrapped, @NonNull Class<?> expectedType, @NonNull ShadowFactory shadowFactory) {
             if (wrapped == null) {
                 return null;
             }

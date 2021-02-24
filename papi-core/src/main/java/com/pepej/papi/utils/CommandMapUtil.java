@@ -1,14 +1,16 @@
 package com.pepej.papi.utils;
 
 import com.google.common.base.Preconditions;
+import com.pepej.papi.shadow.ClassTarget;
+import com.pepej.papi.shadow.Field;
+import com.pepej.papi.shadow.Shadow;
+import com.pepej.papi.shadow.ShadowFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -17,54 +19,23 @@ import java.util.Map;
  */
 public final class CommandMapUtil {
 
-    private static final Constructor<PluginCommand> COMMAND_CONSTRUCTOR;
-    private static final Field COMMAND_MAP_FIELD;
-    private static final Field KNOWN_COMMANDS_FIELD;
+    @ClassTarget(PluginCommand.class)
+    private interface PluginCommandShadow extends Shadow {}
 
-    static {
-        Constructor<PluginCommand> commandConstructor;
-        try {
-            commandConstructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
-            commandConstructor.setAccessible(true);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-        COMMAND_CONSTRUCTOR = commandConstructor;
+    @ClassTarget(SimplePluginManager.class)
+    private interface SimplePluginCommandShadow extends Shadow {
 
-        Field commandMapField;
-        try {
-            commandMapField = SimplePluginManager.class.getDeclaredField("commandMap");
-            commandMapField.setAccessible(true);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-        COMMAND_MAP_FIELD = commandMapField;
+        @Field
+        CommandMap getCommandMap();
 
-        Field knownCommandsField;
-        try {
-            knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
-            knownCommandsField.setAccessible(true);
-        } catch (NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-        KNOWN_COMMANDS_FIELD = knownCommandsField;
     }
 
-    private static CommandMap getCommandMap() {
-        try {
-            return (CommandMap) COMMAND_MAP_FIELD.get(Bukkit.getServer().getPluginManager());
-        } catch (Exception e) {
-            throw new RuntimeException("Could not get CommandMap", e);
-        }
-    }
+    @ClassTarget(SimpleCommandMap.class)
+    private interface SimpleCommandMapShadow extends Shadow {
 
-    private static Map<String, Command> getKnownCommandMap() {
-        try {
-            //noinspection unchecked
-            return (Map<String, Command>) KNOWN_COMMANDS_FIELD.get(getCommandMap());
-        } catch (Exception e) {
-            throw new RuntimeException("Could not get known commands map", e);
-        }
+        @Field
+        Map<String, Command> getKnownCommands();
+
     }
 
     /**
@@ -98,11 +69,14 @@ public final class CommandMapUtil {
         Preconditions.checkArgument(aliases.length != 0, "No aliases");
         for (String alias : aliases) {
             try {
-                PluginCommand cmd = COMMAND_CONSTRUCTOR.newInstance(alias, plugin);
+                final PluginCommand cmd = (PluginCommand) ShadowFactory.global().constructShadow(PluginCommandShadow.class, alias, plugin).getShadowTarget();
 
-                getCommandMap().register(plugin.getDescription().getName(), cmd);
-                getKnownCommandMap().put(plugin.getDescription().getName().toLowerCase() + ":" + alias.toLowerCase(), cmd);
-                getKnownCommandMap().put(alias.toLowerCase(), cmd);
+                assert cmd != null;
+                SimplePluginCommandShadow simplePluginCommandShadow = ShadowFactory.global().shadow(SimplePluginCommandShadow.class, Bukkit.getPluginManager());
+                simplePluginCommandShadow.getCommandMap().register(plugin.getDescription().getName(), cmd);
+                SimpleCommandMapShadow simpleCommandMapShadow = ShadowFactory.global().shadow(SimpleCommandMapShadow.class, simplePluginCommandShadow.getCommandMap());
+                simpleCommandMapShadow.getKnownCommands().put(plugin.getDescription().getName().toLowerCase() + ":" + alias.toLowerCase(), cmd);
+                simpleCommandMapShadow.getKnownCommands().put(alias.toLowerCase(), cmd);
                 cmd.setLabel(alias.toLowerCase());
                 if (permission != null) {
                     cmd.setPermission(permission);
@@ -134,10 +108,11 @@ public final class CommandMapUtil {
      */
     @NonNull
     public static <T extends CommandExecutor> T unregisterCommand(@NonNull T command) {
-        CommandMap map = getCommandMap();
+        SimplePluginCommandShadow simplePluginCommandShadow = ShadowFactory.global().shadow(SimplePluginCommandShadow.class, Bukkit.getPluginManager());
+        SimpleCommandMapShadow simpleCommandMapShadow = ShadowFactory.global().shadow(SimpleCommandMapShadow.class, simplePluginCommandShadow.getCommandMap());
         try {
             //noinspection unchecked
-            Map<String, Command> knownCommands = (Map<String, Command>) KNOWN_COMMANDS_FIELD.get(map);
+            Map<String, Command> knownCommands = simpleCommandMapShadow.getKnownCommands();
 
             Iterator<Command> iterator = knownCommands.values().iterator();
             while (iterator.hasNext()) {
@@ -145,7 +120,7 @@ public final class CommandMapUtil {
                 if (cmd instanceof PluginCommand) {
                     CommandExecutor executor = ((PluginCommand) cmd).getExecutor();
                     if (command == executor) {
-                        cmd.unregister(map);
+                        cmd.unregister(simplePluginCommandShadow.getCommandMap());
                         iterator.remove();
                     }
                 }
