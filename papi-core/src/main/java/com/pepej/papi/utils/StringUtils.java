@@ -1,5 +1,8 @@
 package com.pepej.papi.utils;
 
+import com.google.common.base.Strings;
+import org.bukkit.ChatColor;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.SecureRandom;
@@ -63,6 +66,14 @@ public final class StringUtils {
         }
 
         return 0;
+    }
+
+    public static String getProgressBar(double current, double max, int totalBars, char symbol, ChatColor completedColor,
+                                 ChatColor notCompletedColor) {
+        double percent = current / max;
+        int progressBars = (int) (totalBars * percent);
+
+        return Strings.repeat("" + completedColor + symbol, progressBars) + Strings.repeat("" + notCompletedColor + symbol, totalBars - progressBars);
     }
 
     private static DecimalFormat getFormatter(final String format) {
