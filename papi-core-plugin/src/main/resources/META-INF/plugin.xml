@@ -1,0 +1,28 @@
+<idea-plugin>
+    <id>com.pepej.papi-core-plugin</id>
+    <name>Papi</name>
+    <vendor email="gamzan127@gmail.com" url="https://github.com/PepejHa4ker">Pepej</vendor>
+
+    <description>Intellij plugin for spigot library papi.</description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <postStartupActivity implementation="com.pepej.papi.CheckAnnotationProcessorsStartupActivity"/>
+        <implicitUsageProvider implementation="com.pepej.papi.spigot.SpigotImplicitUsageProvider"/>
+
+        <localInspection language="UAST"
+                         displayName="MenuScheme mask inspection"
+                         groupName="Papi"
+                         enabledByDefault="true"
+                         implementationClass="com.pepej.papi.PapiMenuSchemeInspection"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>

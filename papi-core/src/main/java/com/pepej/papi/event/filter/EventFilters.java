@@ -2,7 +2,6 @@ package com.pepej.papi.event.filter;
 
 import com.pepej.papi.metadata.Metadata;
 import com.pepej.papi.metadata.MetadataKey;
-import org.bukkit.event.Cancellable;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerEvent;
@@ -18,8 +17,7 @@ import java.util.function.Predicate;
 @SuppressWarnings("unchecked")
 public final class EventFilters {
 
-    private static final Predicate<? extends Cancellable> IGNORE_CANCELLED = e -> !e.isCancelled();
-    private static final Predicate<? extends Cancellable> IGNORE_UNCANCELLED = Cancellable::isCancelled;
+
     private static final Predicate<? extends PlayerLoginEvent> IGNORE_DISALLOWED_LOGIN = e -> e.getResult() == PlayerLoginEvent.Result.ALLOWED;
     private static final Predicate<? extends AsyncPlayerPreLoginEvent> IGNORE_DISALLOWED_PRE_LOGIN = e -> e.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED;
 
@@ -38,28 +36,6 @@ public final class EventFilters {
             (e.getFrom().getBlockX() >> 4) != (e.getTo().getBlockX() >> 4) ||
                     (e.getFrom().getBlockZ() >> 4) != (e.getTo().getBlockZ() >> 4) ||
                     !e.getFrom().getWorld().equals(e.getTo().getWorld());
-
-    /**
-     * Returns a predicate which only returns true if the event isn't cancelled
-     *
-     * @param <T> the event type
-     * @return a predicate which only returns true if the event isn't cancelled
-     */
-    @NonNull
-    public static <T extends Cancellable> Predicate<T> ignoreCancelled() {
-        return (Predicate<T>) IGNORE_CANCELLED;
-    }
-
-    /**
-     * Returns a predicate which only returns true if the event is cancelled
-     *
-     * @param <T> the event type
-     * @return a predicate which only returns true if the event is cancelled
-     */
-    @NonNull
-    public static <T extends Cancellable> Predicate<T> ignoreNotCancelled() {
-        return (Predicate<T>) IGNORE_UNCANCELLED;
-    }
 
     /**
      * Returns a predicate which only returns true if the login is allowed
@@ -145,12 +121,23 @@ public final class EventFilters {
      * Returns a predicate which only returns true if the player has the given permission
      *
      * @param permission the permission
-     * @param <T> the event type
+     * @param <T>        the event type
      * @return a predicate which only returns true if the player has the given permission
      */
     @NonNull
     public static <T extends PlayerEvent> Predicate<T> playerHasPermission(String permission) {
         return e -> e.getPlayer().hasPermission(permission);
+    }
+
+    /**
+     * Returns a predicate which only returns true if the player is operator
+     *
+     * @param <T> the event type
+     * @return a predicate which only returns true if the player is operator
+     */
+    @NonNull
+    public static <T extends PlayerEvent> Predicate<T> playerIsOp() {
+        return e -> e.getPlayer().isOp();
     }
 
     private EventFilters() {

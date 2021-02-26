@@ -3,8 +3,7 @@
 /build/classes/java/main/
 /papi-core/build/
 /papi-js/build/
-/papi-kotlin/build/
-/papi-groovy/build/
+/papi-core-plugin/build/
 /.idea/
 /gradle/
 
