@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.serialize.Position;
+import com.pepej.papi.services.Implementor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * A object which can create {@link Hologram}s.
  */
+@Implementor(BukkitHologramFactory.class)
 public interface HologramFactory {
 
     /**
