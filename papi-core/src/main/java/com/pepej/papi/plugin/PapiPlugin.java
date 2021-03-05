@@ -1,13 +1,13 @@
 package com.pepej.papi.plugin;
 
 import com.pepej.papi.events.Events;
+import com.pepej.papi.services.ServicePriority;
 import com.pepej.papi.terminable.TerminableConsumer;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.ServicePriority;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
