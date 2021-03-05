@@ -1,5 +1,6 @@
 package com.pepej.papi.shadow;
 
+import com.pepej.papi.utils.Reflection;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.invoke.MethodHandle;

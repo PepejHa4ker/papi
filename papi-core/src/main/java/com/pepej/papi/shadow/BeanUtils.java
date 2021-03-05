@@ -1,5 +1,7 @@
 package com.pepej.papi.shadow;
 
+import com.pepej.papi.utils.Reflection;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 

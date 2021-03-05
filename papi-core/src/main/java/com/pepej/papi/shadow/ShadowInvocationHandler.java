@@ -2,6 +2,7 @@ package com.pepej.papi.shadow;
 
 import com.pepej.papi.shadow.ShadowingStrategy.Unwrapper;
 import com.pepej.papi.shadow.ShadowingStrategy.Wrapper;
+import com.pepej.papi.utils.Reflection;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

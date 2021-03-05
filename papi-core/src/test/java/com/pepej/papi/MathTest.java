@@ -5,6 +5,7 @@ import com.pepej.papi.math.geom.twodim.Circle;
 import com.pepej.papi.math.geom.twodim.Square;
 import com.pepej.papi.math.geom.twodim.Triangle.RightTriangle;
 import com.pepej.papi.math.vector.Vector2d;
+import com.pepej.papi.utils.Reflection;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -41,6 +42,21 @@ public class MathTest {
         Vector2d a = new Vector2d(3,4);
         Vector2d b = new Vector2d(4,3);
         assertEquals(0.96, a.scalar(b));
+    }
+
+    static class CallerClass {
+
+        @Test
+        public void test_caller_class() {
+            assertEquals("com.pepej.papi.MathTest$CallerClass", new CalledClass().call().getName());
+        }
+    }
+
+    static class CalledClass {
+
+        public Class<?> call() {
+            return Reflection.getCallerClass(2);
+        }
     }
 
 
