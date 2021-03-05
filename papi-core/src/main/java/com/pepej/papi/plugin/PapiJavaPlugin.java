@@ -155,7 +155,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
 
     @Override
     public final <T> void provideService(@NonNull Class<T> clazz, @NonNull T instance, @NonNull ServicePriority priority) {
-        Services.provide(clazz, instance, this, priority);
+        Services.provide(clazz, instance, priority);
     }
 
     @Override

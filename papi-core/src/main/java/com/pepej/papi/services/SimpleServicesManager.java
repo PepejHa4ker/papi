@@ -2,8 +2,10 @@ package com.pepej.papi.services;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.pepej.papi.plugin.PapiPlugin;
+import lombok.SneakyThrows;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 /**
@@ -26,21 +28,57 @@ final class SimpleServicesManager implements ServicesManager {
      */
     private final Map<Class<?>, List<RegisteredServiceProvider<?>>> providers = new HashMap<>();
 
+    @SneakyThrows
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T register(Class<T> service) {
+        RegisteredServiceProvider<T> registeredProvider;
+        T provider;
+        synchronized (providers) {
+            Implementor implementor = service.getAnnotation(Implementor.class);
+            if (implementor == null) {
+                throw new IllegalArgumentException("Can't find @Implementor annotation on Service class");
+            }
+            Class<?> specifiedProviderClass = implementor.value();
+            if (!service.isAssignableFrom(specifiedProviderClass)) {
+                throw new IllegalStateException("Specified provider isn't instanceof Service class");
+            }
+            if (!Modifier.isPublic(specifiedProviderClass.getModifiers())) {
+                throw new IllegalArgumentException("Implementation class must be a public!");
+            }
+            Class<T> providerClass = (Class<T>) specifiedProviderClass;
+            Constructor<?> constructor = providerClass.getDeclaredConstructor();
+            if (constructor.getParameterCount() != 0) {
+                throw new IllegalArgumentException("No default constructor present");
+            }
+            provider = providerClass.getDeclaredConstructor().newInstance();
+            List<RegisteredServiceProvider<?>> registered = providers.computeIfAbsent(service, k -> new ArrayList<>());
+            registeredProvider = new RegisteredServiceProvider<>(service, provider, implementor.priority());
+            // Insert the provider into the collection, much more efficient big O than sort
+            int position = Collections.binarySearch(registered, registeredProvider);
+            if (position < 0) {
+                registered.add(-(position + 1), registeredProvider);
+            } else {
+                registered.add(position, registeredProvider);
+            }
+
+        }
+        return provider;
+    }
+
     /**
      * Register a provider of a service.
      *
      * @param <T> Provider
      * @param service service class
      * @param provider provider to register
-     * @param plugin plugin with the provider
      * @param priority priority of the provider
      */
-    public <T> void register(Class<T> service, T provider, PapiPlugin plugin, ServicePriority priority) {
+    public <T> void register(Class<T> service, T provider, ServicePriority priority) {
         RegisteredServiceProvider<T> registeredProvider;
         synchronized (providers) {
             List<RegisteredServiceProvider<?>> registered = providers.computeIfAbsent(service, k -> new ArrayList<>());
-
-            registeredProvider = new RegisteredServiceProvider<>(service, provider, priority, plugin);
+            registeredProvider = new RegisteredServiceProvider<>(service, provider, priority);
 
             // Insert the provider into the collection, much more efficient big O than sort
             int position = Collections.binarySearch(registered, registeredProvider);
@@ -51,43 +89,6 @@ final class SimpleServicesManager implements ServicesManager {
             }
 
         }
-    }
-
-    /**
-     * Unregister all the providers registered by a particular plugin.
-     *
-     * @param plugin The plugin
-     */
-    public void unregisterAll(PapiPlugin plugin) {
-        synchronized (providers) {
-            Iterator<Map.Entry<Class<?>, List<RegisteredServiceProvider<?>>>> it = providers.entrySet().iterator();
-
-            try {
-                while (it.hasNext()) {
-                    Map.Entry<Class<?>, List<RegisteredServiceProvider<?>>> entry = it.next();
-                    Iterator<RegisteredServiceProvider<?>> it2 = entry.getValue().iterator();
-
-                    try {
-                        // Removed entries that are from this plugin
-
-                        while (it2.hasNext()) {
-                            RegisteredServiceProvider<?> registered = it2.next();
-
-                            if (registered.getPlugin().equals(plugin)) {
-                                it2.remove();
-                            }
-                        }
-                    } catch (NoSuchElementException e) { // Why does Java suck
-                    }
-
-                    // Get rid of the empty list
-                    if (entry.getValue().size() == 0) {
-                        it.remove();
-                    }
-                }
-            } catch (NoSuchElementException ignored) {}
-        }
-
     }
 
     /**
@@ -211,26 +212,6 @@ final class SimpleServicesManager implements ServicesManager {
             // This should not be null!
             return (RegisteredServiceProvider<T>) registered.get(0);
         }
-    }
-
-    /**
-     * Get registrations of providers for a plugin.
-     *
-     * @param plugin The plugin
-     * @return provider registration or null
-     */
-    public List<RegisteredServiceProvider<?>> getRegistrations(PapiPlugin plugin) {
-        ImmutableList.Builder<RegisteredServiceProvider<?>> ret = ImmutableList.builder();
-        synchronized (providers) {
-            for (List<RegisteredServiceProvider<?>> registered : providers.values()) {
-                for (RegisteredServiceProvider<?> provider : registered) {
-                    if (provider.getPlugin().equals(plugin)) {
-                        ret.add(provider);
-                    }
-                }
-            }
-        }
-        return ret.build();
     }
 
     /**

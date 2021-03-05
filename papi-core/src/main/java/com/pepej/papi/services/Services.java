@@ -1,7 +1,5 @@
 package com.pepej.papi.services;
 
-import com.pepej.papi.internal.LoaderUtils;
-import com.pepej.papi.plugin.PapiPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
@@ -42,27 +40,10 @@ public final class Services {
         }
         return Optional.ofNullable(registration.getProvider());
     }
-
-    /**
-     * Provides a service.
-     *
-     * @param clazz the service class
-     * @param instance the service instance
-     * @param plugin the plugin to register the service to
-     * @param priority the priority to register the service instance at
-     * @param <T> the service class type
-     * @return the same service instance
-     */
     @NonNull
-    public static <T> T provide(@NonNull Class<T> clazz, @NonNull T instance, @NonNull PapiPlugin plugin, @NonNull ServicePriority priority) {
-        Objects.requireNonNull(clazz, "clazz");
-        Objects.requireNonNull(instance, "instance");
-        Objects.requireNonNull(plugin, "plugin");
-        Objects.requireNonNull(priority, "priority");
-        ServicesManager.obtain().register(clazz, instance, plugin, priority);
-        return instance;
+    public static <T> T provide(@NonNull Class<T> clazz) {
+        return ServicesManager.obtain().register(clazz);
     }
-
     /**
      * Provides a service.
      *
@@ -74,7 +55,11 @@ public final class Services {
      */
     @NonNull
     public static <T> T provide(@NonNull Class<T> clazz, @NonNull T instance, @NonNull ServicePriority priority) {
-        return provide(clazz, instance, LoaderUtils.getPlugin(), priority);
+        Objects.requireNonNull(clazz, "clazz");
+        Objects.requireNonNull(instance, "instance");
+        Objects.requireNonNull(priority, "priority");
+        ServicesManager.obtain().register(clazz, instance, priority);
+        return instance;
     }
 
     /**

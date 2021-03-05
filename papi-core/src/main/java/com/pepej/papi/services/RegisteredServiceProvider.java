@@ -1,42 +1,24 @@
 package com.pepej.papi.services;
 
-import com.pepej.papi.plugin.PapiPlugin;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 /**
  * A registered service provider.
  *
  * @param <T> Service
  */
+
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Getter
+@AllArgsConstructor
 public class RegisteredServiceProvider<T> implements Comparable<RegisteredServiceProvider<?>> {
 
-    private final Class<T> service;
-    private final PapiPlugin plugin;
-    private final T provider;
-    private final ServicePriority priority;
-
-    public RegisteredServiceProvider(Class<T> service, T provider, ServicePriority priority, PapiPlugin plugin) {
-
-        this.service = service;
-        this.plugin = plugin;
-        this.provider = provider;
-        this.priority = priority;
-    }
-
-    public Class<T> getService() {
-        return service;
-    }
-
-    public PapiPlugin getPlugin() {
-        return plugin;
-    }
-
-    public T getProvider() {
-        return provider;
-    }
-
-    public ServicePriority getPriority() {
-        return priority;
-    }
+    Class<T> service;
+    T provider;
+    ServicePriority priority;
 
     public int compareTo(RegisteredServiceProvider<?> other) {
         if (priority.ordinal() == other.getPriority().ordinal()) {

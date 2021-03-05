@@ -1,10 +1,5 @@
 package com.pepej.papi.services;
-
-
-import com.pepej.papi.plugin.PapiPlugin;
-
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Manages services and service providers. Services are an interface
@@ -20,23 +15,17 @@ public interface ServicesManager {
         return SimpleServicesManager.obtain();
     }
 
+    <T> T register(Class<T> service);
+
     /**
      * Register a provider of a service.
      *
      * @param <T>      Provider
      * @param service  service class
      * @param provider provider to register
-     * @param plugin   plugin with the provider
      * @param priority priority of the provider
      */
-    <T> void register(Class<T> service, T provider, PapiPlugin plugin, ServicePriority priority);
-
-    /**
-     * Unregister all the providers registered by a particular plugin.
-     *
-     * @param plugin The plugin
-     */
-    void unregisterAll(PapiPlugin plugin);
+    <T> void register(Class<T> service, T provider, ServicePriority priority);
 
     /**
      * Unregister a particular provider for a particular service.
@@ -72,14 +61,6 @@ public interface ServicesManager {
      * @return provider registration or null
      */
     <T> RegisteredServiceProvider<T> getRegistration(Class<T> service);
-
-    /**
-     * Get registrations of providers for a plugin.
-     *
-     * @param plugin The plugin
-     * @return provider registration or null
-     */
-    List<RegisteredServiceProvider<?>> getRegistrations(PapiPlugin plugin);
 
     /**
      * Get registrations of providers for a service. The returned list is
