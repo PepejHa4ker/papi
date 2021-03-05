@@ -1,7 +1,7 @@
 package com.pepej.papi.hologram;
 
 import com.google.gson.JsonElement;
-import com.pepej.papi.Services;
+import com.pepej.papi.services.Services;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.serialize.Position;
 import org.checkerframework.checker.nullness.qual.NonNull;

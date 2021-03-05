@@ -3,7 +3,7 @@ package com.pepej.papi.utils;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.pepej.papi.Papi;
-import com.pepej.papi.Services;
+import com.pepej.papi.services.Services;
 import com.pepej.papi.npc.NpcFactory;
 import com.pepej.papi.text.Text;
 import net.md_5.bungee.api.chat.TextComponent;

@@ -48,22 +48,22 @@ public class PaginatedMenu extends Menu {
 
     @Override
     public void redraw() {
-        this.scheme.apply(this);
+        scheme.apply(this);
 
         // get available slots for items
-        List<Integer> slots = new ArrayList<>(this.itemSlots);
+        List<Integer> slots = new ArrayList<>(itemSlots);
 
         // work out the items to display on this page
-        List<List<Item>> pages = Lists.partition(this.content, slots.size());
+        List<List<Item>> pages = Lists.partition(content, slots.size());
 
         // normalize page number
-        if (this.page < 1) {
-            this.page = 1;
-        } else if (this.page > pages.size()) {
-            this.page = Math.max(1, pages.size());
+        if (page < 1) {
+            page = 1;
+        } else if (page > pages.size()) {
+            page = Math.max(1, pages.size());
         }
 
-        List<Item> page = pages.isEmpty() ? new ArrayList<>() : pages.get(this.page - 1);
+        List<Item> currentPage = pages.isEmpty() ? new ArrayList<>() : pages.get(page - 1);
 
         // place prev/next page buttons
         if (this.page == 1) {
@@ -71,13 +71,13 @@ public class PaginatedMenu extends Menu {
             // remove the item if the current slot contains a previous page item type
             Slot slot = getSlot(this.previousPageSlot);
             slot.clearBindings();
-            if (slot.hasItem() && slot.getItem().getType() == this.previousPageItem.apply(PageInfo.create(0, 0)).getType()) {
+            if (slot.getItem() != null && slot.getItem().getType() == previousPageItem.apply(PageInfo.create(0, 0)).getType()) {
                 slot.clearItem();
             }
         } else {
-            setItem(this.previousPageSlot, ItemStackBuilder.of(this.previousPageItem.apply(PageInfo.create(this.page, pages.size())))
+            setItem(this.previousPageSlot, ItemStackBuilder.of(previousPageItem.apply(PageInfo.create(page, pages.size())))
                                                            .build(() -> {
-                                                               this.page -= 1;
+                                                               page -= 1;
                                                                redraw();
                                                            }));
         }
@@ -85,13 +85,13 @@ public class PaginatedMenu extends Menu {
         if (this.page >= pages.size()) {
             // can't go forward a page
             // remove the item if the current slot contains a next page item type
-            Slot slot = getSlot(this.nextPageSlot);
+            Slot slot = getSlot(nextPageSlot);
             slot.clearBindings();
-            if (slot.hasItem() && slot.getItem().getType() == this.nextPageItem.apply(PageInfo.create(0, 0)).getType()) {
+            if (slot.getItem() != null && slot.getItem().getType() == nextPageItem.apply(PageInfo.create(0, 0)).getType()) {
                 slot.clearItem();
             }
         } else {
-            setItem(this.nextPageSlot, ItemStackBuilder.of(this.nextPageItem.apply(PageInfo.create(this.page, pages.size())))
+            setItem(this.nextPageSlot, ItemStackBuilder.of(nextPageItem.apply(PageInfo.create(this.page, pages.size())))
                                                        .build(() -> {
                                                            this.page += 1;
                                                            redraw();
@@ -104,7 +104,7 @@ public class PaginatedMenu extends Menu {
         }
 
         // place the actual items
-        for (Item item : page) {
+        for (Item item : currentPage) {
             int index = slots.remove(0);
             setItem(index, item);
         }

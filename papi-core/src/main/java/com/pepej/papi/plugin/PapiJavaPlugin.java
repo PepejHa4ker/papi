@@ -1,6 +1,5 @@
 package com.pepej.papi.plugin;
 
-import com.pepej.papi.Services;
 import com.pepej.papi.config.ConfigFactory;
 import com.pepej.papi.events.Events;
 import com.pepej.papi.events.player.AsyncPlayerFirstJoinEvent;
@@ -10,6 +9,7 @@ import com.pepej.papi.internal.PapiImplementationPlugin;
 import com.pepej.papi.maven.LibraryLoader;
 import com.pepej.papi.scheduler.PapiExecutors;
 import com.pepej.papi.scheduler.Schedulers;
+import com.pepej.papi.services.Services;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.terminable.module.TerminableModule;
 import com.pepej.papi.utils.CommandMapUtil;
@@ -20,7 +20,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.ServicePriority;
+import com.pepej.papi.services.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -48,7 +48,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
     @Override
     public final void onLoad() {
         // LoaderUtils.getPlugin() has the side effect of caching the loader ref
-        // do that nice and early. also store whether 'this' plugin is the loader.
+        // do that nice and early. also store whether 'this' plugin is the loader.ану п
         final PapiPlugin loaderPlugin = LoaderUtils.getPlugin();
         this.isLoaderPlugin = this == loaderPlugin;
 
@@ -160,7 +160,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
 
     @Override
     public final <T> void provideService(@NonNull Class<T> clazz, @NonNull T instance) {
-        provideService(clazz, instance, ServicePriority.Normal);
+        provideService(clazz, instance, ServicePriority.NORMAL);
     }
 
     @Override
@@ -215,7 +215,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
     @Override
     public final ConfigurationNode loadConfigNode(@NonNull String file) {
         Objects.requireNonNull(file, "file");
-        return ConfigFactory.yaml().load(getBundledFile(file));
+        return ConfigFactory.gson().load(getBundledFile(file));
     }
 
     @NonNull
@@ -227,5 +227,6 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         ConfigFactory.gson().load(f, configObject);
         return configObject;
     }
+
 
 }

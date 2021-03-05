@@ -1,6 +1,6 @@
 package com.pepej.papi.hologram.individual;
 
-import com.pepej.papi.Services;
+import com.pepej.papi.services.Services;
 import com.pepej.papi.hologram.BaseHologram;
 import com.pepej.papi.hologram.HologramLine;
 import com.pepej.papi.serialize.Position;

@@ -15,11 +15,13 @@
         <postStartupActivity implementation="com.pepej.papi.CheckAnnotationProcessorsStartupActivity"/>
         <implicitUsageProvider implementation="com.pepej.papi.spigot.SpigotImplicitUsageProvider"/>
 
-        <localInspection language="UAST"
-                         displayName="MenuScheme mask inspection"
+        <localInspection displayName="Papi MenuScheme#mask invalid mask"
                          groupName="Papi"
+                         language="JAVA"
                          enabledByDefault="true"
-                         implementationClass="com.pepej.papi.PapiMenuSchemeInspection"/>
+                         level="ERROR"
+                         hasStaticDescription="true"
+                         implementationClass="com.pepej.papi.inspection.PapiMenuSchemeMaskInspection"/>
     </extensions>
 
     <actions>

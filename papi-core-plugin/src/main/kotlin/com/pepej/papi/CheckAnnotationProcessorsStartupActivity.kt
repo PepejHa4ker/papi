@@ -24,7 +24,10 @@ class CheckAnnotationProcessorsStartupActivity : StartupActivity {
                 if (!compilerConfiguration.defaultProcessorProfile.isEnabled) {
                     suggestEnableAnnotations(project)
                 }
+
+
             }
+
         }
     }
 
@@ -36,13 +39,16 @@ class CheckAnnotationProcessorsStartupActivity : StartupActivity {
 
         JBPopupFactory.getInstance()
             .createHtmlTextBalloonBuilder(
-                "Do you want to enable annotation processors for Micronaut compilation? <a href=\"enable\">Enable</a>",
-                MessageType.WARNING
-            ) { e ->
-                if (e.eventType == HyperlinkEvent.EventType.ACTIVATED) {
+                "Do you want to enable annotation processors for Papi compilation? <a href=\"enable\">Enable</a>",
+                MessageType.WARNING,
+            )
+
+            {
+                if (it.eventType == HyperlinkEvent.EventType.ACTIVATED) {
                     enableAnnotations(project)
                 }
             }
+            .setFadeoutTime(12000)
             .setHideOnLinkClick(true)
             .createBalloon()
             .show(RelativePoint.getCenterOf(statusBar.component), Balloon.Position.atRight)

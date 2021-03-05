@@ -42,29 +42,29 @@ public class MenuScheme {
         }
     }
 
-    public MenuScheme mask(String s) {
-        char[] chars = s.replace(" ", "").toCharArray();
+    public MenuScheme mask(String mask) {
+        char[] chars = mask.replace(" ", "").toCharArray();
         if (chars.length != 9) {
-            throw new IllegalArgumentException("invalid mask: " + s);
+            throw new IllegalArgumentException("invalid mask: " + mask);
         }
-        boolean[] ret = new boolean[9];
+        boolean[] returnabc = new boolean[9];
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             if (c == '1' || c == 't') {
-                ret[i] = true;
+                returnabc[i] = true;
             } else if (c == '0' || c == 'f' || c == 'x') {
-                ret[i] = false;
+                returnabc[i] = false;
             } else {
                 throw new IllegalArgumentException("invalid mask character: " + c);
             }
         }
-        this.maskRows.add(ret);
+        this.maskRows.add(returnabc);
         return this;
     }
 
-    public MenuScheme masks(String... strings) {
-        for (String s : strings) {
-            mask(s);
+    public MenuScheme masks(String... masks) {
+        for (String mask : masks) {
+            mask(mask);
         }
         return this;
     }
@@ -77,20 +77,13 @@ public class MenuScheme {
         return this;
     }
 
-    public MenuScheme schemes(int... schemes) {
-        for (int schemeid : schemes) {
-            scheme(schemeid);
-        }
-        return this;
-    }
-
     public MenuScheme scheme(int... schemeIds) {
         for (int schemeId : schemeIds) {
-            if (!this.mapping.hasMappingFor(schemeId)) {
+            if (!mapping.hasMappingFor(schemeId)) {
                 throw new IllegalArgumentException("mapping does not contain value for id: " + schemeId);
             }
         }
-        this.schemeRows.add(schemeIds);
+        schemeRows.add(schemeIds);
         return this;
     }
 
@@ -99,9 +92,9 @@ public class MenuScheme {
         int invIndex = 0;
 
         // iterate all of the loaded masks
-        for (int i = 0; i < this.maskRows.size(); i++) {
-            boolean[] mask = this.maskRows.get(i);
-            int[] scheme = this.schemeRows.get(i);
+        for (int i = 0; i < maskRows.size(); i++) {
+            boolean[] mask = maskRows.get(i);
+            int[] scheme = schemeRows.get(i);
 
             int schemeIndex = 0;
 
@@ -118,7 +111,7 @@ public class MenuScheme {
                     int schemeMappingId = scheme[schemeIndex++];
 
                     // lookup the value for this location, and apply it to the menu
-                    this.mapping.get(schemeMappingId).ifPresent(item -> menu.setItem(index, item));
+                    mapping.get(schemeMappingId).ifPresent(item -> menu.setItem(index, item));
                 }
             }
         }
@@ -152,8 +145,8 @@ public class MenuScheme {
         return ImmutableList.copyOf(getMaskedIndexes());
     }
 
-    public MenuPopulator newPopulator(Menu gui) {
-        return new MenuPopulator(gui, this);
+    public MenuPopulator newPopulator(Menu menu) {
+        return new MenuPopulator(menu, this);
     }
 
     public MenuScheme copy() {

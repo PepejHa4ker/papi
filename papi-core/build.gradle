@@ -67,11 +67,7 @@ dependencies {
 shadowJar {
     relocate("net.kyori.adventure", "com.pepej.papi.adventure")
     relocate("net.kyori.examination", "com.pepej.papi.adventure")
-    relocate("ninja.leaping.configurate", "com.pepej.papi.config.configurate")
-    relocate("com.typesafe.config", "com.pepej.papi.config.typesafe")
-    relocate("org.checkerframework", "com.pepej.papi.checker")
-    relocate("com.google", "com.pepej.papi.google")
-    archiveName = "Papi-Core-2.1.0.jar"
+    archiveName = "Papi-Core-2.2.0.jar"
 
 }
 

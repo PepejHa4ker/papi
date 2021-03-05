@@ -38,7 +38,7 @@ public final class FunctionalSchemeMapping implements SchemeMapping {
 
     @Override
     public boolean hasMappingFor(int key) {
-        return this.validRange.contains(key);
+        return validRange.contains(key);
     }
 
     @NonNull
