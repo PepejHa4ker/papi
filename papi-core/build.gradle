@@ -42,7 +42,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens:2.0.22-SNAPSHOT")
     compileOnly("org.bstats:bstats-bukkit:1.7")
     //checkerfw
-    compileOnly("org.checkerframework:checker:3.7.0")
+    implementation("org.checkerframework:checker:3.7.0")
 
     //lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'
@@ -51,10 +51,10 @@ dependencies {
     //asm
     implementation('org.ow2.asm:asm:8.0.1')
 
-    implementation("org.spongepowered:configurate-hocon:3.7.2")
-    implementation("org.spongepowered:configurate-yaml:3.7.2")
-    implementation("org.spongepowered:configurate-core:3.7.2")
-    implementation("org.spongepowered:configurate-gson:3.7.2")
+    implementation("org.spongepowered:configurate-hocon:4.0.0")
+    implementation("org.spongepowered:configurate-yaml:4.0.0")
+    implementation("org.spongepowered:configurate-core:4.0.0")
+    implementation("org.spongepowered:configurate-gson:4.0.0")
 
     //text
     implementation("net.kyori:adventure-api:4.4.0")
@@ -67,8 +67,8 @@ dependencies {
 shadowJar {
     relocate("net.kyori.adventure", "com.pepej.papi.adventure")
     relocate("net.kyori.examination", "com.pepej.papi.adventure")
-    relocate("ninja.leaping.configurate", "com.pepej.papi.config")
-    archiveName = "Papi-Core-2.3.0.jar"
+    relocate("org.spongepowered.configurate", "com.pepej.papi.config")
+    archiveName = "Papi-Core-2.4.0.jar"
 
 }
 

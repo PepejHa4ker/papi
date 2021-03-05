@@ -9,21 +9,21 @@ import com.pepej.papi.internal.PapiImplementationPlugin;
 import com.pepej.papi.maven.LibraryLoader;
 import com.pepej.papi.scheduler.PapiExecutors;
 import com.pepej.papi.scheduler.Schedulers;
+import com.pepej.papi.services.ServicePriority;
 import com.pepej.papi.services.Services;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.terminable.module.TerminableModule;
 import com.pepej.papi.utils.CommandMapUtil;
 import com.pepej.papi.utils.Log;
-import ninja.leaping.configurate.ConfigurationNode;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
-import com.pepej.papi.services.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
 
 import java.io.File;
 import java.util.Arrays;
@@ -223,15 +223,6 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         return ConfigFactory.gson().load(getBundledFile(file));
     }
 
-    @NonNull
-    @Override
-    public final <T> T setupConfig(@NonNull String file, @NonNull T configObject) {
-        Objects.requireNonNull(file, "file");
-        Objects.requireNonNull(configObject, "configObject");
-        File f = getRelativeFile(file);
-        ConfigFactory.gson().load(f, configObject);
-        return configObject;
-    }
 
 
 }

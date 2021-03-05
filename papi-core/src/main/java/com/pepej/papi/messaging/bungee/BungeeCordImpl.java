@@ -7,6 +7,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.plugin.PapiPlugin;
 import com.pepej.papi.promise.Promise;
@@ -62,6 +63,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
      * Messages to be sent
      */
     private final Set<MessageAgent> queuedMessages = ConcurrentHashMap.newKeySet();
+
+    public BungeeCordImpl() {
+        this.plugin = LoaderUtils.getPlugin();
+    }
 
     public BungeeCordImpl(PapiPlugin plugin) {
         this.plugin = plugin;

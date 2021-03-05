@@ -1,10 +1,9 @@
 package com.pepej.papi.item;
 
-import com.google.common.reflect.TypeToken;
 import lombok.SneakyThrows;
-import ninja.leaping.configurate.ConfigurationNode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.spongepowered.configurate.ConfigurationNode;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +69,7 @@ public class ItemStackReader {
     }
 
     protected Material parseMaterial(ConfigurationNode config) {
-        return parseMaterial(config.getNode("material").getString("air"));
+        return parseMaterial(config.node("material").getString("air"));
     }
     protected Material parseMaterial(ConfigurationSection config) {
         return parseMaterial(config.getString("material"));
@@ -84,8 +83,8 @@ public class ItemStackReader {
         }
     }
     protected OptionalInt parseData(ConfigurationNode config) {
-        if (config.getNode("data").getInt() != 0) {
-            return OptionalInt.of(config.getNode("data").getInt(0));
+        if (config.node("data").getInt() != 0) {
+            return OptionalInt.of(config.node("data").getInt(0));
         }
         return OptionalInt.empty();
     }
@@ -96,8 +95,8 @@ public class ItemStackReader {
         return OptionalInt.empty();
     }
     protected Optional<String> parseName(ConfigurationNode config) {
-        if (config.getNode("name").getString() != null) {
-            return Optional.of(config.getNode("name").getString(""));
+        if (config.node("name").getString() != null) {
+            return Optional.of(config.node("name").getString(""));
         }
         return Optional.empty();
     }
@@ -110,7 +109,7 @@ public class ItemStackReader {
     }
     @SneakyThrows
     protected Optional<List<String>> parseLore(ConfigurationNode config) {
-        List<String> lore = config.getNode("lore").getList(new TypeToken<String>() {});
+        List<String> lore = config.node("lore").getList(String.class);
         if (!lore.isEmpty()) {
             return Optional.of(lore);
         }

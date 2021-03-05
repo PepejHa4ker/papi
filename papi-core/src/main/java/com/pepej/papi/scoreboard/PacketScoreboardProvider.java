@@ -1,5 +1,6 @@
 package com.pepej.papi.scoreboard;
 
+import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.plugin.PapiPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -9,6 +10,10 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public final class PacketScoreboardProvider implements ScoreboardProvider {
     private final PapiPlugin plugin;
     private PacketScoreboard scoreboard = null;
+
+    public PacketScoreboardProvider() {
+        this.plugin = LoaderUtils.getPlugin();
+    }
 
     public PacketScoreboardProvider(PapiPlugin plugin) {
         this.plugin = plugin;

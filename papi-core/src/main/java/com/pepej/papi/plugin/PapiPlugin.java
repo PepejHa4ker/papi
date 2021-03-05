@@ -3,13 +3,13 @@ package com.pepej.papi.plugin;
 import com.pepej.papi.events.Events;
 import com.pepej.papi.services.ServicePriority;
 import com.pepej.papi.terminable.TerminableConsumer;
-import ninja.leaping.configurate.ConfigurationNode;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
 
 import java.io.File;
 import java.util.Optional;
@@ -167,17 +167,6 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      */
     @NonNull
     ConfigurationNode loadConfigNode(@NonNull String file);
-
-    /**
-     * Populates a config object.
-     *
-     * @param file the name of the file
-     * @param configObject the config object
-     * @param <T> the config object type
-     * @return configObject
-     */
-    @NonNull
-    <T> T setupConfig(@NonNull String file, @NonNull T configObject);
 
     /**
      * Gets the plugin's class loader

@@ -1,32 +1,32 @@
 package com.pepej.papi.config.typeserializers;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonElement;
 import com.pepej.papi.datatree.ConfigurateDataTree;
 import com.pepej.papi.datatree.DataTree;
 import com.pepej.papi.datatree.GsonDataTree;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
-import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializer;
+
+import java.lang.reflect.Type;
+import java.util.Objects;
 
 public final class JsonTreeTypeSerializer implements TypeSerializer<DataTree> {
-    private static final TypeToken<JsonElement> JSON_ELEMENT_TYPE = TypeToken.of(JsonElement.class);
 
     public static final JsonTreeTypeSerializer INSTANCE = new JsonTreeTypeSerializer();
 
     @Override
-    public DataTree deserialize(TypeToken<?> typeToken, ConfigurationNode node) throws ObjectMappingException {
-        return DataTree.from(node.getValue(JSON_ELEMENT_TYPE));
+    public DataTree deserialize(@NonNull Type type, ConfigurationNode node) throws SerializationException  {
+        return DataTree.from(Objects.requireNonNull(node.get(JsonElement.class)));
     }
 
     @Override
-    public void serialize(TypeToken<?> typeToken, DataTree dataTree, ConfigurationNode node) throws ObjectMappingException {
+    public void serialize(@NonNull Type type, DataTree dataTree, @NonNull ConfigurationNode node) throws SerializationException {
         if (dataTree instanceof GsonDataTree) {
-            node.setValue(JSON_ELEMENT_TYPE, ((GsonDataTree) dataTree).getElement());
+            node.set(JsonElement.class, ((GsonDataTree) dataTree).getElement());
         } else if (dataTree instanceof ConfigurateDataTree) {
-            node.setValue(((ConfigurateDataTree) dataTree).getNode());
-        } else {
-            throw new ObjectMappingException("Unknown type: " + dataTree.getClass().getName());
+            node.set(((ConfigurateDataTree) dataTree).getNode());
         }
     }
 }

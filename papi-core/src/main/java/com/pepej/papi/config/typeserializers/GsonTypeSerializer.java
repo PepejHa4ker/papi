@@ -5,76 +5,70 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import com.pepej.papi.gson.converter.GsonConverters;
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
-import ninja.leaping.configurate.objectmapping.serialize.TypeSerializer;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializer;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
 public final class GsonTypeSerializer implements TypeSerializer<JsonElement> {
-    private static final TypeToken<JsonElement> TYPE = TypeToken.of(JsonElement.class);
+    private static final Type TYPE = TypeToken.of(JsonElement.class).getType();
 
     public static final GsonTypeSerializer INSTANCE = new GsonTypeSerializer();
 
     private GsonTypeSerializer() {
     }
 
-    @Override
-    public JsonElement deserialize(TypeToken<?> type, ConfigurationNode from) throws ObjectMappingException {
-        if (from.getValue() == null) {
-            return JsonNull.INSTANCE;
-        }
 
-        if (from.hasListChildren()) {
-            List<? extends ConfigurationNode> childrenList = from.getChildrenList();
+    @Override
+    public JsonElement deserialize(Type type, ConfigurationNode from) throws SerializationException {
+        if (from.isList()) {
+            List<? extends ConfigurationNode> childrenList = from.childrenList();
             JsonArray array = new JsonArray();
             for (ConfigurationNode node : childrenList) {
-                array.add(node.getValue(TYPE));
+                array.add(node.get(JsonElement.class));
             }
             return array;
         }
 
-        if (from.hasMapChildren()) {
-            Map<Object, ? extends ConfigurationNode> childrenMap = from.getChildrenMap();
+        if (from.isMap()) {
+            Map<Object, ? extends ConfigurationNode> childrenMap = from.childrenMap();
             JsonObject object = new JsonObject();
             for (Map.Entry<Object, ? extends ConfigurationNode> ent : childrenMap.entrySet()) {
-                object.add(ent.getKey().toString(), ent.getValue().getValue(TYPE));
+                object.add(ent.getKey().toString(), ent.getValue().get(JsonElement.class));
             }
             return object;
         }
 
-        Object val = from.getValue();
-        try {
-            return GsonConverters.IMMUTABLE.wrap(val);
-        } catch (IllegalArgumentException e) {
-            throw new ObjectMappingException(e);
-        }
+        Object val = from.get(JsonElement.class);
+        return GsonConverters.IMMUTABLE.wrap(val);
+
     }
 
     @Override
-    public void serialize(TypeToken<?> type, JsonElement from, ConfigurationNode to) throws ObjectMappingException {
+    public void serialize(Type type, @Nullable JsonElement from, ConfigurationNode to) throws SerializationException {
         if (from.isJsonPrimitive()) {
             JsonPrimitive primitive = from.getAsJsonPrimitive();
-            to.setValue(GsonConverters.IMMUTABLE.unwarpPrimitive(primitive));
+            to.set(GsonConverters.IMMUTABLE.unwarpPrimitive(primitive));
         } else if (from.isJsonNull()) {
-            to.setValue(null);
+            to.set(null);
         } else if (from.isJsonArray()) {
             JsonArray array = from.getAsJsonArray();
             // ensure 'to' is a list node
-            to.setValue(ImmutableList.of());
+            to.set(ImmutableList.of());
             for (JsonElement element : array) {
-                serialize(TYPE, element, to.getAppendedNode());
+                serialize(TYPE, element, to.appendListNode());
             }
         } else if (from.isJsonObject()) {
             JsonObject object = from.getAsJsonObject();
             // ensure 'to' is a map node
-            to.setValue(ImmutableMap.of());
+            to.set(ImmutableMap.of());
             for (Map.Entry<String, JsonElement> ent : object.entrySet()) {
-                serialize(TYPE, ent.getValue(), to.getNode(ent.getKey()));
+                serialize(TYPE, ent.getValue(), to.node(ent.getKey()));
             }
-        } else {
-            throw new ObjectMappingException("Unknown element type: " + from.getClass());
         }
     }
 }
