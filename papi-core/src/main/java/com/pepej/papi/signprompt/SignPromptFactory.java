@@ -1,5 +1,6 @@
 package com.pepej.papi.signprompt;
 
+import com.pepej.papi.services.Implementor;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -8,6 +9,7 @@ import java.util.List;
 /**
  * Represents an object which can accept input from players using signs.
  */
+@Implementor(PacketSignPromptFactory.class)
 public interface SignPromptFactory {
 
     /**

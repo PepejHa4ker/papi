@@ -3,6 +3,7 @@ package com.pepej.papi.messaging.bungee;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.pepej.papi.promise.Promise;
+import com.pepej.papi.services.Implementor;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -17,6 +18,7 @@ import java.util.function.Predicate;
  * <p>The returned futures should never be {@link Promise#join() joined} or waited for on
  * the Server thread.</p>
  */
+@Implementor(BungeeCordImpl.class)
 public interface BungeeCord {
 
     /**

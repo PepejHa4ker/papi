@@ -80,23 +80,31 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
     <T> T getService(@NonNull Class<T> service);
 
     /**
-     * Provides a service to the ServiceManager, bound to this plugin
+     * Provides a service to the ServiceManager,
      *
      * @param <T> the service class type
-     * @param clazz the service class
+     * @param service the service class
      * @param instance the instance
      * @param priority the priority to register the service at
      */
-    <T> void provideService(@NonNull Class<T> clazz, @NonNull T instance, @NonNull ServicePriority priority);
+    <T> void provideService(@NonNull Class<T> service, @NonNull T instance, @NonNull ServicePriority priority);
 
     /**
-     * Provides a service to the ServiceManager, bound to this plugin at {@link ServicePriority#Normal}.
+     * Provides a service to the ServiceManager, {@link ServicePriority#NORMAL}.
      *
      * @param <T> the service class type
-     * @param clazz the service class
+     * @param service the service class
      * @param instance the instance
      */
-    <T> void provideService(@NonNull Class<T> clazz, @NonNull T instance);
+    <T> void provideService(@NonNull Class<T> service, @NonNull T instance);
+
+    /**
+     * Provides a service to the ServiceManager, {@link ServicePriority#NORMAL}.
+     *
+     * @param <T> the service class type
+     * @param service the service class
+     */
+    <T> void provideService(@NonNull Class<T> service);
 
     /**
      * Gets if a given plugin is enabled.

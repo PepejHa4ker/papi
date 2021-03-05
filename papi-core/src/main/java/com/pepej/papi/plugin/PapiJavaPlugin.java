@@ -164,6 +164,11 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
     }
 
     @Override
+    public <T> void provideService(@NonNull Class<T> service) {
+        Services.provide(service);
+    }
+
+    @Override
     public final boolean isPluginPresent(@NonNull String name) {
         return getServer().getPluginManager().getPlugin(name) != null;
     }
