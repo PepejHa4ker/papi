@@ -21,7 +21,7 @@ final class PapiServices {
         throw new UnsupportedOperationException("This class cannot be initialized");
     }
 
-    static void setup(PapiJavaPlugin plugin) {
+    static void setup(PapiPlugin plugin) {
         plugin.provideService(HologramFactory.class, new BukkitHologramFactory());
         plugin.provideService(BungeeCord.class, new BungeeCordImpl(plugin));
         if (plugin.isPluginPresent("ProtocolLib")) {
