@@ -16,7 +16,9 @@ import com.pepej.papi.signprompt.PacketSignPromptFactory;
 import com.pepej.papi.signprompt.SignPromptFactory;
 
 final class PapiServices {
+
     private PapiServices() {
+        throw new UnsupportedOperationException("This class cannot be initialized");
     }
 
     static void setup(PapiJavaPlugin plugin) {
@@ -26,34 +28,20 @@ final class PapiServices {
             PacketScoreboardProvider scoreboardProvider = new PacketScoreboardProvider(plugin);
             plugin.provideService(ScoreboardProvider.class, scoreboardProvider);
             plugin.provideService(PacketScoreboardProvider.class, scoreboardProvider);
-
             plugin.provideService(SignPromptFactory.class, new PacketSignPromptFactory());
-
-
             try {
                 plugin.provideService(IndividualHologramFactory.class, new PacketIndividualHologramFactory());
-            } catch (Throwable t) {
-                // ignore??
+            } catch (Throwable ignored) {} // FIXME
 
-            }
         }
         if (plugin.isPluginPresent("Citizens")) {
             CitizensNpcFactory npcManager = plugin.bind(new CitizensNpcFactory());
             plugin.provideService(NpcFactory.class, npcManager);
             plugin.provideService(CitizensNpcFactory.class, npcManager);
         }
-        if (classExists("org.bukkit.boss.BossBar")) {
             plugin.provideService(BossBarFactory.class, new BukkitBossBarFactory(plugin.getServer()));
-        }
     }
 
-    private static boolean classExists(String clazz) {
-        try {
-            Class.forName(clazz);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
+
 
 }
