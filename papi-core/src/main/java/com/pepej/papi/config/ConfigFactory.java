@@ -12,12 +12,14 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.ScopedConfigurationNode;
 import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.objectmapping.meta.NodeResolver;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
@@ -29,13 +31,14 @@ import java.nio.file.Path;
 /**
  * Misc utilities for working with Configurate
  */
-public abstract class ConfigFactory<N extends ConfigurationNode, L extends AbstractConfigurationLoader<?>> {
+public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L extends AbstractConfigurationLoader<N>> {
 
     private static final ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader> YAML = new ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader>() {
         @NonNull
         @Override
         public YamlConfigurationLoader loader(@NonNull Path path) {
             YamlConfigurationLoader.Builder builder = YamlConfigurationLoader.builder()
+                    .nodeStyle(NodeStyle.BLOCK)
                     .indent(2)
                     .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
                     .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
@@ -119,10 +122,9 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Abstr
     public abstract L loader(@NonNull Path path);
 
     @NonNull
-    @SuppressWarnings("unchecked")
     public N load(@NonNull Path path) {
         try {
-            return (N) loader(path).load();
+            return loader(path).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
