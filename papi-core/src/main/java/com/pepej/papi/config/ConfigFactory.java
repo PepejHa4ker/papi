@@ -9,16 +9,14 @@ import com.pepej.papi.datatree.DataTree;
 import com.pepej.papi.gson.GsonSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.spongepowered.configurate.BasicConfigurationNode;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.ScopedConfigurationNode;
+import org.spongepowered.configurate.*;
 import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.objectmapping.meta.NodeResolver;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
+import org.spongepowered.configurate.xml.XmlConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
@@ -32,6 +30,21 @@ import java.nio.file.Path;
  * Misc utilities for working with Configurate
  */
 public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L extends AbstractConfigurationLoader<N>> {
+
+    private static final ConfigFactory<AttributedConfigurationNode, XmlConfigurationLoader> XML = new ConfigFactory<AttributedConfigurationNode, XmlConfigurationLoader>() {
+        @NonNull
+        @Override
+        public XmlConfigurationLoader loader(@NonNull Path path) {
+            XmlConfigurationLoader.Builder builder = XmlConfigurationLoader.builder()
+                    .indent(2)
+                    .defaultTagName("papi")
+                    .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
+                    .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
+            builder.defaultOptions(builder.defaultOptions()
+                    .serializers(TYPE_SERIALIZERS));
+            return builder.build();
+        }
+    };
 
     private static final ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader> YAML = new ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader>() {
         @NonNull
@@ -114,6 +127,11 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
     @NonNull
     public static ConfigFactory<CommentedConfigurationNode, HoconConfigurationLoader> hocon() {
         return HOCON;
+    }
+
+    @NonNull
+    public static ConfigFactory<AttributedConfigurationNode, XmlConfigurationLoader> xml() {
+        return XML;
     }
 
     private ConfigFactory() {}

@@ -51,10 +51,11 @@ dependencies {
 
     //asm
     implementation('org.ow2.asm:asm:8.0.1')
-    implementation("org.spongepowered:configurate-hocon:4.0.0")
-    implementation("org.spongepowered:configurate-yaml:4.0.0")
-    implementation("org.spongepowered:configurate-core:4.0.0")
-    implementation("org.spongepowered:configurate-gson:4.0.0")
+    implementation("org.spongepowered:configurate-core:4.1.0-SNAPSHOT")
+    implementation("org.spongepowered:configurate-gson:4.1.0-SNAPSHOT")
+    implementation("org.spongepowered:configurate-yaml:4.1.0-SNAPSHOT")
+    implementation("org.spongepowered:configurate-hocon:4.1.0-SNAPSHOT")
+    implementation("org.spongepowered:configurate-xml:4.1.0-SNAPSHOT")
 
     //text
     implementation("net.kyori:adventure-api:4.4.0")
@@ -65,10 +66,13 @@ dependencies {
 
 }
 shadowJar {
+    zip64 true
     relocate("net.kyori.adventure", "com.pepej.papi.adventure")
     relocate("net.kyori.examination", "com.pepej.papi.adventure")
     relocate("org.spongepowered.configurate", "com.pepej.papi.config")
-    archiveName = "Papi-Core-2.4.0.jar"
+    archiveName = "Papi-Core-2.4.2.jar"
+    mergeServiceFiles()
+
 
 }
 
