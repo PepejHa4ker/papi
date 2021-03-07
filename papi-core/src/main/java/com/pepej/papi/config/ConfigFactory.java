@@ -11,7 +11,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.ScopedConfigurationNode;
 import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
@@ -19,7 +18,6 @@ import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.objectmapping.meta.NodeResolver;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
-import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
@@ -38,7 +36,6 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         @Override
         public YamlConfigurationLoader loader(@NonNull Path path) {
             YamlConfigurationLoader.Builder builder = YamlConfigurationLoader.builder()
-                    .nodeStyle(NodeStyle.BLOCK)
                     .indent(2)
                     .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
                     .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
@@ -74,7 +71,6 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
             HoconConfigurationLoader.Builder builder = HoconConfigurationLoader.builder()
                     .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
                     .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
-
             builder.defaultOptions(builder.defaultOptions()
                     .serializers(TYPE_SERIALIZERS));
             return builder.build();
@@ -86,7 +82,6 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
     static {
         TYPE_SERIALIZERS = TypeSerializerCollection.defaults()
                 .childBuilder()
-//                .register(String.class, StringSerializer.INSTANCE)
                 .register(JsonElement.class, GsonTypeSerializer.INSTANCE)
                 .register(GsonSerializable.class, PapiTypeSerializer.INSTANCE)
                 .register(ConfigurationSerializable.class, BukkitTypeSerializer.INSTANCE)
@@ -132,7 +127,7 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         }
     }
 
-    public void save(@NonNull Path path, @NonNull ConfigurationNode node) {
+    public void save(@NonNull Path path, @NonNull N node) {
         try {
             loader(path).save(node);
         } catch (IOException e) {
@@ -150,7 +145,7 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         return load(file.toPath());
     }
 
-    public void save(@NonNull File file, @NonNull ConfigurationNode node) {
+    public void save(@NonNull File file, @NonNull N node) {
         save(file.toPath(), node);
     }
 
