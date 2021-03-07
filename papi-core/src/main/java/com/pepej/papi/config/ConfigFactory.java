@@ -11,7 +11,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.ScopedConfigurationNode;
+import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
@@ -29,7 +29,7 @@ import java.nio.file.Path;
 /**
  * Misc utilities for working with Configurate
  */
-public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L extends AbstractConfigurationLoader<N>> {
+public abstract class ConfigFactory<N extends ConfigurationNode, L extends AbstractConfigurationLoader<?>> {
 
     private static final ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader> YAML = new ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader>() {
         @NonNull
@@ -119,15 +119,16 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
     public abstract L loader(@NonNull Path path);
 
     @NonNull
+    @SuppressWarnings("unchecked")
     public N load(@NonNull Path path) {
         try {
-            return loader(path).load();
+            return (N) loader(path).load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void save(@NonNull Path path, @NonNull N node) {
+    public void save(@NonNull Path path, @NonNull ConfigurationNode node) {
         try {
             loader(path).save(node);
         } catch (IOException e) {
@@ -145,7 +146,7 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         return load(file.toPath());
     }
 
-    public void save(@NonNull File file, @NonNull N node) {
+    public void save(@NonNull File file, @NonNull ConfigurationNode node) {
         save(file.toPath(), node);
     }
 
