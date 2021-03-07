@@ -30,14 +30,14 @@ public final class PostResult {
      * @param exceptions the exceptions that were thrown
      * @return a {@link PostResult} indicating failure
      */
-    public static @NonNull PostResult failure(final @NonNull Map<EventSubscriber<?>, Throwable> exceptions) {
+    public static @NonNull PostResult failure(final @NonNull Map<EventSubscriber<?>, Exception> exceptions) {
         Preconditions.checkState(!exceptions.isEmpty(), "no exceptions present");
         return new PostResult(ImmutableMap.copyOf(exceptions));
     }
 
-    private final Map<EventSubscriber<?>, Throwable> exceptions;
+    private final Map<EventSubscriber<?>, Exception> exceptions;
 
-    private PostResult(final @NonNull Map<EventSubscriber<?>, Throwable> exceptions) {
+    private PostResult(final @NonNull Map<EventSubscriber<?>, Exception> exceptions) {
         this.exceptions = exceptions;
     }
 
@@ -55,7 +55,7 @@ public final class PostResult {
      *
      * @return the exceptions thrown by subscribers
      */
-    public @NonNull Map<EventSubscriber<?>, Throwable> exceptions() {
+    public @NonNull Map<EventSubscriber<?>, Exception> exceptions() {
         return this.exceptions;
     }
 
@@ -112,7 +112,7 @@ public final class PostResult {
          */
         public void printAllStackTraces() {
             this.printStackTrace();
-            for(final Throwable exception : this.result.exceptions().values()) {
+            for(final Exception exception : this.result.exceptions().values()) {
                 exception.printStackTrace();
             }
         }

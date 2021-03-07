@@ -17,9 +17,9 @@ public interface EventExecutor<E, L> {
      *
      * @param listener the listener
      * @param event the event
-     * @throws Throwable if an exception occurred
+     * @throws Exception if an exception occurred
      */
-    void invoke(final @NonNull L listener, final @NonNull E event) throws Throwable;
+    void invoke(final @NonNull L listener, final @NonNull E event) throws Exception;
 
     /**
      * Factory for {@link EventExecutor}s.

@@ -81,7 +81,7 @@ public class SimpleMethodSubscriptionAdapter<E, L> implements MethodSubscription
         SubscriberGenerationException(final String message) {
             super(message);
         }
-        SubscriberGenerationException(final String message, final Throwable cause) {
+        SubscriberGenerationException(final String message, final Exception cause) {
             super(message, cause);
         }
     }
@@ -121,7 +121,7 @@ public class SimpleMethodSubscriptionAdapter<E, L> implements MethodSubscription
         }
 
         @Override
-        public void invoke(final @NonNull E event) throws Throwable {
+        public void invoke(final @NonNull E event) throws Exception {
             this.executor.invoke(this.listener, event);
         }
 

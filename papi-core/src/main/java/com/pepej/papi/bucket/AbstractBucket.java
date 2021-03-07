@@ -46,13 +46,13 @@ public abstract class AbstractBucket<E> extends AbstractSet<E> implements Bucket
      */
     private final Cycle<BucketPartition<E>> partitionCycle;
 
+    @SuppressWarnings("unchecked")
     protected AbstractBucket(int size, PartitioningStrategy<E> strategy) {
         this.strategy = strategy;
 
         this.size = size;
         this.content = createSet();
 
-        //noinspection unchecked
         Set<E>[] objs = new Set[size];
         for (int i = 0; i < size; i++) {
             objs[i] = createSet();

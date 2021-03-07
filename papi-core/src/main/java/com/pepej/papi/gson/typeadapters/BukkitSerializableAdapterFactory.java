@@ -69,7 +69,7 @@ public final class BukkitSerializableAdapterFactory implements TypeAdapterFactor
                 if (entry.getValue() instanceof Map) {
                     try {
                         //noinspection unchecked
-                        Map<String, Object> value = (Map) entry.getValue();
+                        Map<String, Object> value = (Map<String, Object>) entry.getValue();
 
                         deserializeChildren(value);
 

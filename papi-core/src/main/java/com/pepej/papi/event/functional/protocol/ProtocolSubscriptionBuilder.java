@@ -119,7 +119,7 @@ public interface ProtocolSubscriptionBuilder extends SubscriptionBuilder<PacketE
      * @throws NullPointerException if the consumer is null
      */
     @NonNull
-    ProtocolSubscriptionBuilder exceptionConsumer(@NonNull BiConsumer<? super PacketEvent, Throwable> consumer);
+    ProtocolSubscriptionBuilder exceptionConsumer(@NonNull BiConsumer<? super PacketEvent, Exception> consumer);
 
     /**
      * Return the handler list builder to append handlers for the event.

@@ -88,6 +88,7 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Abstr
                 .register(DataTree.class, JsonTreeTypeSerializer.INSTANCE)
                 .register(String.class, StringSerializer.INSTANCE)
                 .registerAnnotatedObjects(ObjectMapper.factoryBuilder()
+                        .addNodeResolver(NodeResolver.keyFromSetting())
                         .addNodeResolver(NodeResolver.onlyWithSetting())
                         .build())
                 .build();

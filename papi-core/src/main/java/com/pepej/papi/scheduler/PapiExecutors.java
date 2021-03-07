@@ -14,9 +14,9 @@ import java.util.function.Consumer;
  * Provides common {@link Executor} instances.
  */
 public final class PapiExecutors {
-    private static final Consumer<Throwable> EXCEPTION_CONSUMER = throwable -> {
+    private static final Consumer<Exception> EXCEPTION_CONSUMER = ex -> {
         Log.severe("&a[SCHEDULER]&c Exception thrown whilst executing task");
-        throwable.printStackTrace();
+        ex.printStackTrace();
     };
 
     private static final Executor SYNC_BUKKIT = new BukkitSyncExecutor();
@@ -68,7 +68,7 @@ public final class PapiExecutors {
         public void run() {
             try {
                 this.delegate.run();
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 EXCEPTION_CONSUMER.accept(t);
             }
         }

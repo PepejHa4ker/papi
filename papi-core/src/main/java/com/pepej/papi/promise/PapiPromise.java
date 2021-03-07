@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  * @param <V> the result type
  */
 final class PapiPromise<V> implements Promise<V> {
-    private static final Consumer<Throwable> EXCEPTION_CONSUMER = Throwable::printStackTrace;
+    private static final Consumer<Exception> EXCEPTION_CONSUMER = Exception::printStackTrace;
 
     @NonNull
     static <U> PapiPromise<U> empty() {
@@ -37,7 +37,7 @@ final class PapiPromise<V> implements Promise<V> {
     }
 
     @NonNull
-    static <U> PapiPromise<U> exceptionally(@NonNull Throwable t) {
+    static <U> PapiPromise<U> exceptionally(@NonNull Exception t) {
         return new PapiPromise<>(t);
     }
 
@@ -620,7 +620,7 @@ final class PapiPromise<V> implements Promise<V> {
             }
             try {
                 fut.complete(this.supplier.call());
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 EXCEPTION_CONSUMER.accept(t);
                 fut.completeExceptionally(t);
             }
@@ -641,7 +641,7 @@ final class PapiPromise<V> implements Promise<V> {
             }
             try {
                 PapiPromise.this.fut.complete(this.supplier.get());
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 EXCEPTION_CONSUMER.accept(t);
                 PapiPromise.this.fut.completeExceptionally(t);
             }
@@ -666,7 +666,7 @@ final class PapiPromise<V> implements Promise<V> {
             }
             try {
                 this.promise.complete(this.function.apply(this.value));
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 EXCEPTION_CONSUMER.accept(t);
                 this.promise.completeExceptionally(t);
             }
@@ -702,7 +702,7 @@ final class PapiPromise<V> implements Promise<V> {
                         p.thenAcceptAsync(this.promise::complete);
                     }
                 }
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 EXCEPTION_CONSUMER.accept(t);
                 this.promise.completeExceptionally(t);
             }
@@ -718,7 +718,9 @@ final class PapiPromise<V> implements Promise<V> {
             this.function = function;
             this.t = t;
         }
-        @Override public Function<Throwable, ? extends U> getDelegate() { return this.function; }
+        @Override public Function<Throwable, ? extends U> getDelegate() {
+            return this.function;
+        }
 
         @Override
         public void run() {
@@ -727,7 +729,7 @@ final class PapiPromise<V> implements Promise<V> {
             }
             try {
                 this.promise.complete(this.function.apply(this.t));
-            } catch (Throwable t) {
+            } catch (Exception t) {
                 EXCEPTION_CONSUMER.accept(t);
                 this.promise.completeExceptionally(t);
             }

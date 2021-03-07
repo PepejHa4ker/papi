@@ -17,7 +17,7 @@ class MergedSubscriptionBuilderImpl<T> implements MergedSubscriptionBuilder<T> {
     final TypeToken<T> handledClass;
     final Map<Class<? extends Event>, MergedHandlerMapping<T, ? extends Event>> mappings = new HashMap<>();
 
-    BiConsumer<? super Event, Throwable> exceptionConsumer = DEFAULT_EXCEPTION_CONSUMER;
+    BiConsumer<? super Event, Exception> exceptionConsumer = DEFAULT_EXCEPTION_CONSUMER;
 
     final List<Predicate<T>> filters = new ArrayList<>();
     final List<BiPredicate<MergedSubscription<T>, T>> preExpiryTests = new ArrayList<>(0);
@@ -86,7 +86,7 @@ class MergedSubscriptionBuilderImpl<T> implements MergedSubscriptionBuilder<T> {
 
     @NonNull
     @Override
-    public MergedSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<Event, Throwable> exceptionConsumer) {
+    public MergedSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<Event, Exception> exceptionConsumer) {
         Objects.requireNonNull(exceptionConsumer, "exceptionConsumer");
         this.exceptionConsumer = exceptionConsumer;
         return this;

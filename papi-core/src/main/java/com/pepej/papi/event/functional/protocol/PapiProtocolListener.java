@@ -8,6 +8,7 @@ import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.protocol.Protocol;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,7 +19,7 @@ import java.util.function.Predicate;
 class PapiProtocolListener extends PacketAdapter implements ProtocolSubscription {
     private final Set<PacketType> types;
 
-    private final BiConsumer<? super PacketEvent, Throwable> exceptionConsumer;
+    private final BiConsumer<? super PacketEvent, Exception> exceptionConsumer;
 
     private final Predicate<PacketEvent>[] filters;
     private final BiPredicate<ProtocolSubscription, PacketEvent>[] preExpiryTests;
@@ -98,7 +99,7 @@ class PapiProtocolListener extends PacketAdapter implements ProtocolSubscription
 
             // increment call counter
             this.callCount.incrementAndGet();
-        } catch (Throwable t) {
+        } catch (Exception t) {
             this.exceptionConsumer.accept(event, t);
         }
 

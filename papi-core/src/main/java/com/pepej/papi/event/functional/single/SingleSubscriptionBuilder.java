@@ -129,7 +129,7 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
      * @throws NullPointerException if the consumer is null
      */
     @NonNull
-    SingleSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<? super T, Throwable> consumer);
+    SingleSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<? super T, Exception> consumer);
 
     /**
      * Sets that the handler should accept subclasses of the event type.

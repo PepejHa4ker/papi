@@ -42,7 +42,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens:2.0.22-SNAPSHOT")
     compileOnly("org.bstats:bstats-bukkit:1.7")
     //checkerfw
-    implementation("org.checkerframework:checker:3.7.0")
+    compileOnly("org.checkerframework:checker:3.7.0")
 
     //lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'

@@ -20,7 +20,7 @@ class ProtocolSubscriptionBuilderImpl implements ProtocolSubscriptionBuilder {
     final Set<PacketType> types;
     final ListenerPriority priority;
 
-    BiConsumer<? super PacketEvent, Throwable> exceptionConsumer = DEFAULT_EXCEPTION_CONSUMER;
+    BiConsumer<? super PacketEvent, Exception> exceptionConsumer = DEFAULT_EXCEPTION_CONSUMER;
 
     final List<Predicate<PacketEvent>> filters = new ArrayList<>(3);
     final List<BiPredicate<ProtocolSubscription, PacketEvent>> preExpiryTests = new ArrayList<>(0);
@@ -73,7 +73,7 @@ class ProtocolSubscriptionBuilderImpl implements ProtocolSubscriptionBuilder {
 
     @NonNull
     @Override
-    public ProtocolSubscriptionBuilder exceptionConsumer(@NonNull BiConsumer<? super PacketEvent, Throwable> exceptionConsumer) {
+    public ProtocolSubscriptionBuilder exceptionConsumer(@NonNull BiConsumer<? super PacketEvent, Exception> exceptionConsumer) {
         Objects.requireNonNull(exceptionConsumer, "exceptionConsumer");
         this.exceptionConsumer = exceptionConsumer;
         return this;

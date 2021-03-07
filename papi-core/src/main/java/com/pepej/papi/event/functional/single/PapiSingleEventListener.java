@@ -22,7 +22,7 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
     private final Class<T> eventClass;
     private final EventPriority priority;
 
-    private final BiConsumer<? super T, Throwable> exceptionConsumer;
+    private final BiConsumer<? super T, Exception> exceptionConsumer;
     private final boolean handleSubclasses;
     private final boolean ignoreCancelled;
 
@@ -129,7 +129,7 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
 
             // increment call counter
             callCount.incrementAndGet();
-        } catch (Throwable t) {
+        } catch (Exception t) {
             exceptionConsumer.accept(eventInstance, t);
         }
 
@@ -196,7 +196,7 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
             Method getHandlerListMethod = eventClass.getMethod("getHandlerList");
             HandlerList handlerList = (HandlerList) getHandlerListMethod.invoke(null);
             handlerList.unregister(listener);
-        } catch (Throwable ignored) {
+        } catch (Exception ignored) {
         }
     }
 }

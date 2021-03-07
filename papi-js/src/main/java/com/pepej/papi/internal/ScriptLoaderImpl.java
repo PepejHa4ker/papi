@@ -97,7 +97,7 @@ class ScriptLoaderImpl implements EnvironmentScriptLoader {
         this.lock.lock();
         try {
             reload(false);
-        } catch (Throwable t) {
+        } catch (Exception t) {
             t.printStackTrace();
         } finally {
             this.lock.unlock();

@@ -12,11 +12,11 @@ public class EncodingException extends RuntimeException {
         super(message);
     }
 
-    public EncodingException(String message, Throwable cause) {
+    public EncodingException(String message, Exception cause) {
         super(message, cause);
     }
 
-    public EncodingException(Throwable cause) {
+    public EncodingException(Exception cause) {
         super(cause);
     }
 }

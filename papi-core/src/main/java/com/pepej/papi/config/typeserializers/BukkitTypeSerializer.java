@@ -26,7 +26,7 @@ public final class BukkitTypeSerializer implements TypeSerializer<ConfigurationS
             if (entry.getValue() instanceof Map) {
                 try {
                     //noinspection unchecked
-                    Map<String, Object> value = (Map) entry.getValue();
+                    Map<String, Object> value = (Map<String, Object>) entry.getValue();
 
                     deserializeChildren(value);
 

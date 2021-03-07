@@ -26,7 +26,7 @@ class PapiMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
     private final TypeToken<T> handledClass;
     private final Map<Class<? extends Event>, MergedHandlerMapping<T, ? extends Event>> mappings;
 
-    private final BiConsumer<? super Event, Throwable> exceptionConsumer;
+    private final BiConsumer<? super Event, Exception> exceptionConsumer;
 
     private final Predicate<T>[] filters;
     private final BiPredicate<MergedSubscription<T>, T>[] preExpiryTests;
@@ -43,11 +43,11 @@ class PapiMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
         this.mappings = ImmutableMap.copyOf(builder.mappings);
         this.exceptionConsumer = builder.exceptionConsumer;
 
-        this.filters = builder.filters.toArray(new Predicate[builder.filters.size()]);
-        this.preExpiryTests = builder.preExpiryTests.toArray(new BiPredicate[builder.preExpiryTests.size()]);
-        this.midExpiryTests = builder.midExpiryTests.toArray(new BiPredicate[builder.midExpiryTests.size()]);
-        this.postExpiryTests = builder.postExpiryTests.toArray(new BiPredicate[builder.postExpiryTests.size()]);
-        this.handlers = handlers.toArray(new BiConsumer[handlers.size()]);
+        this.filters = builder.filters.toArray(new Predicate[0]);
+        this.preExpiryTests = builder.preExpiryTests.toArray(new BiPredicate[0]);
+        this.midExpiryTests = builder.midExpiryTests.toArray(new BiPredicate[0]);
+        this.postExpiryTests = builder.postExpiryTests.toArray(new BiPredicate[0]);
+        this.handlers = handlers.toArray(new BiConsumer[0]);
     }
 
     void register(Plugin plugin) {
@@ -122,7 +122,7 @@ class PapiMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
 
             // increment call counter
             this.callCount.incrementAndGet();
-        } catch (Throwable t) {
+        } catch (Exception t) {
             this.exceptionConsumer.accept(event, t);
         }
 
@@ -197,7 +197,7 @@ class PapiMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
             Method getHandlerListMethod = eventClass.getMethod("getHandlerList");
             HandlerList handlerList = (HandlerList) getHandlerListMethod.invoke(null);
             handlerList.unregister(listener);
-        } catch (Throwable t) {
+        } catch (Exception t) {
             // ignored
         }
     }
@@ -206,7 +206,7 @@ class PapiMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
         try {
             clazz.getDeclaredMethod("getHandlerList");
             return clazz;
-        } catch (NoSuchMethodException var2) {
+        } catch (NoSuchMethodException ex) {
             if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Event.class) && Event.class.isAssignableFrom(clazz.getSuperclass())) {
                 return getRegistrationClass(clazz.getSuperclass().asSubclass(Event.class));
             } else {

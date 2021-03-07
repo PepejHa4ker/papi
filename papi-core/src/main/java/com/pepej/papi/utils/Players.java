@@ -55,7 +55,6 @@ public final class Players {
      */
     @Nullable
     public static Player getNullable(@NonNull final String username) {
-        //noinspection deprecation
         return Papi.server().getPlayerExact(username);
     }
 

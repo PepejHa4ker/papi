@@ -8,9 +8,9 @@ import java.util.List;
  * {@link CompositeAutoClosable#close()}.
  */
 public class CompositeClosingException extends Exception {
-    private final List<? extends Throwable> causes;
+    private final List<? extends Exception> causes;
 
-    public CompositeClosingException(List<? extends Throwable> causes) {
+    public CompositeClosingException(List<? extends Exception> causes) {
         super("Exception(s) occurred whilst closing: " + causes.toString());
         if (causes.isEmpty()) {
             throw new IllegalArgumentException("No causes");
@@ -24,7 +24,7 @@ public class CompositeClosingException extends Exception {
 
     public void printAllStackTraces() {
         this.printStackTrace();
-        for (Throwable cause : this.causes) {
+        for (Exception cause : this.causes) {
             cause.printStackTrace();
         }
     }

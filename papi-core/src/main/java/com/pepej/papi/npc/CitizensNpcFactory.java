@@ -276,7 +276,7 @@ public class CitizensNpcFactory implements NpcFactory {
                 if (this.npc.getEntity() instanceof SkinnableEntity) {
                     ((SkinnableEntity) this.npc.getEntity()).getSkinTracker().notifySkinChange(true);
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

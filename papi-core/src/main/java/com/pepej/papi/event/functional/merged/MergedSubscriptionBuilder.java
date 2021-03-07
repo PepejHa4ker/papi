@@ -180,7 +180,7 @@ public interface MergedSubscriptionBuilder<T> extends SubscriptionBuilder<T> {
      * @throws NullPointerException if the consumer is null
      */
     @NonNull
-    MergedSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<Event, Throwable> consumer);
+    MergedSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<Event, Exception> consumer);
 
     /**
      * Return the handler list builder to append handlers for the event.

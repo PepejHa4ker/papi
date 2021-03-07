@@ -18,14 +18,14 @@ import java.util.Objects;
 final class ShadowInvocationHandler implements InvocationHandler {
     private static final Method GET_SHADOW_TARGET_METHOD;
     private static final Method GET_SHADOW_CLASS_METHOD;
-    private static final Method OBJECT_TOSTRING_METHOD;
+    private static final Method OBJECT_TO_STRING_METHOD;
     private static final Method OBJECT_EQUALS_METHOD;
     private static final Method OBJECT_HASHCODE_METHOD;
     static {
         try {
             GET_SHADOW_TARGET_METHOD = Shadow.class.getMethod("getShadowTarget");
             GET_SHADOW_CLASS_METHOD = Shadow.class.getMethod("getShadowClass");
-            OBJECT_TOSTRING_METHOD = Object.class.getMethod("toString");
+            OBJECT_TO_STRING_METHOD = Object.class.getMethod("toString");
             OBJECT_EQUALS_METHOD = Object.class.getMethod("equals", Object.class);
             OBJECT_HASHCODE_METHOD = Object.class.getMethod("hashCode");
         } catch (NoSuchMethodException e) {
@@ -54,7 +54,7 @@ final class ShadowInvocationHandler implements InvocationHandler {
         }
 
         // implement some object methods
-        if (OBJECT_TOSTRING_METHOD.equals(shadowMethod)) {
+        if (OBJECT_TO_STRING_METHOD.equals(shadowMethod)) {
             return "Shadow(shadowClass=" + this.shadow.getShadowClass() + ", targetClass=" + this.shadow.getTargetClass() + ", target=" + this.handle + ")";
         }
         if (OBJECT_EQUALS_METHOD.equals(shadowMethod)) {

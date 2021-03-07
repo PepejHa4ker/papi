@@ -18,7 +18,7 @@ class SingleSubscriptionBuilderImpl<T extends Event> implements SingleSubscripti
     final EventPriority priority;
 
 
-    BiConsumer<? super T, Throwable> exceptionConsumer = DEFAULT_EXCEPTION_CONSUMER;
+    BiConsumer<? super T, Exception> exceptionConsumer = DEFAULT_EXCEPTION_CONSUMER;
     boolean handleSubclasses = false;
     boolean ignoreCancelled = false;
 
@@ -77,7 +77,7 @@ class SingleSubscriptionBuilderImpl<T extends Event> implements SingleSubscripti
 
     @NonNull
     @Override
-    public SingleSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<? super T, Throwable> exceptionConsumer) {
+    public SingleSubscriptionBuilder<T> exceptionConsumer(@NonNull BiConsumer<? super T, Exception> exceptionConsumer) {
         Objects.requireNonNull(exceptionConsumer, "exceptionConsumer");
         this.exceptionConsumer = exceptionConsumer;
         return this;
