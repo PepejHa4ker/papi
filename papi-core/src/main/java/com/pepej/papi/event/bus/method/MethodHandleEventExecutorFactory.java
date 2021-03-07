@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  */
 public final class MethodHandleEventExecutorFactory<E, L> implements EventExecutor.Factory<E, L> {
     @Override
-    public @NonNull EventExecutor<E, L> create(final @NonNull Object object, final @NonNull Method method) throws Exception {
+    public @NonNull EventExecutor<E, L> create(final @NonNull Object object, final @NonNull Method method) throws Throwable {
         final MethodHandle handle = MethodHandles.publicLookup()
                                                  .unreflect(method)
                                                  .bindTo(object);

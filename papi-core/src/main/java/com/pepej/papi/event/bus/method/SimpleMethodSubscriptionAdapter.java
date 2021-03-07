@@ -62,8 +62,8 @@ public class SimpleMethodSubscriptionAdapter<E, L> implements MethodSubscription
             final EventExecutor<E, L> executor;
             try {
                 executor = this.factory.create(listener, method);
-            } catch(final Exception e) {
-                throw new SubscriberGenerationException("Encountered an exception while creating an event subscriber for method '" + method + '\'', e);
+            } catch(final Throwable e) {
+                throw new SubscriberGenerationException("Encountered an exception while creating an event subscriber for method '" + method + '\'', (Exception) e);
             }
 
             final Class<? extends E> eventClass = (Class<? extends E>) methodParameterType;
@@ -121,7 +121,7 @@ public class SimpleMethodSubscriptionAdapter<E, L> implements MethodSubscription
         }
 
         @Override
-        public void invoke(final @NonNull E event) throws Exception {
+        public void invoke(final @NonNull E event) throws Throwable {
             this.executor.invoke(this.listener, event);
         }
 

@@ -19,7 +19,7 @@ public interface EventExecutor<E, L> {
      * @param event the event
      * @throws Exception if an exception occurred
      */
-    void invoke(final @NonNull L listener, final @NonNull E event) throws Exception;
+    void invoke(final @NonNull L listener, final @NonNull E event) throws Throwable;
 
     /**
      * Factory for {@link EventExecutor}s.
@@ -37,6 +37,6 @@ public interface EventExecutor<E, L> {
          * @return an event executor
          * @throws Exception if an exception occurred while creating an executor
          */
-        @NonNull EventExecutor<E, L> create(final @NonNull Object object, final @NonNull Method method) throws Exception;
+        @NonNull EventExecutor<E, L> create(final @NonNull Object object, final @NonNull Method method) throws Throwable;
     }
 }

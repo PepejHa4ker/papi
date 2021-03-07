@@ -76,14 +76,14 @@ public class SimpleEventBus<E> implements EventBus<E> {
     @Override
     @SuppressWarnings("unchecked")
     public PostResult post(final @NonNull E event) {
-        ImmutableMap.Builder<EventSubscriber<?>, Exception> exceptions = null; // save on an allocation
+        ImmutableMap.Builder<EventSubscriber<?>, Throwable> exceptions = null; // save on an allocation
         for (final EventSubscriber subscriber : this.registry.subscribers(event.getClass())) {
             if (!this.shouldPost(event, subscriber)) {
                 continue;
             }
             try {
                 subscriber.invoke(event);
-            } catch (final Exception e) {
+            } catch (final Throwable e) {
                 if (exceptions == null) {
                     exceptions = ImmutableMap.builder();
                 }

@@ -37,7 +37,7 @@ final class PapiPromise<V> implements Promise<V> {
     }
 
     @NonNull
-    static <U> PapiPromise<U> exceptionally(@NonNull Exception t) {
+    static <U> PapiPromise<U> exceptionally(@NonNull Throwable t) {
         return new PapiPromise<>(t);
     }
 

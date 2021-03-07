@@ -20,7 +20,7 @@ public interface EventSubscriber<E> {
      * @param event the event that was posted
      * @throws Exception any exception thrown during handling
      */
-    void invoke(final @NonNull E event) throws Exception;
+    void invoke(final @NonNull E event) throws Throwable;
 
     /**
      * Gets the post order this subscriber should be called at.
