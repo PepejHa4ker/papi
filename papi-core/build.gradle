@@ -33,9 +33,10 @@ dependencies {
 
     //spigot core
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
-    //mojang authlib
+    // mojang authlib
     compileOnly("com.mojang:authlib:1.5.21")
 
+    
     //protocols
     compileOnly("com.comphenix.protocol:ProtocolLib:4.5.0")
     //npcs
@@ -50,7 +51,6 @@ dependencies {
 
     //asm
     implementation('org.ow2.asm:asm:8.0.1')
-
     implementation("org.spongepowered:configurate-hocon:4.0.0")
     implementation("org.spongepowered:configurate-yaml:4.0.0")
     implementation("org.spongepowered:configurate-core:4.0.0")

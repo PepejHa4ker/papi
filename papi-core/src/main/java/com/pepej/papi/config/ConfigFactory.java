@@ -1,11 +1,15 @@
 package com.pepej.papi.config;
 
 import com.google.gson.JsonElement;
-import com.pepej.papi.config.typeserializers.*;
+import com.pepej.papi.config.typeserializers.BukkitTypeSerializer;
+import com.pepej.papi.config.typeserializers.GsonTypeSerializer;
+import com.pepej.papi.config.typeserializers.JsonTreeTypeSerializer;
+import com.pepej.papi.config.typeserializers.PapiTypeSerializer;
 import com.pepej.papi.datatree.DataTree;
 import com.pepej.papi.gson.GsonSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.ScopedConfigurationNode;
@@ -27,9 +31,9 @@ import java.nio.file.Path;
 /**
  * Misc utilities for working with Configurate
  */
-public abstract class ConfigFactory<N extends ConfigurationNode, L extends AbstractConfigurationLoader<?>> {
+public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L extends AbstractConfigurationLoader<N>> {
 
-    private static final ConfigFactory<ConfigurationNode, YamlConfigurationLoader> YAML = new ConfigFactory<ConfigurationNode, YamlConfigurationLoader>() {
+    private static final ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader> YAML = new ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader>() {
         @NonNull
         @Override
         public YamlConfigurationLoader loader(@NonNull Path path) {
@@ -45,7 +49,7 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Abstr
         }
     };
 
-    private static final ConfigFactory<ConfigurationNode, GsonConfigurationLoader> GSON = new ConfigFactory<ConfigurationNode, GsonConfigurationLoader>() {
+    private static final ConfigFactory<BasicConfigurationNode, GsonConfigurationLoader> GSON = new ConfigFactory<BasicConfigurationNode, GsonConfigurationLoader>() {
         @NonNull
         @Override
         public GsonConfigurationLoader loader(@NonNull Path path) {
@@ -80,18 +84,18 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Abstr
     private static final TypeSerializerCollection TYPE_SERIALIZERS;
 
     static {
-
-        TYPE_SERIALIZERS = TypeSerializerCollection.builder()
+        TYPE_SERIALIZERS = TypeSerializerCollection.defaults()
+                .childBuilder()
+//                .register(String.class, StringSerializer.INSTANCE)
                 .register(JsonElement.class, GsonTypeSerializer.INSTANCE)
                 .register(GsonSerializable.class, PapiTypeSerializer.INSTANCE)
                 .register(ConfigurationSerializable.class, BukkitTypeSerializer.INSTANCE)
                 .register(DataTree.class, JsonTreeTypeSerializer.INSTANCE)
-                .register(String.class, StringSerializer.INSTANCE)
                 .registerAnnotatedObjects(ObjectMapper.factoryBuilder()
-                        .addNodeResolver(NodeResolver.keyFromSetting())
                         .addNodeResolver(NodeResolver.onlyWithSetting())
                         .build())
                 .build();
+
     }
 
     @NonNull
@@ -100,12 +104,12 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Abstr
     }
 
     @NonNull
-    public static ConfigFactory<ConfigurationNode, YamlConfigurationLoader> yaml() {
+    public static ConfigFactory<CommentedConfigurationNode, YamlConfigurationLoader> yaml() {
         return YAML;
     }
 
     @NonNull
-    public static ConfigFactory<ConfigurationNode, GsonConfigurationLoader> gson() {
+    public static ConfigFactory<BasicConfigurationNode, GsonConfigurationLoader> gson() {
         return GSON;
     }
 
@@ -114,15 +118,13 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Abstr
         return HOCON;
     }
 
-    private ConfigFactory() {
-
-    }
+    private ConfigFactory() {}
 
     @NonNull
     public abstract L loader(@NonNull Path path);
 
     @NonNull
-    public ScopedConfigurationNode<?> load(@NonNull Path path) {
+    public N load(@NonNull Path path) {
         try {
             return loader(path).load();
         } catch (IOException e) {
@@ -144,7 +146,7 @@ public abstract class ConfigFactory<N extends ConfigurationNode, L extends Abstr
     }
 
     @NonNull
-    public ScopedConfigurationNode<?> load(@NonNull File file) {
+    public N load(@NonNull File file) {
         return load(file.toPath());
     }
 
