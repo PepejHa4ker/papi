@@ -1,10 +1,9 @@
 package com.pepej.papi.config;
 
 import com.google.gson.JsonElement;
-import com.pepej.papi.config.typeserializers.BukkitTypeSerializer;
-import com.pepej.papi.config.typeserializers.GsonTypeSerializer;
-import com.pepej.papi.config.typeserializers.JsonTreeTypeSerializer;
-import com.pepej.papi.config.typeserializers.PapiTypeSerializer;
+import com.pepej.papi.config.typeserializers.*;
+import com.pepej.papi.config.validate.Range;
+import com.pepej.papi.config.validate.Time;
 import com.pepej.papi.datatree.DataTree;
 import com.pepej.papi.gson.GsonSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -25,6 +24,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 /**
  * Misc utilities for working with Configurate
@@ -36,12 +36,12 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         @Override
         public XmlConfigurationLoader loader(@NonNull Path path) {
             XmlConfigurationLoader.Builder builder = XmlConfigurationLoader.builder()
-                    .indent(2)
-                    .defaultTagName("papi")
-                    .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
-                    .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
+                                                                           .indent(2)
+                                                                           .defaultTagName("papi")
+                                                                           .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
+                                                                           .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
             builder.defaultOptions(builder.defaultOptions()
-                    .serializers(TYPE_SERIALIZERS));
+                                          .serializers(TYPE_SERIALIZERS));
             return builder.build();
         }
     };
@@ -51,13 +51,13 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         @Override
         public YamlConfigurationLoader loader(@NonNull Path path) {
             YamlConfigurationLoader.Builder builder = YamlConfigurationLoader.builder()
-                    .nodeStyle(NodeStyle.BLOCK)
-                    .indent(2)
-                    .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
-                    .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
+                                                                             .nodeStyle(NodeStyle.BLOCK)
+                                                                             .indent(2)
+                                                                             .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
+                                                                             .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
 
             builder.defaultOptions(builder.defaultOptions()
-                    .serializers(TYPE_SERIALIZERS));
+                                          .serializers(TYPE_SERIALIZERS));
             return builder.build();
         }
     };
@@ -67,13 +67,12 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         @Override
         public GsonConfigurationLoader loader(@NonNull Path path) {
             GsonConfigurationLoader.Builder builder = GsonConfigurationLoader.builder()
-                    .indent(2)
-                    .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
-                    .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
+                                                                             .indent(2)
+                                                                             .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
+                                                                             .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
 
             builder.defaultOptions(builder.defaultOptions()
-                    .serializers(TYPE_SERIALIZERS));
-
+                                          .serializers(TYPE_SERIALIZERS));
 
 
             return builder.build();
@@ -85,10 +84,10 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         @Override
         public HoconConfigurationLoader loader(@NonNull Path path) {
             HoconConfigurationLoader.Builder builder = HoconConfigurationLoader.builder()
-                    .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
-                    .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
+                                                                               .source(() -> Files.newBufferedReader(path, StandardCharsets.UTF_8))
+                                                                               .sink(() -> Files.newBufferedWriter(path, StandardCharsets.UTF_8));
             builder.defaultOptions(builder.defaultOptions()
-                    .serializers(TYPE_SERIALIZERS));
+                                          .serializers(TYPE_SERIALIZERS));
             return builder.build();
         }
     };
@@ -97,15 +96,17 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
 
     static {
         TYPE_SERIALIZERS = TypeSerializerCollection.defaults()
-                .childBuilder()
-                .register(JsonElement.class, GsonTypeSerializer.INSTANCE)
-                .register(GsonSerializable.class, PapiTypeSerializer.INSTANCE)
-                .register(ConfigurationSerializable.class, BukkitTypeSerializer.INSTANCE)
-                .register(DataTree.class, JsonTreeTypeSerializer.INSTANCE)
-                .registerAnnotatedObjects(ObjectMapper.factoryBuilder()
-                        .addNodeResolver(NodeResolver.onlyWithSetting())
-                        .build())
-                .build();
+                                                   .childBuilder()
+                                                   .register(JsonElement.class, GsonTypeSerializer.INSTANCE)
+                                                   .register(GsonSerializable.class, PapiTypeSerializer.INSTANCE)
+                                                   .register(ConfigurationSerializable.class, BukkitTypeSerializer.INSTANCE)
+                                                   .register(DataTree.class, JsonTreeTypeSerializer.INSTANCE)
+                                                   .register(Duration.class, DurationTypeSerializer.INSTANCE)
+                                                   .registerAnnotatedObjects(ObjectMapper.factoryBuilder()
+                                                                                         .addConstraint(Time.class, String.class, Constraints.time())
+                                                                                         .addConstraint(Range.class, Integer.class, Constraints.range())
+                                                                                         .build())
+                                                   .build();
 
     }
 
@@ -134,7 +135,8 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         return XML;
     }
 
-    private ConfigFactory() {}
+    private ConfigFactory() {
+    }
 
     @NonNull
     public abstract L loader(@NonNull Path path);
@@ -148,7 +150,7 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         }
     }
 
-    public void save(@NonNull Path path, @NonNull ConfigurationNode node) {
+    public <S extends ConfigurationNode> void save(@NonNull Path path, @NonNull S node) {
         try {
             loader(path).save(node);
         } catch (IOException e) {
@@ -166,7 +168,7 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
         return load(file.toPath());
     }
 
-    public void save(@NonNull File file, @NonNull ConfigurationNode node) {
+    public <S extends ConfigurationNode> void save(@NonNull File file, @NonNull S node) {
         save(file.toPath(), node);
     }
 

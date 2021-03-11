@@ -12,7 +12,6 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 import java.lang.reflect.Type;
 
 public final class PapiTypeSerializer implements TypeSerializer<GsonSerializable> {
-    private static final TypeToken<JsonElement> JSON_ELEMENT_TYPE = TypeToken.of(JsonElement.class);
 
     public static final PapiTypeSerializer INSTANCE = new PapiTypeSerializer();
 
@@ -22,7 +21,7 @@ public final class PapiTypeSerializer implements TypeSerializer<GsonSerializable
 
     @Override
     public GsonSerializable deserialize(Type type, ConfigurationNode node) throws SerializationException {
-        return GsonSerializable.deserializeRaw(JSON_ELEMENT_TYPE.getRawType(), node.get(JsonElement.class, JsonNull.INSTANCE));
+        return GsonSerializable.deserializeRaw(TypeToken.of(type).getRawType(), node.get(JsonElement.class, JsonNull.INSTANCE));
     }
 
     @Override

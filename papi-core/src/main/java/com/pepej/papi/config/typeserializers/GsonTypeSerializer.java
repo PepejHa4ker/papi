@@ -3,7 +3,10 @@ package com.pepej.papi.config.typeserializers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.pepej.papi.gson.converter.GsonConverters;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -15,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class GsonTypeSerializer implements TypeSerializer<JsonElement> {
-    private static final Type TYPE = TypeToken.of(JsonElement.class).getType();
+    private static final TypeToken<JsonElement> TYPE = TypeToken.of(JsonElement.class);
 
     public static final GsonTypeSerializer INSTANCE = new GsonTypeSerializer();
 
@@ -43,7 +46,7 @@ public final class GsonTypeSerializer implements TypeSerializer<JsonElement> {
             return object;
         }
 
-        Object val = from.get(JsonElement.class);
+        Object val = from.get(Object.class);
         return GsonConverters.IMMUTABLE.wrap(val);
 
     }
@@ -60,14 +63,14 @@ public final class GsonTypeSerializer implements TypeSerializer<JsonElement> {
             // ensure 'to' is a list node
             to.set(ImmutableList.of());
             for (JsonElement element : array) {
-                serialize(TYPE, element, to.appendListNode());
+                serialize(TYPE.getType(), element, to.appendListNode());
             }
         } else if (from.isJsonObject()) {
             JsonObject object = from.getAsJsonObject();
             // ensure 'to' is a map node
             to.set(ImmutableMap.of());
             for (Map.Entry<String, JsonElement> ent : object.entrySet()) {
-                serialize(TYPE, ent.getValue(), to.node(ent.getKey()));
+                serialize(TYPE.getType(), ent.getValue(), to.node(ent.getKey()));
             }
         }
     }

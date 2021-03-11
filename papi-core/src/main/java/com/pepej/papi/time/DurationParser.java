@@ -34,7 +34,7 @@ public final class DurationParser {
                                                                .map(pattern -> "(?:(\\d+)\\s*" + pattern + "[,\\s]*)?")
                                                                .collect(Collectors.joining());
 
-    private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING, Pattern.CASE_INSENSITIVE);
+    public static final Pattern PATTERN = Pattern.compile(PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 
     /**
      * Parses a {@link Duration} from a string.
