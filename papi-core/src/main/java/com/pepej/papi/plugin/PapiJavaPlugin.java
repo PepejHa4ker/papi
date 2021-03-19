@@ -6,7 +6,7 @@ import com.pepej.papi.events.player.AsyncPlayerFirstJoinEvent;
 import com.pepej.papi.events.server.ServerUpdateEvent;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.internal.PapiImplementationPlugin;
-import com.pepej.papi.maven.LibraryLoader;
+import com.pepej.papi.dependency.DependencyLoader;
 import com.pepej.papi.scheduler.PapiExecutors;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.services.ServicePriority;
@@ -54,7 +54,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
 
         this.terminableRegistry = CompositeTerminable.create();
 
-        LibraryLoader.loadAll(getClass());
+        DependencyLoader.loadAll(getClass());
 
         // call subclass
         onPluginLoad();

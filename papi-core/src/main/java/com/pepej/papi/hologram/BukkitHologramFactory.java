@@ -57,7 +57,6 @@ public class BukkitHologramFactory implements HologramFactory {
 
         private CompositeTerminable listeners = null;
 
-
         BukkitHologram(Position position, List<String> lines) {
             this.position = Objects.requireNonNull(position, "position");
             updateLines(lines);
@@ -88,9 +87,14 @@ public class BukkitHologramFactory implements HologramFactory {
                 int diff = spawnedSize - linesSize;
                 for (int i = 0; i < diff; i++) {
 
-                    // get and remove the last entry
-                    ArmorStand as = this.spawnedEntities.remove(this.spawnedEntities.size() - 1);
+                    int index = this.spawnedEntities.size() - 1;
+
+                    // remove the armorstand first
+                    ArmorStand as = this.spawnedEntities.get(index);
                     as.remove();
+
+                    // then remove from the list
+                    this.spawnedEntities.remove(index);
 
                 }
             }
@@ -223,13 +227,13 @@ public class BukkitHologramFactory implements HologramFactory {
 
         @Override
         public void addExpiring(final long ticksDelay) {
-            Schedulers.async().runLater(this::close, ticksDelay);
+            Schedulers.sync().runLater(this::close, ticksDelay);
 
         }
 
         @Override
         public void addExpiring(final long delay, final TimeUnit unit) {
-            Schedulers.async().runLater(this::close, delay, unit);
+            Schedulers.sync().runLater(this::close, delay, unit);
         }
 
         @Override
@@ -247,8 +251,8 @@ public class BukkitHologramFactory implements HologramFactory {
 
             this.lines.clear();
             this.lines.addAll(ret);
-        }
 
+        }
 
         @Override
         public void close() {

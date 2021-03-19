@@ -84,7 +84,7 @@ public final class StringUtils {
         return format(amount, getFormatter(format));
     }
 
-    public static String formatAmount(Double amount, String format) {
+    public static String formatAmount(double amount, String format) {
         return format(amount, getFormatter(format));
     }
 

@@ -3,12 +3,14 @@ package com.pepej.papi.hologram;
 import com.pepej.papi.serialize.Position;
 import com.pepej.papi.terminable.Terminable;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Base interface for holograms.
@@ -61,6 +63,8 @@ public interface BaseHologram extends Terminable {
     void addExpiring(final long ticksDelay);
 
     void addExpiring(final long delay, final TimeUnit unit);
+
+
 
 
 

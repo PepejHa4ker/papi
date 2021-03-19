@@ -1,4 +1,4 @@
-package com.pepej.papi.maven;
+package com.pepej.papi.dependency;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 

@@ -30,7 +30,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static java.lang.System.out;
 
 public class PacketIndividualHologramFactory implements IndividualHologramFactory {
 
@@ -69,11 +72,10 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
         PacketHologram(@NonNull Position position, @NonNull List<@NonNull HologramLine> lines) {
             Objects.requireNonNull(position, "position");
             this.position = position;
-            updateLines(lines);
             this.lines = new ArrayList<>();
             spawnedEntities = new ArrayList<>();
             viewers = Collections.synchronizedSet(new HashSet<>());
-
+            updateLines(lines);
         }
 
 
@@ -436,7 +438,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
                     })
                     .bindWith(this.listener);
 
-            Protocol.subscribe(ListenerPriority.MONITOR, PacketType.Play.Server.SPAWN_ENTITY)
+            Protocol.subscribe(ListenerPriority.HIGH, PacketType.Play.Server.SPAWN_ENTITY)
                     .handler(e -> {
                         PacketContainer packet = e.getPacket();
                         Player player = e.getPlayer();
@@ -455,6 +457,7 @@ public class PacketIndividualHologramFactory implements IndividualHologramFactor
                         }
                     })
                     .bindWith(this.listener);
+
 
         }
     }

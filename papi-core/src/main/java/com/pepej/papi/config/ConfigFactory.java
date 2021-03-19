@@ -6,6 +6,7 @@ import com.pepej.papi.config.validate.Range;
 import com.pepej.papi.config.validate.Time;
 import com.pepej.papi.datatree.DataTree;
 import com.pepej.papi.gson.GsonSerializable;
+import lombok.SneakyThrows;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.*;

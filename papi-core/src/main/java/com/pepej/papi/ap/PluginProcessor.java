@@ -34,7 +34,7 @@ public class PluginProcessor extends AbstractProcessor {
         }
 
         if (annotatedElements.size() > 1) {
-            this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "More than one @Plugin element found.");
+            this.processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "More than one @Plugi n element found.");
             return false;
         }
 

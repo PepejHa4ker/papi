@@ -12,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.omg.CORBA.portable.ResponseHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +26,7 @@ public class PacketSignPromptFactory implements SignPromptFactory {
     @Override
     public void openPrompt(@NonNull Player player, @NonNull List<String> lines, @NonNull ResponseHandler responseHandler) {
         Location location = player.getLocation().clone();
-        location.setY(254);
+        location.setY(100);
         Players.sendBlockChange(player, location, Material.WALL_SIGN);
 
         BlockPosition position = new BlockPosition(location.toVector());

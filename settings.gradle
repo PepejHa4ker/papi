@@ -2,4 +2,5 @@ rootProject.name = 'papi'
 include 'papi-core'
 include 'papi-js'
 include 'papi-core-plugin'
+include 'papi-kotlin-ext'
 

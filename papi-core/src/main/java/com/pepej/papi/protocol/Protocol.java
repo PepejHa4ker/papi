@@ -6,10 +6,13 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketContainer;
 import com.pepej.papi.event.functional.protocol.ProtocolSubscriptionBuilder;
+import com.pepej.papi.utils.Log;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
+
+import static java.lang.System.out;
 
 /**
  * Utilities for working with ProtocolLib.
@@ -56,6 +59,7 @@ public final class Protocol {
      * @param packet the packet
      */
     public static void sendPacket(@NonNull Player player, @NonNull PacketContainer packet) {
+        Log.info("sending packet %s for %s", packet, player.getName());
         try {
             manager().sendServerPacket(player, packet);
         } catch (InvocationTargetException e) {

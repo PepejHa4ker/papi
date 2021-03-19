@@ -210,56 +210,38 @@ public final class Players {
     }
 
     @SuppressWarnings("deprecation")
-    public static void sendBlockChange(@NonNull final Player player, @NonNull final Location loc, @NonNull final Material type, final int data) {
+    public static void sendBlockChange(Player player, Location loc, Material type, int data) {
         player.sendBlockChange(loc, type, (byte) data);
     }
 
-    public static void sendBlockChange(@NonNull final Player player, @NonNull final Block block, @NonNull final Material type, final int data) {
+    public static void sendBlockChange(Player player, Block block, Material type, int data) {
         sendBlockChange(player, block.getLocation(), type, data);
     }
 
-    public static void sendBlockChange(@NonNull final Player player, @NonNull final Location loc, @NonNull final Material type) {
+    public static void sendBlockChange(Player player, Location loc, Material type) {
         sendBlockChange(player, loc, type, 0);
     }
 
-    public static void sendBlockChange(@NonNull final Player player, @NonNull final Block block, @NonNull final Material type) {
+    public static void sendBlockChange(Player player, Block block, Material type) {
         sendBlockChange(player, block, type, 0);
     }
 
-    public static void spawnParticle(@NonNull final Player player, @NonNull final Location location, @NonNull final Particle particle) {
+    public static void spawnParticle(Player player, Location location, Particle particle) {
         player.spawnParticle(particle, location, 1);
     }
 
-    public static void spawnParticle(@NonNull final Location location, @NonNull final Particle particle) {
+    public static void spawnParticle(Location location, Particle particle) {
         location.getWorld().spawnParticle(particle, location, 1);
     }
 
-    public static void spawnParticle(@NonNull final Player player, @NonNull final Location location, @NonNull final Particle particle, final int amount) {
+    public static void spawnParticle(Player player, Location location, Particle particle, int amount) {
         Preconditions.checkArgument(amount > 0, "amount > 0");
         player.spawnParticle(particle, location, amount);
     }
 
-    public static void spawnParticle(@NonNull final Location location, @NonNull final Particle particle, final int amount) {
+    public static void spawnParticle(Location location, Particle particle, int amount) {
         Preconditions.checkArgument(amount > 0, "amount > 0");
         location.getWorld().spawnParticle(particle, location, amount);
-    }
-
-    public static void spawnParticleOffset(@NonNull final Player player, @NonNull final Location location, @NonNull final Particle particle, final double offset) {
-        player.spawnParticle(particle, location, 1, offset, offset, offset);
-    }
-
-    public static void spawnParticleOffset(Location location, Particle particle, final double offset) {
-        location.getWorld().spawnParticle(particle, location, 1, offset, offset, offset);
-    }
-
-    public static void spawnParticleOffset(@NonNull final Player player, @NonNull final Location location, @NonNull final Particle particle, final int amount, final double offset) {
-        Preconditions.checkArgument(amount > 0, "amount > 0");
-        player.spawnParticle(particle, location, amount, offset, offset, offset);
-    }
-
-    public static void spawnParticleOffset(@NonNull final Location location, @NonNull final Particle particle, final int amount, final double offset) {
-        Preconditions.checkArgument(amount > 0, "amount > 0");
-        location.getWorld().spawnParticle(particle, location, amount, offset, offset, offset);
     }
 
     public static void spawnEffect(@NonNull final Player player, @NonNull final Location location, @NonNull final Effect effect) {
