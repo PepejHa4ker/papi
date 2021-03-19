@@ -4,7 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import lombok.SneakyThrows;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
@@ -47,11 +49,23 @@ final class SimpleServicesManager implements ServicesManager {
                 throw new IllegalArgumentException("Implementation class must be a public!");
             }
             Class<T> providerClass = (Class<T>) specifiedProviderClass;
+            provider = providerClass.getDeclaredConstructor().newInstance();
+            for (Field field : providerClass.getDeclaredFields()) {
+                field.setAccessible(true);
+                final Service serviceAnn = field.getDeclaredAnnotation(Service.class);
+                if (serviceAnn == null) {
+                    continue;
+                }
+                RegisteredServiceProvider<?> registration = getRegistration(field.getType());
+                if (registration == null) {
+                    throw new IllegalArgumentException("No registration present for type " + field.getType());
+                }
+                field.set(provider, registration.getProvider());
+            }
             Constructor<?> constructor = providerClass.getDeclaredConstructor();
             if (constructor.getParameterCount() != 0) {
                 throw new IllegalArgumentException("No default constructor present");
             }
-            provider = providerClass.getDeclaredConstructor().newInstance();
             List<RegisteredServiceProvider<?>> registered = providers.computeIfAbsent(service, k -> new ArrayList<>());
             registeredProvider = new RegisteredServiceProvider<>(service, provider, implementor.priority());
             // Insert the provider into the collection, much more efficient big O than sort
@@ -74,10 +88,23 @@ final class SimpleServicesManager implements ServicesManager {
      * @param provider provider to register
      * @param priority priority of the provider
      */
+    @SneakyThrows
     public <T> void register(Class<T> service, T provider, ServicePriority priority) {
         RegisteredServiceProvider<T> registeredProvider;
         synchronized (providers) {
             List<RegisteredServiceProvider<?>> registered = providers.computeIfAbsent(service, k -> new ArrayList<>());
+            for (Field field : provider.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                final Service serviceAnn = field.getDeclaredAnnotation(Service.class);
+                if (serviceAnn == null) {
+                    continue;
+                }
+                RegisteredServiceProvider<?> registration = getRegistration(field.getType());
+                if (registration == null) {
+                    throw new IllegalArgumentException("No registration present for type " + field.getType());
+                }
+                field.set(provider, registration.getProvider());
+            }
             registeredProvider = new RegisteredServiceProvider<>(service, provider, priority);
 
             // Insert the provider into the collection, much more efficient big O than sort

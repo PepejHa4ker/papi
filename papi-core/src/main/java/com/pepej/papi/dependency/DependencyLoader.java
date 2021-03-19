@@ -1,4 +1,4 @@
-package com.pepej.papi.maven;
+package com.pepej.papi.dependency;
 
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.shadow.ClassTarget;
@@ -16,13 +16,13 @@ import java.nio.file.Files;
 
 
 /**
- * Resolves {@link MavenLibrary} annotations for a class, and loads the dependency
+ * Resolves {@link Dependency} annotations for a class, and loads the dependency
  * into the classloader.
  */
-public final class LibraryLoader {
+public final class DependencyLoader {
 
     /**
-     * Resolves all {@link MavenLibrary} annotations on the given object.
+     * Resolves all {@link Dependency} annotations on the given object.
      *
      * @param object the object to load libraries for.
      */
@@ -31,14 +31,14 @@ public final class LibraryLoader {
     }
 
     /**
-     * Resolves all {@link MavenLibrary} annotations on the given class.
+     * Resolves all {@link Dependency} annotations on the given class.
      *
      * @param clazz the class to load libraries for.
      */
     public static void loadAll(Class<?> clazz) {
-        MavenLibrary[] libs = clazz.getDeclaredAnnotationsByType(MavenLibrary.class);
+        Dependency[] libs = clazz.getDeclaredAnnotationsByType(Dependency.class);
 
-        for (MavenLibrary lib : libs) {
+        for (Dependency lib : libs) {
             if (!lib.value().isEmpty()) {
                 String[] strings = lib.value().split(":");
                 load(strings[0], strings[1], strings[2], lib.repo().url());
@@ -53,21 +53,21 @@ public final class LibraryLoader {
     }
 
     public static void load(String groupId, String artifactId, String version, String repoUrl) {
-        load(new Dependency(groupId, artifactId, version, repoUrl));
+        load(new DependencyValue(groupId, artifactId, version, repoUrl));
     }
 
     @SneakyThrows
-    public static void load(Dependency d) {
+    public static void load(DependencyValue d) {
         Log.info("Loading dependency &d'%s:%s:%s'&a from&d %s", d.getGroupId(), d.getArtifactId(), d.getVersion(), d.getRepoUrl());
         String name = d.getArtifactId() + "-" + d.getVersion();
 
         File saveLocation = new File(getLibFolder(), name + ".jar");
         if (!saveLocation.exists()) {
-            Log.info("Dependency &d'%s'&a is not already in the libraries folder. Attempting to download...", name);
+            Log.info("DependencyValue &d'%s'&a is not already in the libraries folder. Attempting to download...", name);
             URL url = d.getUrl();
             @Cleanup InputStream is = url.openStream();
             Files.copy(is, saveLocation.toPath());
-            Log.info("Dependency &d'%s'&a successfully downloaded.", name);
+            Log.info("DependencyValue &d'%s'&a successfully downloaded.", name);
         }
 
         if (!saveLocation.exists()) {
@@ -99,7 +99,7 @@ public final class LibraryLoader {
     @EqualsAndHashCode
     @ToString
     @Value
-    private static class Dependency {
+    private static class DependencyValue {
         String groupId;
         String artifactId;
         String version;

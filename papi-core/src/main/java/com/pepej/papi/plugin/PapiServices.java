@@ -8,6 +8,7 @@ import com.pepej.papi.messaging.bungee.BungeeCord;
 import com.pepej.papi.npc.CitizensNpcFactory;
 import com.pepej.papi.npc.NpcFactory;
 import com.pepej.papi.scoreboard.ScoreboardProvider;
+import com.pepej.papi.signprompt.PacketSignPromptFactory;
 import com.pepej.papi.signprompt.SignPromptFactory;
 
 final class PapiServices {
@@ -21,7 +22,8 @@ final class PapiServices {
         plugin.provideService(BungeeCord.class);
         if (plugin.isPluginPresent("ProtocolLib")) {
             plugin.provideService(ScoreboardProvider.class);
-            plugin.provideService(SignPromptFactory.class);
+            SignPromptFactory signPromptFactory = new PacketSignPromptFactory();
+            plugin.provideService(SignPromptFactory.class, signPromptFactory);
             plugin.provideService(IndividualHologramFactory.class);
         }
 

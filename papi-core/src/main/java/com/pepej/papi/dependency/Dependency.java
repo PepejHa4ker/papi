@@ -1,4 +1,4 @@
-package com.pepej.papi.maven;
+package com.pepej.papi.dependency;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -8,10 +8,10 @@ import java.lang.annotation.*;
  * Annotation to indicate a required library for a class.
  */
 @Documented
-@Repeatable(MavenLibraries.class)
+@Repeatable(Dependencies.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MavenLibrary {
+public @interface Dependency {
 
     /**
      * The full name of the library. (like gradle style)

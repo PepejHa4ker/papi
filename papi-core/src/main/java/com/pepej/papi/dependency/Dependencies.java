@@ -1,4 +1,4 @@
-package com.pepej.papi.maven;
+package com.pepej.papi.dependency;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -10,9 +10,9 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MavenLibraries {
+public @interface Dependencies {
 
     @NonNull
-    MavenLibrary[] value() default {};
+    Dependency[] value() default {};
 
 }
