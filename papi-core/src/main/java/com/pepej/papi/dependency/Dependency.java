@@ -6,6 +6,8 @@ import java.lang.annotation.*;
 
 /**
  * Annotation to indicate a required library for a class.
+ *
+ * You have to specify one argument. or {@link Dependency#value()} or {@link Dependency#groupId()}, {@link Dependency#artifactId()} and {@link Dependency#version()}
  */
 @Documented
 @Repeatable(Dependencies.class)

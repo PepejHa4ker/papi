@@ -19,24 +19,26 @@ import static java.util.stream.Collectors.toSet;
  * Provides the instance which loaded the papi classes into the server
  */
 public final class LoaderUtils {
-    private static PapiPlugin plugin;
+    private static volatile PapiPlugin plugin; // double check locking
     private static Thread mainThread;
 
     @NonNull
-    @Synchronized
     public static PapiPlugin getPlugin() {
         if (plugin == null) {
-            JavaPlugin pl = JavaPlugin.getProvidingPlugin(LoaderUtils.class);
-            if (!(pl instanceof PapiPlugin)) {
-                throw new IllegalStateException("papi providing plugin does not implement PapiPlugin: " + pl.getClass().getName());
+            synchronized (LoaderUtils.class) { // double check locking
+                if (plugin == null) {
+                    JavaPlugin pl = JavaPlugin.getProvidingPlugin(LoaderUtils.class);
+                    if (!(pl instanceof PapiPlugin)) {
+                        throw new IllegalStateException("papi providing plugin does not implement PapiPlugin: " + pl.getClass().getName());
+                    }
+                    plugin = (PapiPlugin) pl;
+                    String pkg = LoaderUtils.class.getPackage().getName();
+                    pkg = pkg.substring(0, pkg.length() - 9);
+
+                    Log.info("papi (%s) bound to plugin %s - %s", pkg, plugin.getName(), plugin.getClass().getSimpleName());
+                    setup();
+                }
             }
-            plugin = (PapiPlugin) pl;
-            String pkg = LoaderUtils.class.getPackage().getName();
-            pkg = pkg.substring(0, pkg.length() - 9);
-
-            Log.info("papi (%s) bound to plugin %s - %s", pkg, plugin.getName(), plugin.getClass().getSimpleName());
-
-            setup();
         }
 
         return plugin;
