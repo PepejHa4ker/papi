@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -44,6 +45,7 @@ public final class LoaderUtils {
         return plugin;
     }
 
+    @ApiStatus.Internal
     public static Set<Plugin> getPapiImplementationPlugins() {
         return Stream.concat(
                 Stream.of(getPlugin()),
@@ -52,6 +54,7 @@ public final class LoaderUtils {
                      .collect(toSet());
     }
 
+    @ApiStatus.Internal
     public static Set<PapiPlugin> getPapiBasedPlugins() {
         return Stream.concat(
                 Stream.of(getPlugin()),

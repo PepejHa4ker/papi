@@ -15,11 +15,15 @@ import java.util.*;
  */
 final class SimpleServicesManager implements ServicesManager {
 
-    private static SimpleServicesManager instance;
+    private static volatile SimpleServicesManager instance;
 
-    static synchronized ServicesManager obtain() {
+    static ServicesManager obtain() {
         if (instance == null) {
-            instance = new SimpleServicesManager();
+            synchronized (SimpleServicesManager.class) {
+                if (instance == null) {
+                    instance = new SimpleServicesManager();
+                }
+            }
         }
         return instance;
     }
@@ -72,7 +76,8 @@ final class SimpleServicesManager implements ServicesManager {
             int position = Collections.binarySearch(registered, registeredProvider);
             if (position < 0) {
                 registered.add(-(position + 1), registeredProvider);
-            } else {
+            }
+            else {
                 registered.add(position, registeredProvider);
             }
 
@@ -83,8 +88,8 @@ final class SimpleServicesManager implements ServicesManager {
     /**
      * Register a provider of a service.
      *
-     * @param <T> Provider
-     * @param service service class
+     * @param <T>      Provider
+     * @param service  service class
      * @param provider provider to register
      * @param priority priority of the provider
      */
@@ -111,7 +116,8 @@ final class SimpleServicesManager implements ServicesManager {
             int position = Collections.binarySearch(registered, registeredProvider);
             if (position < 0) {
                 registered.add(-(position + 1), registeredProvider);
-            } else {
+            }
+            else {
                 registered.add(position, registeredProvider);
             }
 
@@ -121,7 +127,7 @@ final class SimpleServicesManager implements ServicesManager {
     /**
      * Unregister a particular provider for a particular service.
      *
-     * @param service The service interface
+     * @param service  The service interface
      * @param provider The service provider implementation
      */
     public void unregister(Class<?> service, Object provider) {
@@ -157,9 +163,10 @@ final class SimpleServicesManager implements ServicesManager {
                         it.remove();
                     }
                 }
-            } catch (NoSuchElementException ignored) {}
+            } catch (NoSuchElementException ignored) {
+            }
         }
-        
+
     }
 
     /**
@@ -194,7 +201,8 @@ final class SimpleServicesManager implements ServicesManager {
                         it.remove();
                     }
                 }
-            } catch (NoSuchElementException ignored) {}
+            } catch (NoSuchElementException ignored) {
+            }
         }
     }
 
@@ -202,7 +210,7 @@ final class SimpleServicesManager implements ServicesManager {
      * Queries for a provider. This may return if no provider has been
      * registered for a service. The highest priority provider is returned.
      *
-     * @param <T> The service interface
+     * @param <T>     The service interface
      * @param service The service interface
      * @return provider or null
      */
@@ -223,7 +231,7 @@ final class SimpleServicesManager implements ServicesManager {
      * Queries for a provider registration. This may return if no provider
      * has been registered for a service.
      *
-     * @param <T> The service interface
+     * @param <T>     The service interface
      * @param service The service interface
      * @return provider registration or null
      */
@@ -245,7 +253,7 @@ final class SimpleServicesManager implements ServicesManager {
      * Get registrations of providers for a service. The returned list is
      * an unmodifiable copy.
      *
-     * @param <T> The service interface
+     * @param <T>     The service interface
      * @param service The service interface
      * @return a copy of the list of registrations
      */
@@ -284,7 +292,7 @@ final class SimpleServicesManager implements ServicesManager {
     /**
      * Returns whether a provider has been registered for a service.
      *
-     * @param <T> service
+     * @param <T>     service
      * @param service service to check
      * @return true if and only if there are registered providers
      */

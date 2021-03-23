@@ -3,12 +3,12 @@ package com.pepej.papi;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.plugin.PapiPlugin;
 import com.pepej.papi.services.Services;
+import com.pepej.papi.services.ServicesManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.ServicesManager;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -42,7 +42,7 @@ public final class Papi {
     }
 
     public static ServicesManager services() {
-        return server().getServicesManager();
+        return ServicesManager.obtain();
     }
 
     public static BukkitScheduler bukkitScheduler() {

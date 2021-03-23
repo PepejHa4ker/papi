@@ -3,6 +3,7 @@ package com.pepej.papi.time;
 
 import com.google.common.collect.ImmutableMap;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.intellij.lang.annotations.RegExp;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -30,6 +31,7 @@ public final class DurationParser {
 
     private static final ChronoUnit[] UNITS = UNITS_PATTERNS.keySet().toArray(new ChronoUnit[0]);
 
+    @RegExp
     private static final String PATTERN_STRING = UNITS_PATTERNS.values().stream()
                                                                .map(pattern -> "(?:(\\d+)\\s*" + pattern + "[,\\s]*)?")
                                                                .collect(Collectors.joining());

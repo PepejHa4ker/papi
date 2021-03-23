@@ -2,6 +2,7 @@ package com.pepej.papi.random;
 
 
 import org.checkerframework.checker.index.qual.NonNegative;
+import org.jetbrains.annotations.Range;
 
 /**
  * Represents an object which has a weight
@@ -20,7 +21,7 @@ public interface Weighted {
      *
      * @return The weight
      */
-    @NonNegative
+    @Range(to = 0, from = Integer.MAX_VALUE)
     double getWeight();
 
 
