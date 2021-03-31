@@ -4,6 +4,9 @@
 /papi-core/build/
 /papi-js/build/
 /papi-core-plugin/build/
+/papi-kotlin-ext/build/
+/papi-essentials-plugin/build/
 /.idea/
 /gradle/
+/build/
 

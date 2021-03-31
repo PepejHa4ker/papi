@@ -6,6 +6,9 @@ import com.pepej.papi.terminable.TerminableConsumer;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import javax.annotation.Nonnull;
+import java.util.List;
+
 
 /**
  * Represents a command
@@ -38,4 +41,11 @@ public interface Command extends Terminable {
      */
     void call(@NonNull CommandContext<? extends CommandSender> context) throws CommandInterruptException;
 
+    /**
+     * Calls the command tab completer
+     *
+     * @param context the contexts for the command
+     * @return a {@link List} with the completions
+     */
+    List<String> callTabCompleter(@Nonnull CommandContext<? extends CommandSender> context) throws CommandInterruptException;
 }

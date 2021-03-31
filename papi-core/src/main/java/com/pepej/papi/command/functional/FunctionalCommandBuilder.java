@@ -2,6 +2,8 @@ package com.pepej.papi.command.functional;
 
 import com.pepej.papi.command.Command;
 import com.pepej.papi.command.context.CommandContext;
+import com.pepej.papi.command.functional.handler.FunctionalCommandHandler;
+import com.pepej.papi.command.functional.handler.FunctionalTabHandler;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +23,7 @@ public interface FunctionalCommandBuilder<T extends CommandSender> {
     String DEFAULT_NOT_OP_MESSAGE = "&cТолько администраторы сервера могут использовать эту команду.";
     String DEFAULT_NOT_PLAYER_MESSAGE = "&cТолько игроки могут использовать эту команду.";
     String DEFAULT_NOT_CONSOLE_MESSAGE = "&cЭта команда доступна только через консоль сервера.";
-    String DEFAULT_INVALID_USAGE_MESSAGE = "&cПравильное использование. Попробуйте: {usage}.";
+    String DEFAULT_INVALID_USAGE_MESSAGE = "&cНеравильное использование. Попробуйте: {usage}.";
     String DEFAULT_INVALID_ARGUMENT_MESSAGE = "&cНедействительный аргумент '{arg}' в позиции {index}.";
     String DEFAULT_INVALID_SENDER_MESSAGE = "&cВы не можете использовать эту команду.";
     String DEFAULT_COOLDOWN_MESSAGE = "&cВы не можете использовать эту команду еще &6{cooldown}.";
@@ -219,6 +221,14 @@ public interface FunctionalCommandBuilder<T extends CommandSender> {
      * @return the builder instance
      */
     FunctionalCommandBuilder<T> assertSender(Predicate<T> test, String failureMessage);
+
+    /**
+     * Sets the tab handler to the provided one.
+     *
+     * @param tabHandler the tab handler
+     * @return the builder instance
+     */
+    FunctionalCommandBuilder<T> tabHandler(FunctionalTabHandler<T> tabHandler);
 
     /**
      * Builds this {@link FunctionalCommandBuilder} into a {@link Command} instance.

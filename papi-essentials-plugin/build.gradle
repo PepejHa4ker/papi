@@ -8,6 +8,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("net.luckperms:api:5.3")
     compileOnly project(":papi-core")
     annotationProcessor project(":papi-core")
 }

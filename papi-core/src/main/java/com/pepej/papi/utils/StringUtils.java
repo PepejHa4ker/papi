@@ -44,6 +44,7 @@ public final class StringUtils {
         }
         return pluralB;
     }
+
     public static String getRandomString() {
         String uuid = UUID.randomUUID().toString();
         return uuid.replace("-", "");
@@ -59,9 +60,11 @@ public final class StringUtils {
 
         if (n > 10 && n < 20) {
             return 0;
-        } else if (n1 > 1 && n1 < 5) {
+        }
+        else if (n1 > 1 && n1 < 5) {
             return 2;
-        } else if (n1 == 1) {
+        }
+        else if (n1 == 1) {
             return 1;
         }
 
@@ -69,7 +72,7 @@ public final class StringUtils {
     }
 
     public static String getProgressBar(double current, double max, int totalBars, char symbol, ChatColor completedColor,
-                                 ChatColor notCompletedColor) {
+                                        ChatColor notCompletedColor) {
         double percent = current / max;
         int progressBars = (int) (totalBars * percent);
 
@@ -89,7 +92,9 @@ public final class StringUtils {
     }
 
     public static String trim(String s) {
-        if (isEmpty(s)) return s;
+        if (isEmpty(s)) {
+            return s;
+        }
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
@@ -104,17 +109,39 @@ public final class StringUtils {
     }
 
     public static boolean parseBoolean(String s) {
-        return s != null && (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("да"));
+        if (s == null) {
+            return false;
+        }
+        else if (s.isEmpty()) {
+            return false;
+        }
+        if (s.equalsIgnoreCase("true")
+                || s.equalsIgnoreCase("enable")
+                || s.equalsIgnoreCase("on")) {
+            return true;
+
+        } else if (s.equalsIgnoreCase("false")
+                || s.equalsIgnoreCase("disable")
+                || s.equalsIgnoreCase("off")) {
+            return false;
+        }
+        return false;
     }
 
     public static String capitalizeFirstLetter(String s) {
-        if (isEmpty(s)) return s;
+        if (isEmpty(s)) {
+            return s;
+        }
         return toUpperCase(s.trim().charAt(0)) + s.trim().substring(1);
     }
 
     public static boolean equalsIgnoreCase(String s1, String s2) {
-        if (isEmpty(s1) ^ isEmpty(s2)) return false;
-        if (isEmpty(s1) && isEmpty(s2)) return true;
+        if (isEmpty(s1) ^ isEmpty(s2)) {
+            return false;
+        }
+        if (isEmpty(s1) && isEmpty(s2)) {
+            return true;
+        }
         return s1.equalsIgnoreCase(s2);
     }
 

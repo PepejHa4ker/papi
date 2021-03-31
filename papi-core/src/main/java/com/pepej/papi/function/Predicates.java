@@ -4,6 +4,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,6 +28,10 @@ public final class Predicates {
         Objects.requireNonNull(function, "function");
         Objects.requireNonNull(predicate, "predicate");
         return input -> predicate.test(function.apply(input));
+    }
+
+    public static Predicate<String> startWith(String arg) {
+        return s -> s.toLowerCase(Locale.ROOT).startsWith(arg.toLowerCase(Locale.ROOT));
     }
 
     /**

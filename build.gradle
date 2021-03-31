@@ -10,8 +10,6 @@ subprojects {
 
     group = 'com.pepej.papi'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
@@ -28,7 +26,9 @@ subprojects {
     }
 
     dependencies {
-        compileOnly 'org.jetbrains:annotations:20.1.0'
+        compileOnly("org.checkerframework:checker:3.7.0")
+        compileOnly("org.jetbrains:annotations:20.1.0")
+
     }
 }
 

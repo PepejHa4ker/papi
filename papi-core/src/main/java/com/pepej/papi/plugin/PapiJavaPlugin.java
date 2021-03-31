@@ -76,7 +76,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
                    .forEach(plugin -> Log.info("Loaded papi based plugin &d%s&a successfully", plugin.getName()));
         LoaderUtils.getPapiImplementationPlugins()
                    .forEach(module -> Log.info("Loaded papi implementation module &d%s&a successfully",
-                           module.getClass().getDeclaredAnnotation(PapiImplementationPlugin.class).moduleName()));
+                           module.getClass().getDeclaredAnnotation(PapiImplementationPlugin.class).value()));
 
 
         Events.subscribe(PlayerJoinEvent.class)

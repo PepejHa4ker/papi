@@ -17,10 +17,9 @@ import java.lang.annotation.Target;
 @ApiStatus.Internal
 public @interface PapiImplementationPlugin {
 
-
     /**
      * Returns the name of papi submodule
      * @return the papi submodule name
      */
-    String moduleName();
+    String value();
 }

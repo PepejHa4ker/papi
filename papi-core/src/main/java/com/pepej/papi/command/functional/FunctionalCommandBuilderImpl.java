@@ -4,6 +4,8 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.pepej.papi.command.Command;
 import com.pepej.papi.command.context.CommandContext;
+import com.pepej.papi.command.functional.handler.FunctionalCommandHandler;
+import com.pepej.papi.command.functional.handler.FunctionalTabHandler;
 import com.pepej.papi.cooldown.Cooldown;
 import com.pepej.papi.cooldown.CooldownMap;
 import org.bukkit.command.CommandSender;
@@ -17,21 +19,29 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
+@SuppressWarnings("rawtypes")
 class FunctionalCommandBuilderImpl<T extends CommandSender> implements FunctionalCommandBuilder<T> {
     private final ImmutableList.Builder<Predicate<CommandContext<?>>> predicates;
+    private @Nullable FunctionalTabHandler tabHandler;
     private @Nullable String permission;
     private @Nullable String permissionMessage;
     private @Nullable String description;
 
-    private FunctionalCommandBuilderImpl(final ImmutableList.@NonNull Builder<Predicate<CommandContext<?>>> predicates, @Nullable String permission, @Nullable String permissionMessage, @Nullable String description) {
+    private FunctionalCommandBuilderImpl(
+            final ImmutableList.@NonNull Builder<Predicate<CommandContext<?>>> predicates,
+            @Nullable FunctionalTabHandler tabHandler,
+            @Nullable String permission,
+            @Nullable String permissionMessage,
+            @Nullable String description) {
         this.predicates = predicates;
+        this.tabHandler = tabHandler;
         this.permission = permission;
         this.permissionMessage = permissionMessage;
         this.description = description;
     }
 
     FunctionalCommandBuilderImpl() {
-        this(ImmutableList.builder(), null, null, null);
+        this(ImmutableList.builder(), null, null, null, null);
     }
 
     public FunctionalCommandBuilder<T> description(final @NonNull String description) {
@@ -81,7 +91,7 @@ class FunctionalCommandBuilderImpl<T extends CommandSender> implements Functiona
             return false;
         });
         // cast the generic type
-        return new FunctionalCommandBuilderImpl<>(this.predicates, this.permission, this.permissionMessage, this.description);
+        return new FunctionalCommandBuilderImpl<>(this.predicates, this.tabHandler, this.permission, this.permissionMessage, this.description);
     }
 
     @Override
@@ -96,7 +106,7 @@ class FunctionalCommandBuilderImpl<T extends CommandSender> implements Functiona
             return false;
         });
         // cast the generic type
-        return new FunctionalCommandBuilderImpl<>(this.predicates, this.permission, this.permissionMessage, this.description);
+        return new FunctionalCommandBuilderImpl<>(this.predicates, this.tabHandler, this.permission, this.permissionMessage, this.description);
     }
 
     @Override
@@ -156,12 +166,12 @@ class FunctionalCommandBuilderImpl<T extends CommandSender> implements Functiona
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public FunctionalCommandBuilder<T> assertSender(final @NonNull Predicate<T> test, final @NonNull String failureMessage) {
         Objects.requireNonNull(test, "test");
         Objects.requireNonNull(failureMessage, "failureMessage");
         this.predicates.add(context -> {
-            //noinspection unchecked
-            T sender = (T) context.sender();
+            final T sender = (T) context.sender();
             if (test.test(sender)) {
                 return true;
             }
@@ -173,8 +183,14 @@ class FunctionalCommandBuilderImpl<T extends CommandSender> implements Functiona
     }
 
     @Override
+    public FunctionalCommandBuilder<T> tabHandler(FunctionalTabHandler tabHandler) {
+        this.tabHandler = tabHandler;
+        return this;
+    }
+
+    @Override
     public Command handler(FunctionalCommandHandler<T> handler) {
         Objects.requireNonNull(handler, "handler");
-        return new FunctionalCommand<>(this.predicates.build(), handler, permission, permissionMessage, description);
+        return new FunctionalCommand<>(predicates.build(), handler, tabHandler, permission, permissionMessage, description);
     }
 }

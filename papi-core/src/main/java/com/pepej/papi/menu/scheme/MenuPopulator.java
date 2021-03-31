@@ -23,7 +23,6 @@ public class MenuPopulator {
     public MenuPopulator(Menu menu, MenuScheme scheme) {
         Objects.requireNonNull(menu, "menu");
         Objects.requireNonNull(scheme, "scheme");
-
         this.remainingSlots = scheme.getMaskedIndexes();
         Preconditions.checkArgument(remainingSlots.size() > 0, "no slots in scheme");
 

@@ -226,7 +226,7 @@ public class VectorNd implements Vectord, Comparable<VectorNd>, Serializable, Cl
         final int size = size();
         final VectorNd d = new VectorNd(size);
         for (int comp = 0; comp < size; comp++) {
-            d.vec[comp] = Math.abs(vec[comp]);
+            d.vec[comp] = GenericMath.abs(vec[comp]);
         }
         return d;
     }
@@ -295,7 +295,7 @@ public class VectorNd implements Vectord, Comparable<VectorNd>, Serializable, Cl
     }
 
     public double length(double... v) {
-        return Math.sqrt(lengthSquared(v));
+        return GenericMath.sqrt(lengthSquared(v));
     }
 
     @Override

@@ -4,6 +4,8 @@ import org.bukkit.command.CommandSender;
 
 import java.util.function.Consumer;
 
+import static com.pepej.papi.text.Text.colorize;
+
 /**
  * Exception thrown when the handling of a command should be interrupted.
  *
@@ -34,7 +36,8 @@ public class CommandInterruptException extends Exception {
     }
 
     public CommandInterruptException(String message) {
-        this.action = cs -> cs.sendMessage(message);
+        super(message, null, false, false);
+        this.action = cs -> cs.sendMessage(colorize("&c" + message));
     }
 
     public Consumer<CommandSender> getAction() {

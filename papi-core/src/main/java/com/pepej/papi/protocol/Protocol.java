@@ -59,7 +59,6 @@ public final class Protocol {
      * @param packet the packet
      */
     public static void sendPacket(@NonNull Player player, @NonNull PacketContainer packet) {
-        Log.info("sending packet %s for %s", packet, player.getName());
         try {
             manager().sendServerPacket(player, packet);
         } catch (InvocationTargetException e) {

@@ -1,6 +1,7 @@
 # papi
-A collection of utilities and extended APIs to support the rapid and easy development of Bukkit plugins. 
-### Modules
+A collection of utilities and extended APIs to support the rapid and easy development of Bukkit plugins.
+
+## Modules
 ##### [`papi-core`](https://github.com/PepejHa4ker/papi/tree/master/papi-core): The main papi module
 ##### [`papi-js`](https://github.com/PepejHa4ker/papi/tree/master/papi-js): The javascript papi module
 
@@ -11,14 +12,16 @@ A collection of utilities and extended APIs to support the rapid and easy develo
             Players.msg(e.player, "&6Welcome to my server!")
         })
 ```
-#### or standard spigot events
+
+### or standard spigot events
 ```
     Events.subscribe(PlayerJoinEvent.class)
         .handler(e -> {
             Players.msg(e.player, "&6Welcome to my server!")
         })
 ```
-#### event merging
+
+### event merging
 ```
     Events.merge(PlayerEvent.class, PlayerQuitEvent.class, PlayerKickEvent.class)
             .filter(e -> !e.getPlayer().isOp())
@@ -26,7 +29,8 @@ A collection of utilities and extended APIs to support the rapid and easy develo
                 Bukkit.broadcastMessage(Text.colorize("&aPlayer &d" + e.getPlayer().getName() + "&a has left the server!"));
             });
 ```
-## JavaScript
+
+# JavaScript
 
 ```javascript 1.6
 Commands.create()
@@ -41,6 +45,7 @@ Commands.create()
     })
     .registerAndBind(registry, "shutdown", "stop", "off");	
 ```
-##### It's just a javascript file than loaded from init.js
+
+### It's just a javascript file than loaded from init.js
 
 

@@ -21,14 +21,15 @@ import com.pepej.papi.metadata.MetadataKey;
 import com.pepej.papi.plugin.PapiJavaPlugin;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.scheduler.Ticks;
+import com.pepej.papi.services.ServicesManager;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.text.Text;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,13 +46,15 @@ import java.util.stream.Collectors;
 /**
  * Uses {@link ScriptController} and papi to provide a javascript plugin environment for Bukkit.
  */
-@PapiImplementationPlugin(moduleName = "Papi Js")
+@PapiImplementationPlugin(PapiJsPlugin.MODULE_ID)
 @Plugin(name = "papi-js", version = "1.1", description = "JavaScript plugins powered by papi", depends = @PluginDependency("papi"))
 public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
+
+    public static final String MODULE_ID = "Papi Js";
+
     private static final String[] DEFAULT_IMPORT_INCLUDES = new String[]{
             // include all of the packages in papi
             "com.pepej.papi",
-            "com.flowpowered.math",
             // include all of the packages in bukkit
             "org.bukkit",
             "com.destroystokyo.paper",
@@ -145,7 +148,7 @@ public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
         }
 
         @Override
-        public void execute(@Nonnull Runnable command) {
+        public void execute(@NotNull Runnable command) {
             Schedulers.async().run(command);
         }
     }
@@ -214,7 +217,7 @@ public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
             bindings.put("HOURS", TimeUnit.HOURS);
             bindings.put("DAYS", TimeUnit.DAYS);
             // provide core server classes
-            bindings.put("server", Bukkit.getServer());
+            bindings.put("server", Papi.server());
             //boxed primitives
             bindings.put("int", Integer.class);
             bindings.put("str", String.class);
@@ -222,11 +225,10 @@ public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
             bindings.put("long", Long.class);
             bindings.put("short", Short.class);
             bindings.put("plugin", this.plugin);
-            bindings.put("services", Bukkit.getServicesManager());
-            // boxed primitives
+            bindings.put("services", ServicesManager.obtain());
 
             bindings.put("colorize", (Function<Object, String>) PapiScriptBindings::colorize);
-            bindings.put("newMetadataKey", (Function<Object, MetadataKey>) PapiScriptBindings::newMetadataKey);
+            bindings.put("newMetadataKey", (Function<Object, MetadataKey<?>>) PapiScriptBindings::newMetadataKey);
             bindings.put("newEmptyScheme", (Supplier<MenuScheme>) PapiScriptBindings::newScheme);
             bindings.put("newScheme", (Function<SchemeMapping, MenuScheme>) PapiScriptBindings::newScheme);
         }

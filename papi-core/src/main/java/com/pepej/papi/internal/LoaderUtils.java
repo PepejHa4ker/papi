@@ -34,7 +34,7 @@ public final class LoaderUtils {
                     }
                     plugin = (PapiPlugin) pl;
                     String pkg = LoaderUtils.class.getPackage().getName();
-                    pkg = pkg.substring(0, pkg.length() - 9);
+                    pkg = pkg.substring(0, pkg.length() - "internal".length());
 
                     Log.info("papi (%s) bound to plugin %s - %s", pkg, plugin.getName(), plugin.getClass().getSimpleName());
                     setup();

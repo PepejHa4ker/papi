@@ -7,6 +7,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.*;
 
+import static java.lang.System.out;
+
 /**
  * Utility methods for parsing {@link Number}s, {@link Integer}s, {@link Long}s,
  * {@link Float}s and {@link Double}s from {@link String}s.

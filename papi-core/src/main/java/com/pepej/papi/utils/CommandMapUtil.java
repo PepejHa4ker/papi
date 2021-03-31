@@ -70,8 +70,6 @@ public final class CommandMapUtil {
         for (String alias : aliases) {
             try {
                 final PluginCommand cmd = (PluginCommand) ShadowFactory.global().constructShadow(PluginCommandShadow.class, alias, plugin).getShadowTarget();
-
-                assert cmd != null;
                 SimplePluginCommandShadow simplePluginCommandShadow = ShadowFactory.global().shadow(SimplePluginCommandShadow.class, Bukkit.getPluginManager());
                 simplePluginCommandShadow.getCommandMap().register(plugin.getDescription().getName(), cmd);
                 SimpleCommandMapShadow simpleCommandMapShadow = ShadowFactory.global().shadow(SimpleCommandMapShadow.class, simplePluginCommandShadow.getCommandMap());

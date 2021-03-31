@@ -1,6 +1,7 @@
 package com.pepej.papi.environment.loader;
 
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
@@ -28,7 +29,7 @@ public interface ScriptLoadingExecutor extends Executor {
             }
 
             @Override
-            public void execute(@Nonnull Runnable command) {
+            public void execute(@NotNull Runnable command) {
                 service.execute(command);
             }
         };

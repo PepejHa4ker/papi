@@ -1,4 +1,4 @@
-package com.pepej.papi.command.functional;
+package com.pepej.papi.command.functional.handler;
 
 import com.pepej.papi.command.Command;
 import com.pepej.papi.command.CommandInterruptException;

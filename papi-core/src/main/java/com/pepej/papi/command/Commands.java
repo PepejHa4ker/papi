@@ -7,6 +7,7 @@ import com.pepej.papi.command.functional.FunctionalCommandBuilder;
 import com.pepej.papi.function.Numbers;
 import com.pepej.papi.time.DurationParser;
 import com.pepej.papi.utils.Players;
+import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.time.Duration;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,6 +67,13 @@ public final class Commands {
         });
         PARSER_REGISTRY.register(World.class, Papi::world);
         PARSER_REGISTRY.register(Duration.class, DurationParser::parseSafely);
+        PARSER_REGISTRY.register(GameMode.class, s -> {
+            try {
+                return Optional.of(GameMode.valueOf(s.toUpperCase(Locale.ROOT)));
+            } catch (IllegalArgumentException e) {
+                return Optional.empty();
+            }
+        });
     }
 
     /**
