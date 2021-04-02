@@ -21,5 +21,5 @@ public @interface PapiImplementationPlugin {
      * Returns the name of papi submodule
      * @return the papi submodule name
      */
-    String value();
+    String moduleName();
 }

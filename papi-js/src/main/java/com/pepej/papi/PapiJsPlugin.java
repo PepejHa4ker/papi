@@ -21,7 +21,6 @@ import com.pepej.papi.metadata.MetadataKey;
 import com.pepej.papi.plugin.PapiJavaPlugin;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.scheduler.Ticks;
-import com.pepej.papi.services.ServicesManager;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.text.Text;
 import io.github.classgraph.ClassGraph;
@@ -46,7 +45,7 @@ import java.util.stream.Collectors;
 /**
  * Uses {@link ScriptController} and papi to provide a javascript plugin environment for Bukkit.
  */
-@PapiImplementationPlugin(PapiJsPlugin.MODULE_ID)
+@PapiImplementationPlugin(moduleName = PapiJsPlugin.MODULE_ID)
 @Plugin(name = "papi-js", version = "1.1", description = "JavaScript plugins powered by papi", depends = @PluginDependency("papi"))
 public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
 
@@ -225,7 +224,7 @@ public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
             bindings.put("long", Long.class);
             bindings.put("short", Short.class);
             bindings.put("plugin", this.plugin);
-            bindings.put("services", ServicesManager.obtain());
+//            bindings.put("services", ServicesManager.obtain());
 
             bindings.put("colorize", (Function<Object, String>) PapiScriptBindings::colorize);
             bindings.put("newMetadataKey", (Function<Object, MetadataKey<?>>) PapiScriptBindings::newMetadataKey);
