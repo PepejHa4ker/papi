@@ -4,4 +4,5 @@ include 'papi-js'
 include 'papi-core-plugin'
 include 'papi-kotlin-ext'
 include 'papi-essentials-plugin'
+include 'papi-sql'
 
