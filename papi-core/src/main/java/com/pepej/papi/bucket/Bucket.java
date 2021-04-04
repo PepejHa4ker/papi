@@ -55,6 +55,7 @@ public interface Bucket<E> extends Set<E> {
      *
      * @return a cycle of partitions
      */
+
     @NonNull
     Cycle<BucketPartition<E>> asCycle();
 
