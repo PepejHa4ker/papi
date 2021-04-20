@@ -311,10 +311,7 @@ public class Matrix2d implements Matrixd, Serializable, Cloneable {
         if (Double.compare(matrix2.m10, m10) != 0) {
             return false;
         }
-        if (Double.compare(matrix2.m11, m11) != 0) {
-            return false;
-        }
-        return true;
+        return Double.compare(matrix2.m11, m11) == 0;
     }
 
     @Override

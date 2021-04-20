@@ -3,6 +3,7 @@ package com.pepej.papi.commands;
 import com.pepej.papi.command.Commands;
 import com.pepej.papi.terminable.TerminableConsumer;
 import com.pepej.papi.terminable.module.TerminableModule;
+import com.pepej.papi.utils.TabHandlers;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.ConsoleCommandSender;
@@ -18,6 +19,7 @@ public class PapiTpCommand implements TerminableModule {
                 .assertPlayer()
                 .assertPermission("papi.essentials.commands.tp")
                 .assertUsage("<player/location>")
+                .tabHandler(context -> TabHandlers.players(context.rawArg(0)))
                 .handler(context -> {
                     Location to;
                     if (context.arg(0).parse(Player.class).isPresent()) {
@@ -26,7 +28,12 @@ public class PapiTpCommand implements TerminableModule {
                         double x = context.arg(0).parseOrFail(Double.class);
                         double y = context.arg(1).parseOrFail(Double.class);
                         double z = context.arg(2).parseOrFail(Double.class);
-                        World world = context.arg(3).parse(World.class).orElse(context.sender().getWorld());
+                        World world;
+                        if (context.args().size() >= 4) {
+                            world = context.arg(3).parse(World.class).orElse(context.sender().getWorld());
+                        } else {
+                            world = context.sender().getWorld();
+                        }
                         to = new Location(world, x, y, z);
                     }
                     context.sender().teleport(to);

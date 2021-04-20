@@ -133,10 +133,7 @@ public class Operator {
         else if (!symbol.equals(other.symbol)) {
             return false;
         }
-        if (precedence != other.precedence) {
-            return false;
-        }
-        return true;
+        return precedence == other.precedence;
     }
 }
 

@@ -35,7 +35,7 @@ class ScriptLoaderImpl implements EnvironmentScriptLoader {
      * The script files currently being monitored by this instance.
      * These paths are relative to the script directory
      */
-    private List<Path> files = new ArrayList<>();
+    private final List<Path> files = new ArrayList<>();
 
     /** The instance mutex */
     private final ReentrantLock lock = new ReentrantLock();

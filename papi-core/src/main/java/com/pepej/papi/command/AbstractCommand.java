@@ -40,7 +40,7 @@ public abstract class AbstractCommand implements Command, CommandExecutor, TabEx
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         CommandContext<CommandSender> context = new ImmutableCommandContext<>(sender, label, args);
         try {
-            if (Events.callAndReturn(new CommandCallEvent<>(this, sender, context)).cancelled()) {
+            if (Events.callAndReturn(new CommandCallEvent<>(this, sender, context)).isCancelled()) {
                 return true;
             }
             call(context);

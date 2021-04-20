@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Provides type based bindings for {@link ResultSet} and {@link PreparedStatement}
@@ -18,6 +19,7 @@ import java.util.Map;
  * <p>
  * Note that this class is not part of the public API of this library and as such, is
  * not required to stay compatible between versions.
+ *
  * @see ParameterProviderImpl#with(Object...)
  * @see ParameterProviderImpl#set(int, Object)
  */
@@ -48,7 +50,7 @@ public final class SqlBindings {
         addMapping(LocalDate.class, (rs, i) -> rs.getDate(i).toLocalDate(), (rs, name) -> rs.getDate(name).toLocalDate(), (statement, index, value) -> statement.setDate(index, Date.valueOf(value)));
         addMapping(LocalDateTime.class, (rs, i) -> rs.getTimestamp(i).toLocalDateTime(), (rs, name) -> rs.getTimestamp(name).toLocalDateTime(), (statement, index, value) -> statement.setTimestamp(index, Timestamp.valueOf(value)));
         addMapping(LocalTime.class, (rs, i) -> rs.getTime(i).toLocalTime(), (rs, name) -> rs.getTime(name).toLocalTime(), (statement, index, value) -> statement.setTime(index, Time.valueOf(value)));
-
+        addMapping(UUID.class, (rs, i) -> UUID.fromString(rs.getString(i)), (rs, name) -> UUID.fromString(rs.getString(name)), (statement, index, value) -> statement.setString(index, value.toString()));
         addMapping(String.class, ResultSet::getString, ResultSet::getString, PreparedStatement::setString);
 
         addMapping(Long.class, ResultSet::getLong, ResultSet::getLong, PreparedStatement::setLong);
@@ -86,7 +88,8 @@ public final class SqlBindings {
 
         if (value.getClass().isEnum()) {
             toSqlBinding = (s, i, v) -> s.setInt(i, ((Enum<?>) v).ordinal());
-        } else {
+        }
+        else {
             toSqlBinding = (PreparedStatementBinderByIndex<T>) this.binders.get(value.getClass());
             if (toSqlBinding == null) {
                 throw new IllegalArgumentException("No binding for " + value.getClass());
@@ -101,7 +104,8 @@ public final class SqlBindings {
 
         if (clazz.isEnum()) {
             fromSqlBinding = (rs, i) -> clazz.getEnumConstants()[rs.getInt(i)];
-        } else {
+        }
+        else {
             @SuppressWarnings("unchecked")
             SqlBindings.Bindings<T> bindings = (SqlBindings.Bindings<T>) this.retrievers.get(clazz);
             if (bindings == null) {
@@ -120,7 +124,8 @@ public final class SqlBindings {
 
         if (clazz.isEnum()) {
             fromSqlBinding = (rs, i) -> clazz.getEnumConstants()[rs.getInt(i)];
-        } else {
+        }
+        else {
             @SuppressWarnings("unchecked")
             SqlBindings.Bindings<T> bindings = (SqlBindings.Bindings<T>) this.retrievers.get(clazz);
             if (bindings == null) {

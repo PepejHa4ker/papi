@@ -21,6 +21,11 @@ public final class TabHandlers {
     }
 
 
+    public static List<String> of(String arg, String... values) {
+        return finalize(Arrays.stream(values), arg);
+
+    }
+
     public static List<String> worlds(String arg) {
         return finalize(Papi.server().getWorlds()
                             .stream()

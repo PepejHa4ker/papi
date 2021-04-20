@@ -4,7 +4,9 @@ import java.util.BitSet;
 
 /**
  * Represents a map of states of a given realm of settings.
- *
+ * This class is not intended for multithreading, {@link BitSet bitset} does not support multithreading
+ * because many CPU do not support atomic reading less then 1 byte (8 bit)
+ * @see BitSet
  * @param <S> the setting type
  */
 public final class BooleanSettingMap<S extends BooleanSetting> {

@@ -35,11 +35,11 @@ final class ScriptLoggerImpl implements ScriptLogger {
         if (message == null || message.length == 0) {
             return " ";
         } else if (message.length == 1) {
-            return " " + String.valueOf(message[0]);
+            return " " + message[0];
         } else {
             StringBuilder sb = new StringBuilder();
             for (Object o : message) {
-                sb.append(" ").append(String.valueOf(o));
+                sb.append(" ").append(o);
             }
             return sb.toString();
         }

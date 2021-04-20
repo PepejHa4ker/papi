@@ -44,7 +44,7 @@ public interface DataTree {
      * @return a tree
      */
     @NonNull
-    static GsonDataTree from(@NonNull JsonElement element) {
+    static DataTree from(@NonNull JsonElement element) {
         return new GsonDataTree(element);
     }
 
@@ -55,7 +55,7 @@ public interface DataTree {
      * @return a tree
      */
     @NonNull
-    static ConfigurateDataTree from(@NonNull ConfigurationNode node) {
+    static DataTree from(@NonNull ConfigurationNode node) {
         return new ConfigurateDataTree(node);
     }
 

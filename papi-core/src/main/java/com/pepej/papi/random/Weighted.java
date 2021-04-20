@@ -1,7 +1,6 @@
 package com.pepej.papi.random;
 
 
-import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -20,9 +19,10 @@ public interface Weighted {
      * Gets the weight of this entry.
      *
      * @return The weight
+     * @throws IllegalArgumentException if <code>return value < 0</code>
      */
     @Range(to = 0, from = Integer.MAX_VALUE)
-    double getWeight();
+    double getWeight() throws IllegalArgumentException;
 
 
 }

@@ -143,7 +143,7 @@ public class Vector3i implements Vectori, Comparable<Vector3i>, Serializable, Cl
     }
 
     public int dot(int x, int y, int z) {
-        return (int) (this.x * x + this.y * y + this.z * z);
+        return this.x * x + this.y * y + this.z * z;
     }
 
     public Vector3i cross(Vector3i v) {

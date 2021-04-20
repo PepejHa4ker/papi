@@ -13,7 +13,7 @@ import java.util.List;
 public interface NBTTagByteArray extends Shadow, NBTBase {
 
     static NBTTagByteArray create(byte[] data) {
-        return ShadowFactory.global().constructShadow(NBTTagByteArray.class, (Object) data);
+        return ShadowFactory.global().constructShadow(NBTTagByteArray.class, data);
     }
 
     static NBTTagByteArray create(List<Byte> data) {

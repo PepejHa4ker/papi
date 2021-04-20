@@ -1,7 +1,6 @@
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
@@ -13,10 +12,10 @@ apply plugin: 'java'
 
 
 repositories {
-    maven { url "https://repo.dmulloy2.net/nexus/repository/public/" }
-    maven { url "https://repo.citizensnpcs.co" }
-    maven { url "https://repo.codemc.org/repository/maven-public" }
-    maven { url 'https://libraries.minecraft.net' }
+    maven { url = "https://repo.dmulloy2.net/nexus/repository/public/" }
+    maven { url = "https://repo.citizensnpcs.co" }
+    maven { url = "https://repo.codemc.org/repository/maven-public" }
+    maven { url = 'https://libraries.minecraft.net' }
 
 }
 

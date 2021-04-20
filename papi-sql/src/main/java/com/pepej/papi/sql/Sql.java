@@ -115,7 +115,7 @@ public interface Sql extends Terminable {
      * @see #query(String, SqlFunction) to perform this query synchronously
      */
     default <R> Promise<Optional<R>> queryAsync(@Language("MySQL") @NonNull String query, @NonNull SqlFunction<ResultSet, R> handler) {
-        return Schedulers.async().supply(() -> this.query(query, handler));
+        return Schedulers.async().supply(() -> query(query, handler));
     }
 
     /**
@@ -134,7 +134,7 @@ public interface Sql extends Terminable {
      * @see #queryAsync(String, SqlFunction) to perform this query asynchronously
      */
     default <R> Optional<R> query(@Language("MySQL") @NonNull String query, @NonNull SqlFunction<ResultSet, R> handler) {
-        return this.query(query, stmt -> {}, handler);
+        return query(query, stmt -> {}, handler);
     }
 
     /**
@@ -154,7 +154,7 @@ public interface Sql extends Terminable {
      * @see #query(String, SqlFunction) to perform this query synchronously
      */
     default <R> Promise<Optional<R>> queryAsync(@Language("MySQL") @NonNull String query, @NonNull SqlConsumer<PreparedStatement> preparer, @NonNull SqlFunction<ResultSet, R> handler) {
-        return Schedulers.async().supply(() -> this.query(query, preparer, handler));
+        return Schedulers.async().supply(() -> query(query, preparer, handler));
     }
     /**
      * Executes a database query with preparation.

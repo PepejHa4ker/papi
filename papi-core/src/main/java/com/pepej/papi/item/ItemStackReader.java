@@ -110,7 +110,7 @@ public class ItemStackReader {
     @SneakyThrows
     protected Optional<List<String>> parseLore(ConfigurationNode config) {
         List<String> lore = config.node("lore").getList(String.class);
-        if (!lore.isEmpty()) {
+        if (lore != null && !lore.isEmpty()) {
             return Optional.of(lore);
         }
         return Optional.empty();

@@ -476,10 +476,7 @@ public class Quaterniond implements Imaginaryd, Comparable<Quaterniond>, Seriali
         if (Double.compare(quaternion.y, y) != 0) {
             return false;
         }
-        if (Double.compare(quaternion.z, z) != 0) {
-            return false;
-        }
-        return true;
+        return Double.compare(quaternion.z, z) == 0;
     }
 
     @Override

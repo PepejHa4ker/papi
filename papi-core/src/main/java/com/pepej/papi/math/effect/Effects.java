@@ -83,16 +83,4 @@ public final class Effects {
     }
 
 
-    public static ImmutableList<Vector3d> c(Vector3d base, double radius) {
-        final ImmutableList.Builder<Vector3d> points = ImmutableList.builder();
-        for (double t = 0; t < 4 * TWO_PI; t += TWO_PI / 10) {
-            double dx = 0.5 * Math.exp(0.15 * t) * cos(2 * t);
-            double dy = 0.5 * Math.exp(0.15 * t) * sin(2 * t);
-            double dz = 0.5 * Math.exp(0.15 * t);
-            points.add(base.add(dx, dy, dz));
-
-        }
-
-        return points.build();
     }
-}

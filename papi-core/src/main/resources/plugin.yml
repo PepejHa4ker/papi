@@ -1,9 +1,9 @@
 name: papi
 author: pepej
-version: 2.1.0
+version: 2.4.2
 description: simple spigot api library
 main: com.pepej.papi.internal.StandalonePlugin
 load: STARTUP
-depend:
+softdepends:
   - ProtocolLib
   - Citizens

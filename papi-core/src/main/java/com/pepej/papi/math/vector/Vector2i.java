@@ -295,10 +295,7 @@ public class Vector2i implements Vectori, Comparable<Vector2i>, Serializable, Cl
         if (vector2.x != x) {
             return false;
         }
-        if (vector2.y != y) {
-            return false;
-        }
-        return true;
+        return vector2.y == y;
     }
 
     @Override

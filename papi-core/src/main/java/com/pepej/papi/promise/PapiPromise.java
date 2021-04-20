@@ -7,6 +7,7 @@ import com.pepej.papi.interfaces.Delegate;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.scheduler.PapiExecutors;
 import com.pepej.papi.scheduler.Ticks;
+import com.pepej.papi.utils.Log;
 import org.bukkit.Bukkit;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -24,7 +25,7 @@ import java.util.function.Supplier;
  * @param <V> the result type
  */
 final class PapiPromise<V> implements Promise<V> {
-    private static final Consumer<Exception> EXCEPTION_CONSUMER = Exception::printStackTrace;
+    private static final Consumer<Exception> EXCEPTION_CONSUMER = e -> Log.severe("Exception during promise completion: cause %s trace: %s", e.getCause(), e.getStackTrace());
 
     @NonNull
     static <U> PapiPromise<U> empty() {

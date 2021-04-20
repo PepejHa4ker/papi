@@ -89,11 +89,7 @@ public final class BukkitSerializableAdapterFactory implements TypeAdapterFactor
 
                     if (intVal == doubleVal) {
                         entry.setValue(intVal);
-                    } else if (longVal == doubleVal) {
-                        entry.setValue(longVal);
-                    } else {
-                        entry.setValue(doubleVal);
-                    }
+                    } else entry.setValue(doubleVal);
                 }
             }
         }

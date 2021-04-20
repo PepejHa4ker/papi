@@ -362,10 +362,7 @@ public class Vector2d implements Vectord, Comparable<Vector2d>, Serializable, Cl
         if (Double.compare(vector2.x, x) != 0) {
             return false;
         }
-        if (Double.compare(vector2.y, y) != 0) {
-            return false;
-        }
-        return true;
+        return Double.compare(vector2.y, y) == 0;
     }
 
     @Override

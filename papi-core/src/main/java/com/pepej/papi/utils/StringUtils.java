@@ -30,19 +30,14 @@ public final class StringUtils {
     }
 
     public static String plural(int count, String single, String pluralA, String pluralB) {
-
-        int h = count % 100;
-        int t = count % 10;
-        if (h > 10 && h < 20) {
-            return pluralB;
+        final int declination = getDeclination(count);
+        switch (declination) {
+            case 1:
+                return single;
+            case 2:
+                return pluralA;
+            default: return pluralB;
         }
-        if (t > 1 && t < 5) {
-            return pluralA;
-        }
-        if (t == 1) {
-            return single;
-        }
-        return pluralB;
     }
 
     public static String getRandomString() {

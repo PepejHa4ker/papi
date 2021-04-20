@@ -327,10 +327,7 @@ public class Matrix2f implements Matrixf, Serializable, Cloneable {
         if (Float.compare(matrix2.m10, m10) != 0) {
             return false;
         }
-        if (Float.compare(matrix2.m11, m11) != 0) {
-            return false;
-        }
-        return true;
+        return Float.compare(matrix2.m11, m11) == 0;
     }
 
     @Override

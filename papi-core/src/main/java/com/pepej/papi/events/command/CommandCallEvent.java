@@ -2,10 +2,10 @@ package com.pepej.papi.events.command;
 
 import com.pepej.papi.command.Command;
 import com.pepej.papi.command.context.CommandContext;
-import com.pepej.papi.event.bus.api.Cancellable;
 import com.pepej.papi.events.PapiEvent;
 import lombok.Getter;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.Cancellable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -27,12 +27,12 @@ public class CommandCallEvent<T extends CommandSender> extends PapiEvent impleme
     }
 
     @Override
-    public boolean cancelled() {
+    public boolean isCancelled() {
         return cancelled;
     }
 
     @Override
-    public void cancelled(final boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
 }

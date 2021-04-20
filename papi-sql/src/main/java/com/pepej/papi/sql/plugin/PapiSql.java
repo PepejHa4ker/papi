@@ -32,8 +32,6 @@ public class PapiSql implements Sql {
 
     private static final long MAX_LIFETIME = TimeUnit.MINUTES.toMillis(30);
     private static final long CONNECTION_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
-    private static final long LEAK_DETECTION_THRESHOLD = TimeUnit.SECONDS.toMillis(10);
-
     private final HikariDataSource source;
     private final SqlStream stream;
 
@@ -53,7 +51,6 @@ public class PapiSql implements Sql {
 
         hikari.setMaxLifetime(MAX_LIFETIME);
         hikari.setConnectionTimeout(CONNECTION_TIMEOUT);
-        hikari.setLeakDetectionThreshold(LEAK_DETECTION_THRESHOLD);
 
         Map<String, String> properties = ImmutableMap.<String, String>builder()
                 // Ensure we use utf8 encoding

@@ -477,11 +477,8 @@ public class Quaternionf implements Imaginaryf, Comparable<Quaternionf>, Seriali
         if (Float.compare(quaternion.y, y) != 0) {
             return false;
         }
-        if (Float.compare(quaternion.z, z) != 0) {
-            return false;
-        }
-        return true;
-    }
+    return Float.compare(quaternion.z, z) == 0;
+}
 
     @Override
     public int hashCode() {

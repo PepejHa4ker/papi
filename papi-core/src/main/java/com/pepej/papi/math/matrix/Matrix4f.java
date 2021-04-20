@@ -555,10 +555,7 @@ public class Matrix4f implements Matrixf, Serializable, Cloneable {
         if (Float.compare(matrix4.m32, m32) != 0) {
             return false;
         }
-        if (Float.compare(matrix4.m33, m33) != 0) {
-            return false;
-        }
-        return true;
+        return Float.compare(matrix4.m33, m33) == 0;
     }
 
     @Override

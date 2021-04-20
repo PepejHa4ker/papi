@@ -85,16 +85,6 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
             }
         }
 
-
-        if (eventInstance instanceof com.pepej.papi.event.bus.api.Cancellable) {
-            com.pepej.papi.event.bus.api.Cancellable c = (com.pepej.papi.event.bus.api.Cancellable) eventInstance;
-            if (c.cancelled()) {
-                if (!ignoreCancelled) {
-                    return;
-                }
-            }
-        }
-
         // check pre-expiry tests
         for (BiPredicate<SingleSubscription<T>, T> test : preExpiryTests) {
             if (test.test(this, eventInstance)) {

@@ -5,11 +5,8 @@ plugins {
 }
 
 group 'com.pepej'
-version '1.0.1'
+version '1.0.2'
 
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
@@ -24,8 +21,8 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+      Added menu scheme check inspection
+      """
 }
 
 tasks {

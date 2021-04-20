@@ -14,11 +14,11 @@ import java.util.List;
 public interface NBTTagLongArray extends Shadow, NBTBase {
 
     static NBTTagLongArray create(long[] data) {
-        return ShadowFactory.global().constructShadow(NBTTagLongArray.class, (Object) data);
+        return ShadowFactory.global().constructShadow(NBTTagLongArray.class, data);
     }
 
     static NBTTagLongArray create(List<Long> data) {
-        return ShadowFactory.global().constructShadow(NBTTagLongArray.class, (Object) data);
+        return ShadowFactory.global().constructShadow(NBTTagLongArray.class, data);
     }
 
     @Field

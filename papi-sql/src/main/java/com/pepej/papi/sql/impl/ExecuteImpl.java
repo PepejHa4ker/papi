@@ -1,7 +1,6 @@
 package com.pepej.papi.sql.impl;
 
 
-import be.bendem.sqlstreams.impl.SqlImpl;
 import com.pepej.papi.sql.Execute;
 import com.pepej.papi.sql.util.Wrap;
 

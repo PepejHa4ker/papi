@@ -409,10 +409,7 @@ public class Complexf implements Imaginaryf, Comparable<Complexf>, Serializable,
         if (Float.compare(complex.x, x) != 0) {
             return false;
         }
-        if (Float.compare(complex.y, y) != 0) {
-            return false;
-        }
-        return true;
+        return Float.compare(complex.y, y) == 0;
     }
 
     @Override

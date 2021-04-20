@@ -1,6 +1,9 @@
 package com.pepej.papi.internal;
 
+import com.google.common.eventbus.EventBus;
+import com.pepej.papi.events.Events;
 import com.pepej.papi.plugin.PapiJavaPlugin;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.ApiStatus;
 
 
@@ -9,7 +12,6 @@ import org.jetbrains.annotations.ApiStatus;
 public final class StandalonePlugin extends PapiJavaPlugin {
 
     public static final String MODULE_ID = "Papi Core";
-
 
 }
 

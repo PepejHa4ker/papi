@@ -16,7 +16,7 @@ public class PapiGiveExpCommand implements TerminableModule {
     public void setup(@NonNull TerminableConsumer consumer) {
         Commands.create()
                 .assertUsage("<exp> [player]")
-                .assertPermission("papi.essentials.command.exp")
+                .assertPermission("papi.essentials.commands.exp")
                 .description("Give experience command")
                 .tabHandler(context -> {
                     if (context.args().size() == 1) {

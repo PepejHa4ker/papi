@@ -13,11 +13,11 @@ import java.util.List;
 public interface NBTTagIntArray extends Shadow, NBTBase {
 
     static NBTTagIntArray create(int[] data) {
-        return ShadowFactory.global().constructShadow(NBTTagIntArray.class, (Object) data);
+        return ShadowFactory.global().constructShadow(NBTTagIntArray.class, data);
     }
 
     static NBTTagIntArray create(List<Integer> data) {
-        return ShadowFactory.global().constructShadow(NBTTagIntArray.class, (Object) data);
+        return ShadowFactory.global().constructShadow(NBTTagIntArray.class, data);
     }
 
     @ObfuscatedTarget({

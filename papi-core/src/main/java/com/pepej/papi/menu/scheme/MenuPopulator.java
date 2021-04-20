@@ -8,7 +8,9 @@ import com.pepej.papi.menu.Slot;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -74,7 +76,14 @@ public class MenuPopulator {
     public MenuPopulator consumeIfSpace(Consumer<Slot> action) {
         tryConsume(action);
         return this;
+
     }
+
+    private CompletableFuture<String> supplyPrefix(Object o) {
+        return null;
+    }
+
+
 
     public boolean tryConsume(Consumer<Slot> action) {
         Objects.requireNonNull(action, "action");

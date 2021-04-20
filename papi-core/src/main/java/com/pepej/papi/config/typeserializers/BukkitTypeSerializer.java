@@ -46,11 +46,7 @@ public final class BukkitTypeSerializer implements TypeSerializer<ConfigurationS
 
                 if (intVal == doubleVal) {
                     entry.setValue(intVal);
-                } else if (longVal == doubleVal) {
-                    entry.setValue(longVal);
-                } else {
-                    entry.setValue(doubleVal);
-                }
+                } else entry.setValue(doubleVal);
             }
         }
     }

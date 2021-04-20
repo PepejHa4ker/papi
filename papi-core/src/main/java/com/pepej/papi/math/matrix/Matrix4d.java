@@ -531,10 +531,7 @@ public class Matrix4d implements Matrixd, Serializable, Cloneable {
         if (Double.compare(matrix4.m32, m32) != 0) {
             return false;
         }
-        if (Double.compare(matrix4.m33, m33) != 0) {
-            return false;
-        }
-        return true;
+        return Double.compare(matrix4.m33, m33) == 0;
     }
 
     @Override

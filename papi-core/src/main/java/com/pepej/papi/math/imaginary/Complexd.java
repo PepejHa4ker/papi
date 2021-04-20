@@ -410,10 +410,7 @@ public class Complexd implements Imaginaryd, Comparable<Complexd>, Serializable,
         if (Double.compare(complex.x, x) != 0) {
             return false;
         }
-        if (Double.compare(complex.y, y) != 0) {
-            return false;
-        }
-        return true;
+        return Double.compare(complex.y, y) == 0;
     }
 
     @Override

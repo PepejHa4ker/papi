@@ -8,7 +8,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly project(":papi-core")
     annotationProcessor project(":papi-core")
-    compileOnly 'com.zaxxer:HikariCP:4.0.3'
+    compileOnly 'com.zaxxer:HikariCP:3.4.5'
     compileOnly 'mysql:mysql-connector-java:8.0.23'
 }
 

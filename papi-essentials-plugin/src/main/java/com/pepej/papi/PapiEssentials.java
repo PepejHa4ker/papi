@@ -8,7 +8,7 @@ import com.pepej.papi.plugin.PapiJavaPlugin;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 
-@PapiImplementationPlugin(PapiEssentials.MODULE_ID)
+@PapiImplementationPlugin(moduleName = PapiEssentials.MODULE_ID)
 @Plugin(name = "papi-essentials", version = "1.0", description = "Essential spigot plugin powered by papi library", depends = {@PluginDependency("papi"), @PluginDependency("LuckPerms")})
 public class PapiEssentials extends PapiJavaPlugin {
 
@@ -28,5 +28,6 @@ public class PapiEssentials extends PapiJavaPlugin {
         bindModule(new PapiClearInvCommand());
         bindModule(new PapiGiveExpCommand());
         bindModule(new PapiSetExpCommand());
+        bindModule(new PapiSpeedCommand());
     }
 }

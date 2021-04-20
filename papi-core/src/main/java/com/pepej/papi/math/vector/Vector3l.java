@@ -141,7 +141,7 @@ public class Vector3l implements Vectorl, Comparable<Vector3l>, Serializable, Cl
     }
 
     public long dot(long x, long y, long z) {
-        return (long) (this.x * x + this.y * y + this.z * z);
+        return this.x * x + this.y * y + this.z * z;
     }
 
     public Vector3l cross(Vector3l v) {

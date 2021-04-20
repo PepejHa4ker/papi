@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -47,13 +47,13 @@ class FunctionalCommand<T extends CommandSender> extends AbstractCommand {
 
     @Nullable
     @Override
-    public List<String> callTabCompleter(@Nonnull CommandContext<? extends CommandSender> context) throws CommandInterruptException {
+    public List<String> callTabCompleter(@NonNull CommandContext<? extends CommandSender> context) throws CommandInterruptException {
         if (tabHandler == null) {
             return TabHandlers.players("");
         }
         for (Predicate<CommandContext<?>> predicate : this.predicates) {
             if (!predicate.test(context)) {
-                return null;
+                return Arrays.asList("");
             }
         }
 

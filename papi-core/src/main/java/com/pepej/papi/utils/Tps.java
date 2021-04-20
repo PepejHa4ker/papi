@@ -4,8 +4,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pepej.papi.gson.GsonSerializable;
 import com.pepej.papi.gson.JsonBuilder;
+import com.pepej.papi.shadow.ClassTarget;
+import com.pepej.papi.shadow.Shadow;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +21,7 @@ import java.util.function.Supplier;
 public final class Tps implements GsonSerializable {
 
     private static final Supplier<double[]> SUPPLIER = getSupplier();
+
     private static Supplier<double[]> getSupplier() {
         try {
             Method spigotMethod = Bukkit.getServer().getClass().getMethod("spigot");

@@ -29,7 +29,7 @@ public class Vector4d implements Vectord, Comparable<Vector4d>, Serializable, Cl
     }
 
     public Vector4d(Vector2d v, float z, float w) {
-        this(v, (double) z, (double) w);
+        this(v, z, (double) w);
     }
 
     public Vector4d(Vector2d v, double z, double w) {
@@ -57,7 +57,7 @@ public class Vector4d implements Vectord, Comparable<Vector4d>, Serializable, Cl
     }
 
     public Vector4d(float x, float y, float z, float w) {
-        this((double) x, (double) y, (double) z, (double) w);
+        this(x, y, z, (double) w);
     }
 
     public Vector4d(double x, double y, double z, double w) {
