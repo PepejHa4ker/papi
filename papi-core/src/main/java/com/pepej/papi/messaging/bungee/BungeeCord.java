@@ -2,6 +2,8 @@ package com.pepej.papi.messaging.bungee;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.pepej.papi.promise.Promise;
 import com.pepej.papi.services.Implementor;
 import org.bukkit.entity.Player;
@@ -54,19 +56,19 @@ public interface BungeeCord {
      *
      * @param player the player to get the IP of
      * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#ip">Ip message</a>
-     * @return a future
+     * @return a future of json object which contains ip and port
      */
     @NonNull
-    Promise<Map.Entry<String, Integer>> ip(@NonNull Player player);
+    Promise<JsonObject> ip(@NonNull Player player);
 
     /**
      * Get the real IP of another player.
      * @param playerName the username of the to get the IP
      * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#ipother">IpOther message</a>
-     * @return a future
+     * @return a future of json object which contains ip and port
      */
     @NonNull
-    Promise<Map.Entry<String, Integer>> ipOther(@NonNull String playerName);
+    Promise<JsonObject> ipOther(@NonNull String playerName);
 
     /**
      * Gets the amount of players on a certain server, or all servers
@@ -147,10 +149,10 @@ public interface BungeeCord {
      *
      * @param serverName the name of the server to get the ip of
      * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#serverip">ServerIp message</a>
-     * @return a future
+     * @return a future of json object which contains ip and port
      */
     @NonNull
-    Promise<Map.Entry<String, Integer>> serverIp(@NonNull String serverName);
+    Promise<JsonObject> serverIp(@NonNull String serverName);
 
     /**
      * Kick a player from the proxy

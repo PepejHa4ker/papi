@@ -3,14 +3,15 @@ package com.pepej.papi.messaging.bungee;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import com.google.gson.JsonObject;
+import com.pepej.papi.gson.JsonBuilder;
 import com.pepej.papi.internal.LoaderUtils;
-import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.plugin.PapiPlugin;
 import com.pepej.papi.promise.Promise;
+import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.utils.Players;
 import org.bukkit.entity.Player;
@@ -223,15 +224,15 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public @NonNull Promise<Map.Entry<String, Integer>> ip(@NonNull Player player) {
-        Promise<Map.Entry<String, Integer>> fut = Promise.empty();
+    public @NonNull Promise<JsonObject> ip(@NonNull Player player) {
+        Promise<JsonObject> fut = Promise.empty();
         sendMessage(new IPAgent(player, fut));
         return fut;
     }
 
     @Override
-    public @NonNull Promise<Map.Entry<String, Integer>> ipOther(@NonNull final String playerName) {
-        Promise<Map.Entry<String, Integer>> fut = Promise.empty();
+    public @NonNull Promise<JsonObject> ipOther(@NonNull final String playerName) {
+        Promise<JsonObject> fut = Promise.empty();
         sendMessage(new IPOtherAgent(playerName, fut));
         return fut;
     }
@@ -289,8 +290,8 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public @NonNull Promise<Map.Entry<String, Integer>> serverIp(@NonNull String serverName) {
-        Promise<Map.Entry<String, Integer>> fut = Promise.empty();
+    public @NonNull Promise<JsonObject> serverIp(@NonNull String serverName) {
+        Promise<JsonObject> fut = Promise.empty();
         sendMessage(new ServerIPAgent(serverName, fut));
         return fut;
     }
@@ -458,9 +459,9 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private static final String CHANNEL = "IP";
 
         private final Player player;
-        private final Promise<Map.Entry<String, Integer>> callback;
+        private final Promise<JsonObject> callback;
 
-        private IPAgent(Player player, Promise<Map.Entry<String, Integer>> callback) {
+        private IPAgent(Player player, Promise<JsonObject> callback) {
             Objects.requireNonNull(player, "player");
             Objects.requireNonNull(callback, "callback");
             this.player = player;
@@ -487,7 +488,11 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         public boolean acceptResponse(Player receiver, ByteArrayDataInput in) {
             String ip = in.readUTF();
             int port = in.readInt();
-            this.callback.supply(Maps.immutableEntry(ip, port));
+            JsonObject data = JsonBuilder.object()
+                                         .add("ip", ip)
+                                         .add("port", port)
+                                         .build();
+            this.callback.supply(data);
             return true;
         }
     }
@@ -496,9 +501,9 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private static final String CHANNEL = "IPOther";
 
         private final String playerName;
-        private final Promise<Map.Entry<String, Integer>> callback;
+        private final Promise<JsonObject> callback;
 
-        private IPOtherAgent(String playerName, Promise<Map.Entry<String, Integer>> callback) {
+        private IPOtherAgent(String playerName, Promise<JsonObject> callback) {
             Objects.requireNonNull(playerName, "playerName");
             Objects.requireNonNull(callback, "callback");
             this.playerName = playerName;
@@ -527,7 +532,11 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
             String userName = in.readUTF(); //unused player name
             String ip = in.readUTF();
             int port = in.readInt();
-            this.callback.supply(Maps.immutableEntry(ip, port));
+            JsonObject data = JsonBuilder.object()
+                    .add("ip", ip)
+                    .add("port", port)
+                    .build();
+            this.callback.supply(data);
             return true;
         }
     }
@@ -791,9 +800,9 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private static final String CHANNEL = "ServerIP";
 
         private final String serverName;
-        private final Promise<Map.Entry<String, Integer>> callback;
+        private final Promise<JsonObject> callback;
 
-        private ServerIPAgent(String serverName, Promise<Map.Entry<String, Integer>> callback) {
+        private ServerIPAgent(String serverName, Promise<JsonObject> callback) {
             Objects.requireNonNull(serverName, "serverName");
             Objects.requireNonNull(callback, "callback");
             this.serverName = serverName;
@@ -820,7 +829,11 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
             in.readUTF();
             String ip = in.readUTF();
             int port = in.readInt();
-            this.callback.supply(Maps.immutableEntry(ip, port));
+            JsonObject data = JsonBuilder.object()
+                                         .add("ip", ip)
+                                         .add("port", port)
+                                         .build();
+            this.callback.supply(data);
             return true;
         }
     }
