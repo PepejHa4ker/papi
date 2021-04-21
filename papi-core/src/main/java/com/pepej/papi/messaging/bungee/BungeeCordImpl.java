@@ -230,6 +230,13 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
+    public @NonNull Promise<Map.Entry<String, Integer>> ipOther(@NonNull final String playerName) {
+        Promise<Map.Entry<String, Integer>> fut = Promise.empty();
+        sendMessage(new IPOtherAgent(playerName, fut));
+        return fut;
+    }
+
+    @Override
     public @NonNull Promise<Integer> playerCount(@NonNull String serverName) {
         Promise<Integer> fut = Promise.empty();
         sendMessage(new PlayerCountAgent(serverName, fut));
@@ -485,6 +492,46 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         }
     }
 
+    private static final class IPOtherAgent implements MessageAgent, MessageCallback {
+        private static final String CHANNEL = "IPOther";
+
+        private final String playerName;
+        private final Promise<Map.Entry<String, Integer>> callback;
+
+        private IPOtherAgent(String playerName, Promise<Map.Entry<String, Integer>> callback) {
+            Objects.requireNonNull(playerName, "playerName");
+            Objects.requireNonNull(callback, "callback");
+            this.playerName = playerName;
+            this.callback = callback;
+
+        }
+
+        @Override
+        public String getSubChannel() {
+            return CHANNEL;
+        }
+
+
+        @Override
+        public void appendPayload(ByteArrayDataOutput out) {
+            out.writeUTF(this.playerName);
+        }
+
+        @Override
+        public boolean testResponse(Player receiver, ByteArrayDataInput in) {
+            return in.readUTF().equalsIgnoreCase(this.playerName);
+        }
+
+        @Override
+        public boolean acceptResponse(Player receiver, ByteArrayDataInput in) {
+            String userName = in.readUTF(); //unused player name
+            String ip = in.readUTF();
+            int port = in.readInt();
+            this.callback.supply(Maps.immutableEntry(ip, port));
+            return true;
+        }
+    }
+
     private static final class PlayerCountAgent implements MessageAgent, MessageCallback {
         private static final String CHANNEL = "PlayerCount";
 
@@ -733,7 +780,7 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
 
         @Override
         public boolean acceptResponse(Player receiver, ByteArrayDataInput in) {
-            in.readUTF();
+            String userName = in.readUTF(); //unused playerName
             String uuid = in.readUTF();
             this.callback.supply(UUID.fromString(uuid));
             return true;

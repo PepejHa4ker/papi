@@ -53,11 +53,20 @@ public interface BungeeCord {
      * Get the real IP of a player
      *
      * @param player the player to get the IP of
-     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#ipother">IpOther message</a>
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#ip">Ip message</a>
      * @return a future
      */
     @NonNull
     Promise<Map.Entry<String, Integer>> ip(@NonNull Player player);
+
+    /**
+     * Get the real IP of another player.
+     * @param playerName the username of the to get the IP
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#ipother">IpOther message</a>
+     * @return a future
+     */
+    @NonNull
+    Promise<Map.Entry<String, Integer>> ipOther(@NonNull String playerName);
 
     /**
      * Gets the amount of players on a certain server, or all servers
