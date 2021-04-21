@@ -20,6 +20,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.ByteArrayInputStream;
+import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -70,6 +71,7 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         if (!this.setup.compareAndSet(false, true)) {
             return;
         }
+
 
         this.plugin.getServer().getMessenger().registerOutgoingPluginChannel(this.plugin, CHANNEL);
         this.plugin.getServer().getMessenger().registerIncomingPluginChannel(this.plugin, CHANNEL, this);
@@ -224,15 +226,15 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public @NonNull Promise<JsonObject> ip(@NonNull Player player) {
-        Promise<JsonObject> fut = Promise.empty();
+    public @NonNull Promise<IpMessageCallback> ip(@NonNull Player player) {
+        Promise<IpMessageCallback> fut = Promise.empty();
         sendMessage(new IPAgent(player, fut));
         return fut;
     }
 
     @Override
-    public @NonNull Promise<JsonObject> ipOther(@NonNull final String playerName) {
-        Promise<JsonObject> fut = Promise.empty();
+    public @NonNull Promise<IpMessageCallback> ipOther(@NonNull final String playerName) {
+        Promise<IpMessageCallback> fut = Promise.empty();
         sendMessage(new IPOtherAgent(playerName, fut));
         return fut;
     }
@@ -290,8 +292,8 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
-    public @NonNull Promise<JsonObject> serverIp(@NonNull String serverName) {
-        Promise<JsonObject> fut = Promise.empty();
+    public @NonNull Promise<IpMessageCallback> serverIp(@NonNull String serverName) {
+        Promise<IpMessageCallback> fut = Promise.empty();
         sendMessage(new ServerIPAgent(serverName, fut));
         return fut;
     }
@@ -459,9 +461,9 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private static final String CHANNEL = "IP";
 
         private final Player player;
-        private final Promise<JsonObject> callback;
+        private final Promise<IpMessageCallback> callback;
 
-        private IPAgent(Player player, Promise<JsonObject> callback) {
+        private IPAgent(Player player, Promise<IpMessageCallback> callback) {
             Objects.requireNonNull(player, "player");
             Objects.requireNonNull(callback, "callback");
             this.player = player;
@@ -488,11 +490,8 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         public boolean acceptResponse(Player receiver, ByteArrayDataInput in) {
             String ip = in.readUTF();
             int port = in.readInt();
-            JsonObject data = JsonBuilder.object()
-                                         .add("ip", ip)
-                                         .add("port", port)
-                                         .build();
-            this.callback.supply(data);
+            IpMessageCallback callback = new IpMessageCallback(ip, port);
+            this.callback.supply(callback);
             return true;
         }
     }
@@ -501,9 +500,9 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private static final String CHANNEL = "IPOther";
 
         private final String playerName;
-        private final Promise<JsonObject> callback;
+        private final Promise<IpMessageCallback> callback;
 
-        private IPOtherAgent(String playerName, Promise<JsonObject> callback) {
+        private IPOtherAgent(String playerName, Promise<IpMessageCallback> callback) {
             Objects.requireNonNull(playerName, "playerName");
             Objects.requireNonNull(callback, "callback");
             this.playerName = playerName;
@@ -532,11 +531,8 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
             String userName = in.readUTF(); //unused player name
             String ip = in.readUTF();
             int port = in.readInt();
-            JsonObject data = JsonBuilder.object()
-                    .add("ip", ip)
-                    .add("port", port)
-                    .build();
-            this.callback.supply(data);
+            IpMessageCallback callback = new IpMessageCallback(ip, port);
+            this.callback.supply(callback);
             return true;
         }
     }
@@ -800,9 +796,9 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private static final String CHANNEL = "ServerIP";
 
         private final String serverName;
-        private final Promise<JsonObject> callback;
+        private final Promise<IpMessageCallback> callback;
 
-        private ServerIPAgent(String serverName, Promise<JsonObject> callback) {
+        private ServerIPAgent(String serverName, Promise<IpMessageCallback> callback) {
             Objects.requireNonNull(serverName, "serverName");
             Objects.requireNonNull(callback, "callback");
             this.serverName = serverName;
@@ -829,11 +825,8 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
             in.readUTF();
             String ip = in.readUTF();
             int port = in.readInt();
-            JsonObject data = JsonBuilder.object()
-                                         .add("ip", ip)
-                                         .add("port", port)
-                                         .build();
-            this.callback.supply(data);
+            IpMessageCallback callback = new IpMessageCallback(ip, port);
+            this.callback.supply(callback);
             return true;
         }
     }
