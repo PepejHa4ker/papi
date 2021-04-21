@@ -117,7 +117,8 @@ final class PapiPromise<V> implements Promise<V> {
     }
 
     private PapiPromise(@NonNull CompletableFuture<V> fut) {
-        this.fut = Objects.requireNonNull(fut, "future");
+        Objects.requireNonNull(fut, "message");
+        this.fut = fut;
         this.supplied.set(true);
         this.cancelled.set(fut.isCancelled());
     }

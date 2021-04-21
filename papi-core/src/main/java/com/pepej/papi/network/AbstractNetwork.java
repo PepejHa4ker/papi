@@ -22,6 +22,7 @@ import com.pepej.papi.network.metadata.ServerMetadataProvider;
 import com.pepej.papi.network.metadata.TpsMetadataProvider;
 import com.pepej.papi.profiles.Profile;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
+import com.pepej.papi.utils.Log;
 import com.pepej.papi.utils.Players;
 import org.bukkit.Bukkit;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -216,12 +217,13 @@ public class AbstractNetwork implements Network {
         private void checkTimeSync(long messageTimestamp) {
             long systemTime = System.currentTimeMillis();
             long timeDifference = Math.abs(systemTime - messageTimestamp);
-            if (timeDifference > TIME_SYNC_THRESHOLD && timeSyncWarningCooldown.test()) {
-                LoaderUtils.getPlugin().getLogger().warning(
-                        "[network] Server '" + id + "' appears to have a system time difference of " + timeDifference + " ms. " +
-                                "time now = " + systemTime + ", " +
-                                "message timestamp = " + messageTimestamp + " - " +
-                                "Check NTP is running? Is network stable?"
+            if (timeDifference > TIME_SYNC_THRESHOLD && timeSyncWarningCooldown.testAndReset()) {
+                Log.warn(
+                        "[network] Server %s' appears to have a system time difference of %s ms. " +
+                                "time now = %s, " +
+                                "message timestamp = %s - " +
+                                "Check NTP is running? Is network stable?",
+                        id, timeDifference, systemTime, messageTimestamp
                 );
             }
         }

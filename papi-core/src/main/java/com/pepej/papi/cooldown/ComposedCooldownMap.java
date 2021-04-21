@@ -65,11 +65,11 @@ public interface ComposedCooldownMap<I, O> {
     /* methods from Cooldown */
 
     default boolean test(@NonNull I key) {
-        return get(key).test();
+        return get(key).testAndReset();
     }
 
     default boolean testSilently(@NonNull I key) {
-        return get(key).testSilently();
+        return get(key).test();
     }
 
     default long elapsed(@NonNull I key) {

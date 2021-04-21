@@ -60,11 +60,11 @@ public interface CooldownMap<T> {
     /* methods from Cooldown */
 
     default boolean test(@NonNull T key) {
-        return get(key).test();
+        return get(key).testAndReset();
     }
 
     default boolean testSilently(@NonNull T key) {
-        return get(key).testSilently();
+        return get(key).test();
     }
 
     default long elapsed(@NonNull T key) {

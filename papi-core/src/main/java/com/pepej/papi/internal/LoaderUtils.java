@@ -75,7 +75,7 @@ public final class LoaderUtils {
         return mainThread;
     }
 
-    // performs an intial setup for global handlers
+    // performs an initial setup for global handlers
     private static void setup() {
 
         // cache main thread in this class

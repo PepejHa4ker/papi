@@ -70,13 +70,13 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
     }
 
     private void handleInternalTasks() {
+        LoaderUtils.getPapiImplementationPlugins()
+                   .forEach(module -> Log.info("Loaded papi implementation module &d%s&a successfully",
+                           module.getClass().getDeclaredAnnotation(PapiImplementationPlugin.class).moduleName()));
         LoaderUtils.getPapiBasedPlugins()
                    .stream()
                    .filter(plugin -> !LoaderUtils.getPapiImplementationPlugins().contains(plugin))
                    .forEach(plugin -> Log.info("Loaded papi based plugin &d%s&a successfully", plugin.getName()));
-        LoaderUtils.getPapiImplementationPlugins()
-                   .forEach(module -> Log.info("Loaded papi implementation module &d%s&a successfully",
-                           module.getClass().getDeclaredAnnotation(PapiImplementationPlugin.class).moduleName()));
 
 
         Events.subscribe(PlayerJoinEvent.class)

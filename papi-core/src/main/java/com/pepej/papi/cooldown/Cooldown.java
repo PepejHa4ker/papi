@@ -60,8 +60,8 @@ public interface Cooldown extends GsonSerializable {
      *
      * @return true if the cooldown is not active
      */
-    default boolean test() {
-        if (!testSilently()) {
+    default boolean testAndReset() {
+        if (!test()) {
             return false;
         }
 
@@ -74,7 +74,7 @@ public interface Cooldown extends GsonSerializable {
      *
      * @return true if the cooldown is not active
      */
-    default boolean testSilently() {
+    default boolean test() {
         return elapsed() > getTimeout();
     }
 
@@ -119,7 +119,7 @@ public interface Cooldown extends GsonSerializable {
     }
 
     /**
-     * Return the time in milliseconds when this cooldown was last {@link #test()}ed.
+     * Return the time in milliseconds when this cooldown was last {@link #testAndReset()}ed.
      *
      * @return the last call time
      */
@@ -130,7 +130,7 @@ public interface Cooldown extends GsonSerializable {
      * Sets the time in milliseconds when this cooldown was last tested.
      *
      * <p>Note: this should only be used when re-constructing a cooldown
-     * instance. Use {@link #test()} otherwise.</p>
+     * instance. Use {@link #testAndReset()} otherwise.</p>
      *
      * @param time the time
      */

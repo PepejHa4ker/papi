@@ -47,7 +47,7 @@ import java.util.regex.Pattern;
 public class DoubleEvaluator extends AbstractEvaluator<Double> {
     /**
      * The order or operations (operator precedence) is not clearly defined, especially between the unary minus operator and exponentiation
-     * operator (see <a href="http://en.wikipedia.org/wiki/Order_of_operations#Exceptions_to_the_standard">http://en.wikipedia.org/wiki/Order_of_operations</a>).
+     * operator (see <a href="http://en.wikipedia.org/wiki/Order_of_operations#Exceptions_to_the_standard">Order of operations</a>).
      * These constants define the operator precedence styles.
      */
     public enum Style {
