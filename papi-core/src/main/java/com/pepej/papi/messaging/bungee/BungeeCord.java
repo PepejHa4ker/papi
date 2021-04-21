@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 
 /**
  * API interface to encapsulate the BungeeCord Plugin Messaging API.
- *
+ * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel">BungeeCord messaging channel</a>
  * <p>The returned futures should never be {@link Promise#join() joined} or waited for on
  * the Server thread.</p>
  */
@@ -36,6 +36,7 @@ public interface BungeeCord {
      *
      * @param player the player to connect
      * @param serverName the name of the server to connect to
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#connect">Connect message</a>
      */
     void connect(@NonNull Player player, @NonNull String serverName);
 
@@ -44,6 +45,7 @@ public interface BungeeCord {
      *
      * @param playerName the username of the player to connect
      * @param serverName the name of the server to connect to
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#connectother">ConnectOther message</a>
      */
     void connectOther(@NonNull String playerName, @NonNull String serverName);
 
@@ -51,6 +53,7 @@ public interface BungeeCord {
      * Get the real IP of a player
      *
      * @param player the player to get the IP of
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#ipother">IpOther message</a>
      * @return a future
      */
     @NonNull
@@ -60,6 +63,7 @@ public interface BungeeCord {
      * Gets the amount of players on a certain server, or all servers
      *
      * @param serverName the name of the server to get the player count for. Use {@link #ALL_SERVERS} to get the global count
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#playercount">PlayerCount message</a>
      * @return a future
      */
     @NonNull
@@ -69,6 +73,7 @@ public interface BungeeCord {
      * Gets a list of players connected on a certain server, or all servers.
      *
      * @param serverName the name of the server to get the player list for. Use {@link #ALL_SERVERS} to get the global list
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#playerlist">PlayerList message</a>
      * @return a future
      */
     @NonNull
@@ -76,7 +81,7 @@ public interface BungeeCord {
 
     /**
      * Get a list of server name strings, as defined in the BungeeCord config
-     *
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#getservers">GetServers message</a>
      * @return a future
      */
     @NonNull
@@ -85,14 +90,24 @@ public interface BungeeCord {
     /**
      * Send a message (as in chat message) to the specified player
      *
-     * @param playerName the username of the player to send the message to
+     * @param playerName the username of the player to send the message to or ALL to send to all players
      * @param message the message to send
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#message">Message message</a>
      */
     void message(@NonNull String playerName, @NonNull String message);
 
     /**
-     * Gets this servers name, as defined in the BungeeCord config
+     * Send a raw message (as in, a chat message) to the specified player. The advantage of this method over Message is that you can include click events and hover events.
      *
+     * @param playerName the username of the player to send the message to or ALL to send to all players
+     * @param messageRaw the message to send
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#messageraw">MessageRaw message</a>
+     */
+    void messageRaw(@NonNull String playerName, @NonNull String messageRaw);
+
+    /**
+     * Gets this servers name, as defined in the BungeeCord config
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#getserver">GetServer message</a>
      * @return a future
      */
     @NonNull
@@ -102,6 +117,7 @@ public interface BungeeCord {
      * Get the UUID of a player
      *
      * @param player the player to get the uuid of
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#uuid">UUID message</a>
      * @return a future
      */
     @NonNull
@@ -111,6 +127,7 @@ public interface BungeeCord {
      * Get the UUID of any player connected to the proxy
      *
      * @param playerName the username of the player to get the uuid of
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#uuidother">UUIDOther message</a>
      * @return a future
      */
     @NonNull
@@ -120,6 +137,7 @@ public interface BungeeCord {
      * Get the IP of any server connected to the proxy
      *
      * @param serverName the name of the server to get the ip of
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#serverip">ServerIp message</a>
      * @return a future
      */
     @NonNull
@@ -129,6 +147,8 @@ public interface BungeeCord {
      * Kick a player from the proxy
      *
      * @param playerName the username of the player to kick
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#kickplayer">KickPlayer message</a>
+
      * @param reason the reason to display to the player when they are kicked
      */
     void kickPlayer(@NonNull String playerName, @NonNull String reason);
@@ -141,8 +161,9 @@ public interface BungeeCord {
      * @param serverName the name of the server to send to. use {@link #ALL_SERVERS} to send to all servers, or {@link #ONLINE_SERVERS} to only send to servers which are online.
      * @param channelName the name of the subchannel
      * @param data the data to send
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#forward">Forward message</a>
      */
-    void forward(@NonNull String serverName, @NonNull String channelName, @NonNull byte[] data);
+    void forward(@NonNull String serverName, @NonNull String channelName, byte[] data);
 
     /**
      * Sends a custom plugin message to a given server.
@@ -152,6 +173,7 @@ public interface BungeeCord {
      * @param serverName the name of the server to send to. use {@link #ALL_SERVERS} to send to all servers, or {@link #ONLINE_SERVERS} to only send to servers which are online.
      * @param channelName the name of the subchannel
      * @param data the data to send
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#forward">Forward message</a>
      */
     void forward(@NonNull String serverName, @NonNull String channelName, @NonNull ByteArrayDataOutput data);
 
@@ -163,8 +185,9 @@ public interface BungeeCord {
      * @param playerName the username of a player. BungeeCord will send the forward message to their server.
      * @param channelName the name of the subchannel
      * @param data the data to send
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#forwardtoplayer">ForwardToPlayer message</a>
      */
-    void forwardToPlayer(@NonNull String playerName, @NonNull String channelName, @NonNull byte[] data);
+    void forwardToPlayer(@NonNull String playerName, @NonNull String channelName, byte[] data);
 
     /**
      * Sends a custom plugin message to a given server.
@@ -174,6 +197,7 @@ public interface BungeeCord {
      * @param playerName the username of a player. BungeeCord will send the forward message to their server.
      * @param channelName the name of the subchannel
      * @param data the data to send
+     * @see <a href="https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel/#forwardtoplayer">ForwardToPlayer message</a>
      */
     void forwardToPlayer(@NonNull String playerName, @NonNull String channelName, @NonNull ByteArrayDataOutput data);
 

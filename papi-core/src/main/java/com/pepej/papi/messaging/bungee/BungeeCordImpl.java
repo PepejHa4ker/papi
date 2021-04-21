@@ -27,13 +27,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
-
-    /*
-     * See:
-     * - https://www.spigotmc.org/wiki/bukkit-bungee-plugin-messaging-channel
-     * - https://github.com/SpigotMC/BungeeCord/blob/master/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java#L223
-     */
-
     /**
      * The name of the BungeeCord plugin channel
      */
@@ -165,7 +158,8 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         player = Iterables.getFirst(Players.all(), null);
         if (player != null) {
             sendToChannel(agent, player);
-        } else {
+        }
+        else {
             // no players online, queue the message
             this.queuedMessages.add(agent);
             ensureSetup();
@@ -262,6 +256,11 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
     }
 
     @Override
+    public void messageRaw(@NonNull final String playerName, @NonNull final String messageRaw) {
+        sendMessage(new PlayerMessageRawAgent(playerName, messageRaw));
+    }
+
+    @Override
     public @NonNull Promise<String> getServer() {
         Promise<String> fut = Promise.empty();
         sendMessage(new GetServerAgent(fut));
@@ -322,7 +321,8 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
 
     @Override
     public void registerForwardCallback(@NonNull String channelName, @NonNull Predicate<ByteArrayDataInput> callback) {
-        final Predicate<ByteArrayDataInput> cb = Objects.requireNonNull(callback, "callback");
+        Objects.requireNonNull(callback, "callback");
+        final Predicate<ByteArrayDataInput> cb = callback;
         ForwardCustomCallback customCallback = new ForwardCustomCallback(channelName, bytes -> cb.test(ByteStreams.newDataInput(bytes)));
         registerCallback(customCallback);
     }
@@ -375,7 +375,7 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
          * Returns true if the incoming data applies to this callback
          *
          * @param receiver the player instance which received the data
-         * @param in the input data
+         * @param in       the input data
          * @return true if the data is applicable
          */
         default boolean testResponse(Player receiver, ByteArrayDataInput in) {
@@ -386,7 +386,7 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
          * Accepts the incoming data, and returns true if this callback should now be de-registered
          *
          * @param receiver the player instance which received the data
-         * @param in the input data
+         * @param in       the input data
          * @return if the callback should be de-registered
          */
         boolean acceptResponse(Player receiver, ByteArrayDataInput in);
@@ -400,8 +400,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final String serverName;
 
         private ConnectAgent(Player player, String serverName) {
-            this.player = Objects.requireNonNull(player, "player");
-            this.serverName = Objects.requireNonNull(serverName, "serverName");
+            Objects.requireNonNull(player, "player");
+            Objects.requireNonNull(serverName, "serverName");
+            this.player = player;
+            this.serverName = serverName;
         }
 
         @Override
@@ -427,8 +429,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final String serverName;
 
         private ConnectOtherAgent(String playerName, String serverName) {
-            this.playerName = Objects.requireNonNull(playerName, "playerName");
-            this.serverName = Objects.requireNonNull(serverName, "serverName");
+            Objects.requireNonNull(playerName, "playerName");
+            Objects.requireNonNull(serverName, "serverName");
+            this.playerName = playerName;
+            this.serverName = serverName;
         }
 
         @Override
@@ -450,8 +454,11 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final Promise<Map.Entry<String, Integer>> callback;
 
         private IPAgent(Player player, Promise<Map.Entry<String, Integer>> callback) {
-            this.player = Objects.requireNonNull(player, "player");
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(player, "player");
+            Objects.requireNonNull(callback, "callback");
+            this.player = player;
+            this.callback = callback;
+
         }
 
         @Override
@@ -485,8 +492,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final Promise<Integer> callback;
 
         private PlayerCountAgent(String serverName, Promise<Integer> callback) {
-            this.serverName = Objects.requireNonNull(serverName, "serverName");
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(serverName, "serverName");
+            Objects.requireNonNull(callback, "callback");
+            this.serverName = serverName;
+            this.callback = callback;
         }
 
         @Override
@@ -520,8 +529,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final Promise<List<String>> callback;
 
         private PlayerListAgent(String serverName, Promise<List<String>> callback) {
-            this.serverName = Objects.requireNonNull(serverName, "serverName");
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(serverName, "serverName");
+            Objects.requireNonNull(callback, "callback");
+            this.serverName = serverName;
+            this.callback = callback;
         }
 
         @Override
@@ -560,7 +571,8 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final Promise<List<String>> callback;
 
         private GetServersAgent(Promise<List<String>> callback) {
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(callback, "callback");
+            this.callback = callback;
         }
 
         @Override
@@ -589,8 +601,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final String message;
 
         private PlayerMessageAgent(String playerName, String message) {
-            this.playerName = Objects.requireNonNull(playerName, "playerName");
-            this.message = Objects.requireNonNull(message, "message");
+            Objects.requireNonNull(playerName, "playerName");
+            Objects.requireNonNull(message, "message");
+            this.playerName = playerName;
+            this.message = message;
         }
 
         @Override
@@ -605,13 +619,40 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         }
     }
 
+
+    private static final class PlayerMessageRawAgent implements MessageAgent {
+        private static final String CHANNEL = "MessageRaw";
+
+        private final String playerName;
+        private final String messageRaw;
+
+        private PlayerMessageRawAgent(String playerName, String messageRaw) {
+            Objects.requireNonNull(playerName, "playerName");
+            Objects.requireNonNull(messageRaw, "messageRaw");
+            this.playerName = playerName;
+            this.messageRaw = messageRaw;
+        }
+
+        @Override
+        public String getSubChannel() {
+            return CHANNEL;
+        }
+
+        @Override
+        public void appendPayload(ByteArrayDataOutput out) {
+            out.writeUTF(this.playerName);
+            out.writeUTF(this.messageRaw);
+        }
+    }
+
     private static final class GetServerAgent implements MessageAgent, MessageCallback {
         private static final String CHANNEL = "GetServer";
 
         private final Promise<String> callback;
 
         private GetServerAgent(Promise<String> callback) {
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(callback, "callback");
+            this.callback = callback;
         }
 
         @Override
@@ -633,8 +674,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final Promise<UUID> callback;
 
         private UUIDAgent(Player player, Promise<UUID> callback) {
-            this.player = Objects.requireNonNull(player, "player");
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(player, "player");
+            Objects.requireNonNull(callback, "callback");
+            this.player = player;
+            this.callback = callback;
         }
 
         @Override
@@ -667,8 +710,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final Promise<UUID> callback;
 
         private UUIDOtherAgent(String playerName, Promise<UUID> callback) {
-            this.playerName = Objects.requireNonNull(playerName, "playerName");
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(playerName, "playerName");
+            Objects.requireNonNull(callback, "callback");
+            this.playerName = playerName;
+            this.callback = callback;
         }
 
         @Override
@@ -702,8 +747,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final Promise<Map.Entry<String, Integer>> callback;
 
         private ServerIPAgent(String serverName, Promise<Map.Entry<String, Integer>> callback) {
-            this.serverName = Objects.requireNonNull(serverName, "serverName");
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(serverName, "serverName");
+            Objects.requireNonNull(callback, "callback");
+            this.serverName = serverName;
+            this.callback = callback;
         }
 
         @Override
@@ -738,8 +785,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final String reason;
 
         private KickPlayerAgent(String playerName, String reason) {
-            this.playerName = Objects.requireNonNull(playerName, "playerName");
-            this.reason = Objects.requireNonNull(reason, "reason");
+            Objects.requireNonNull(playerName, "playerName");
+            Objects.requireNonNull(reason, "reason");
+            this.playerName = playerName;
+            this.reason = reason;
         }
 
         @Override
@@ -762,15 +811,20 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final byte[] data;
 
         private ForwardAgent(String serverName, String channelName, byte[] data) {
-            this.serverName = Objects.requireNonNull(serverName, "serverName");
-            this.channelName = Objects.requireNonNull(channelName, "channelName");
+            Objects.requireNonNull(serverName, "serverName");
+            Objects.requireNonNull(channelName, "channelName");
+            this.serverName = serverName;
+            this.channelName = channelName;
             this.data = data;
         }
 
         private ForwardAgent(String serverName, String channelName, ByteArrayDataOutput data) {
-            this.serverName = Objects.requireNonNull(serverName, "serverName");
-            this.channelName = Objects.requireNonNull(channelName, "channelName");
-            this.data = Objects.requireNonNull(data, "data").toByteArray();
+            Objects.requireNonNull(serverName, "serverName");
+            Objects.requireNonNull(channelName, "channelName");
+            Objects.requireNonNull(data, "data");
+            this.serverName = serverName;
+            this.channelName = channelName;
+            this.data = data.toByteArray();
         }
 
         @Override
@@ -795,15 +849,19 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final byte[] data;
 
         private ForwardToPlayerAgent(String playerName, String channelName, byte[] data) {
-            this.playerName = Objects.requireNonNull(playerName, "playerName");
-            this.channelName = Objects.requireNonNull(channelName, "channelName");
+
+            this.playerName = playerName;
+            this.channelName = channelName;
             this.data = data;
         }
 
         private ForwardToPlayerAgent(String playerName, String channelName, ByteArrayDataOutput data) {
-            this.playerName = Objects.requireNonNull(playerName, "playerName");
-            this.channelName = Objects.requireNonNull(channelName, "channelName");
-            this.data = Objects.requireNonNull(data, "data").toByteArray();
+            Objects.requireNonNull(playerName, "playerName");
+            Objects.requireNonNull(channelName, "channelName");
+            Objects.requireNonNull(data, "data");
+            this.playerName = playerName;
+            this.channelName = channelName;
+            this.data = data.toByteArray();
         }
 
         @Override
@@ -825,8 +883,10 @@ public final class BungeeCordImpl implements BungeeCord, PluginMessageListener {
         private final Predicate<byte[]> callback;
 
         private ForwardCustomCallback(String subChannel, Predicate<byte[]> callback) {
-            this.subChannel = Objects.requireNonNull(subChannel, "subChannel");
-            this.callback = Objects.requireNonNull(callback, "callback");
+            Objects.requireNonNull(subChannel, "subChannel");
+            Objects.requireNonNull(callback, "callback");
+            this.subChannel = subChannel;
+            this.callback = callback;
         }
 
         @Override
