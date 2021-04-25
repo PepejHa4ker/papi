@@ -3,6 +3,9 @@ package com.pepej.papi.services;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -241,6 +244,11 @@ final class SimpleServicesManager implements ServicesManager {
             List<RegisteredServiceProvider<?>> registered = providers.get(service);
 
             if (registered == null) {
+                T possibleProvider = findProviderByAnnotation(service);
+                if (possibleProvider != null) {
+                    register(service, possibleProvider, ServicePriority.NORMAL);
+                    return new RegisteredServiceProvider<>(service, possibleProvider, ServicePriority.NORMAL);
+                }
                 return null;
             }
 
@@ -258,12 +266,18 @@ final class SimpleServicesManager implements ServicesManager {
      * @return a copy of the list of registrations
      */
     @SuppressWarnings("unchecked")
+    @UnmodifiableView
     public <T> List<RegisteredServiceProvider<T>> getRegistrations(Class<T> service) {
         ImmutableList.Builder<RegisteredServiceProvider<T>> ret;
         synchronized (providers) {
             List<RegisteredServiceProvider<?>> registered = providers.get(service);
 
             if (registered == null) {
+               T possibleProvider = findProviderByAnnotation(service);
+                if (possibleProvider != null) {
+                    register(service, possibleProvider, ServicePriority.NORMAL);
+                    return Collections.singletonList(new RegisteredServiceProvider<>(service, possibleProvider, ServicePriority.NORMAL));
+                }
                 return ImmutableList.of();
             }
 
@@ -300,5 +314,20 @@ final class SimpleServicesManager implements ServicesManager {
         synchronized (providers) {
             return providers.containsKey(service);
         }
+    }
+
+
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
+    @Nullable
+    private static <T> T findProviderByAnnotation(Class<T> clazz) {
+        Implementor implementor = clazz.getDeclaredAnnotation(Implementor.class);
+        if (implementor == null) {
+            return null;
+        }
+        Class<?> implClass = implementor.value();
+        return (T) implClass.getDeclaredConstructor().newInstance();
+
+
     }
 }
