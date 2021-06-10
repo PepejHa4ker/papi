@@ -2,6 +2,7 @@ package com.pepej.papi.services;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public final class Services {
      * @return the service instance
      * @deprecated see {@link Services#getNullable}
      */
-    @NonNull
+    @Nullable
     @Deprecated
     @ApiStatus.ScheduledForRemoval
     public static <T> T load(@NonNull Class<T> clazz) {
@@ -35,7 +36,8 @@ public final class Services {
      * @param <T> the service class type
      * @return the service instance
      */
-    @NonNull static <T> T getNullable(@NonNull Class<T> clazz) {
+    @Nullable
+    public static <T> T getNullable(@NonNull Class<T> clazz) {
         Objects.requireNonNull(clazz, "clazz");
         return get(clazz).orElseThrow(() -> new IllegalStateException("No registration present for service '" + clazz.getName() + "'"));
     }

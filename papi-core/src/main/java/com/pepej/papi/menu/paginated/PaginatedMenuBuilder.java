@@ -20,19 +20,19 @@ public class PaginatedMenuBuilder {
 
     public static final int DEFAULT_LINES = 6;
 
-    public static final int DEFAULT_NEXT_PAGE_SLOT = new MenuScheme()
+    public static final int DEFAULT_NEXT_PAGE_SLOT = MenuScheme.create()
             .maskEmpty(5)
             .mask("000000010")
             .getMaskedIndexes()
             .get(0);
 
-    public static final int DEFAULT_PREVIOUS_PAGE_SLOT = new MenuScheme()
+    public static final int DEFAULT_PREVIOUS_PAGE_SLOT = MenuScheme.create()
             .maskEmpty(5)
             .mask("010000000")
             .getMaskedIndexes()
             .get(0);
 
-    public static final List<Integer> DEFAULT_ITEM_SLOTS = new MenuScheme()
+    public static final List<Integer> DEFAULT_ITEM_SLOTS = MenuScheme.create()
             .mask("011111110")
             .mask("011111110")
             .mask("011111110")
@@ -40,7 +40,7 @@ public class PaginatedMenuBuilder {
             .mask("011111110")
             .getMaskedIndexesImmutable();
 
-    public static final MenuScheme DEFAULT_SCHEME = new MenuScheme(StandardSchemeMappings.STAINED_GLASS)
+    public static final MenuScheme DEFAULT_SCHEME = MenuScheme.create(StandardSchemeMappings.STAINED_GLASS)
             .mask("100000001")
             .mask("100000001")
             .mask("100000001")

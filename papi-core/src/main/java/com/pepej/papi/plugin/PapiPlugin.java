@@ -7,8 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 
 import java.io.File;
@@ -41,8 +41,8 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param <T> the listener class type
      * @return the listener
      */
-    @NonNull
-    <T extends Listener> T registerListener(@NonNull T listener);
+    @NotNull
+    <T extends Listener> T registerListener(@NotNull T listener);
 
     /**
      * Registers a CommandExecutor with the server
@@ -52,8 +52,8 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param <T> the command executor class type
      * @return the command executor
      */
-    @NonNull
-    <T extends CommandExecutor> T registerCommand(@NonNull T command, @NonNull String... aliases);
+    @NotNull
+    <T extends CommandExecutor> T registerCommand(@NotNull T command, @NotNull String... aliases);
 
     /**
      * Registers a CommandExecutor with the server
@@ -66,8 +66,8 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param <T> the command executor class type
      * @return the command executor
      */
-    @NonNull
-    <T extends CommandExecutor> T registerCommand(@NonNull T command, String permission, String permissionMessage, String description, @NonNull String... aliases);
+    @NotNull
+    <T extends CommandExecutor> T registerCommand(@NotNull T command, String permission, String permissionMessage, String description, @NotNull String... aliases);
 
     /**
      * Gets a service provided by the ServiceManager
@@ -76,8 +76,8 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param <T> the class type
      * @return the service
      */
-    @NonNull
-    <T> T getService(@NonNull Class<T> service);
+    @NotNull
+    <T> T getService(@NotNull Class<T> service);
 
     /**
      * Provides a service to the ServiceManager,
@@ -87,7 +87,7 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param instance the instance
      * @param priority the priority to register the service at
      */
-    <T> void provideService(@NonNull Class<T> service, @NonNull T instance, @NonNull ServicePriority priority);
+    <T> void provideService(@NotNull Class<T> service, @NotNull T instance, @NotNull ServicePriority priority);
 
     /**
      * Provides a service to the ServiceManager, {@link ServicePriority#NORMAL}.
@@ -96,7 +96,7 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param service the service class
      * @param instance the instance
      */
-    <T> void provideService(@NonNull Class<T> service, @NonNull T instance);
+    <T> void provideService(@NotNull Class<T> service, @NotNull T instance);
 
     /**
      * Provides a service to the ServiceManager, {@link ServicePriority#NORMAL}.
@@ -104,7 +104,7 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param <T> the service class type
      * @param service the service class
      */
-    <T> void provideService(@NonNull Class<T> service);
+    <T> void provideService(@NotNull Class<T> service);
 
     /**
      * Gets if a given plugin is enabled.
@@ -112,7 +112,7 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param name the name of the plugin
      * @return if the plugin is enabled
      */
-    boolean isPluginPresent(@NonNull String name);
+    boolean isPluginPresent(@NotNull String name);
 
     /**
      * Gets a plugin instance for the given plugin name
@@ -123,7 +123,7 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @return the plugin
      */
     @Nullable
-    <T extends Plugin> T getPluginNullable(@NonNull String name, @NonNull Class<T> pluginClass);
+    <T extends Plugin> T getPluginNullable(@NotNull String name, @NotNull Class<T> pluginClass);
 
     /**
      * Gets a plugin instance for the given plugin name
@@ -132,8 +132,8 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param <T> the main class type
      * @return the plugin
      */
-    @NonNull
-    <T extends Plugin> Optional<T> getPlugin(@NonNull String name, @NonNull Class<T> pluginClass);
+    @NotNull
+    <T extends Plugin> Optional<T> getPlugin(@NotNull String name, @NotNull Class<T> pluginClass);
 
     /**
      * Gets a bundled file from the plugins resource folder.
@@ -143,8 +143,8 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param name the name of the file
      * @return the file
      */
-    @NonNull
-    File getBundledFile(@NonNull String name);
+    @NotNull
+    File getBundledFile(@NotNull String name);
 
     /**
      * Loads a config file from a file name.
@@ -154,8 +154,8 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param file the name of the file
      * @return the config instance
      */
-    @NonNull
-    YamlConfiguration loadConfig(@NonNull String file);
+    @NotNull
+    YamlConfiguration loadConfig(@NotNull String file);
 
     /**
      * Loads a config file from a file name.
@@ -165,15 +165,15 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param file the name of the file
      * @return the config instance
      */
-    @NonNull
-    ConfigurationNode loadConfigNode(@NonNull String file);
+    @NotNull
+    ConfigurationNode loadConfigNode(@NotNull String file);
 
     /**
      * Gets the plugin's class loader
      *
      * @return the class loader
      */
-    @NonNull
+    @NotNull
     ClassLoader getClassloader();
 
 }

@@ -6,8 +6,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.google.gson.JsonObject;
-import com.pepej.papi.gson.JsonBuilder;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.plugin.PapiPlugin;
 import com.pepej.papi.promise.Promise;
@@ -20,7 +18,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.ByteArrayInputStream;
-import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;

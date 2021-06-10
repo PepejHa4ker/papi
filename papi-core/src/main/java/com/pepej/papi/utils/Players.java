@@ -106,7 +106,7 @@ public final class Players {
         for (Object o : objects) {
             if (o instanceof Player) {
                 Player player = (Player) o;
-                if (!Services.load(NpcFactory.class).isPapiNPC(player)) {
+                if (!Services.getNullable(NpcFactory.class).isPapiNPC(player)) {
                     consumer.accept(player);
                 }
             }
@@ -122,7 +122,7 @@ public final class Players {
      */
     public static Stream<Player> streamInRange(@NonNull final Location center, final double radius) {
         return center.getWorld().getNearbyEntities(center, radius, radius, radius).stream()
-                     .filter(e -> e instanceof Player && !Services.load(NpcFactory.class).isPapiNPC(e))
+                     .filter(e -> e instanceof Player && !Services.getNullable(NpcFactory.class).isPapiNPC(e))
                      .map(e -> ((Player) e));
     }
 

@@ -241,11 +241,11 @@ public class PapiJsPlugin extends PapiJavaPlugin implements PapiJs {
         }
 
         private static MenuScheme newScheme() {
-            return new MenuScheme();
+            return MenuScheme.create();
         }
 
         private static MenuScheme newScheme(SchemeMapping mapping) {
-            return new MenuScheme(mapping);
+            return MenuScheme.create(mapping);
         }
     }
 }

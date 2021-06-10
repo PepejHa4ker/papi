@@ -3,6 +3,7 @@ package com.pepej.papi.item;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.pepej.papi.menu.Item;
+import com.pepej.papi.random.VariableAmount;
 import com.pepej.papi.text.Text;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -76,7 +77,7 @@ public final class ItemStackBuilder {
         return this;
     }
 
-    public <T extends ItemMeta> ItemStackBuilder transformMeta(Consumer<T> meta) {
+    public <T extends ItemMeta> ItemStackBuilder transformMeta(Consumer<? super T> meta) {
         //noinspection unchecked
         T m = (T) this.itemStack.getItemMeta();
         if (m != null) {
@@ -133,11 +134,7 @@ public final class ItemStackBuilder {
     }
 
     public ItemStackBuilder lore(String line) {
-        return transformMeta(meta -> {
-            List<String> lore = meta.getLore() == null ? new ArrayList<>() : meta.getLore();
-            lore.add(Text.colorize(line));
-            meta.setLore(lore);
-        });
+        return lore(new String[]{line});
     }
 
     public ItemStackBuilder lore(String... lines) {
@@ -151,13 +148,10 @@ public final class ItemStackBuilder {
     }
 
     public ItemStackBuilder lore(Iterable<String> lines) {
-        return transformMeta(meta -> {
-            List<String> lore = meta.getLore() == null ? new ArrayList<>() : meta.getLore();
-            for (String line : lines) {
-                lore.add(Text.colorize(line));
-            }
-            meta.setLore(lore);
-        });
+        for (String line : lines) {
+            lore(line);
+        }
+        return this;
     }
 
     public ItemStackBuilder clearLore() {

@@ -2,6 +2,10 @@ package com.pepej.papi.event.functional.single;
 
 import com.pepej.papi.Papi;
 import com.pepej.papi.event.SingleSubscription;
+import com.pepej.papi.shadow.ClassTarget;
+import com.pepej.papi.shadow.DynamicClassTarget;
+import com.pepej.papi.shadow.Shadow;
+import com.pepej.papi.shadow.Static;
 import org.bukkit.event.*;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
@@ -24,8 +28,6 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
 
     private final BiConsumer<? super T, Exception> exceptionConsumer;
     private final boolean handleSubclasses;
-    private final boolean ignoreCancelled;
-
     private final Predicate<T>[] filters;
     private final BiPredicate<SingleSubscription<T>, T>[] preExpiryTests;
     private final BiPredicate<SingleSubscription<T>, T>[] midExpiryTests;
@@ -41,7 +43,6 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
         this.priority = builder.priority;
         this.exceptionConsumer = builder.exceptionConsumer;
         this.handleSubclasses = builder.handleSubclasses;
-        this.ignoreCancelled = builder.ignoreCancelled;
         this.filters = builder.filters.toArray(new Predicate[0]);
         this.preExpiryTests = builder.preExpiryTests.toArray(new BiPredicate[0]);
         this.midExpiryTests = builder.midExpiryTests.toArray(new BiPredicate[0]);
@@ -75,15 +76,6 @@ class PapiSingleEventListener<T extends Event> implements SingleSubscription<T>,
 
         // obtain the event instance
         T eventInstance = eventClass.cast(event);
-
-        if (eventInstance instanceof Cancellable) {
-            Cancellable cancellable = (Cancellable) eventInstance;
-            if (cancellable.isCancelled()) {
-                if (!ignoreCancelled) {
-                    return;
-                }
-            }
-        }
 
         // check pre-expiry tests
         for (BiPredicate<SingleSubscription<T>, T> test : preExpiryTests) {

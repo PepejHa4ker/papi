@@ -103,13 +103,6 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
     SingleSubscriptionBuilder<T> filterNot(@NonNull Predicate<T> predicate);
 
     /**
-     * @param state the state
-     * @return the builder instance
-     */
-    @NonNull
-    SingleSubscriptionBuilder<T> ignoreCancelled(boolean state);
-
-    /**
      * Add a expiry predicate.
      *
      * @param predicate the expiry test

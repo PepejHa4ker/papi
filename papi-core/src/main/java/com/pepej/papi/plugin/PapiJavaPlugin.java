@@ -23,6 +23,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
 
 import java.io.File;
@@ -85,9 +86,9 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
               .bindWith(terminableRegistry);
 
         Arrays.stream(ServerUpdateEvent.Type.values()).forEach(value -> Schedulers.builder()
-                                                                                  .async()
+                                                                                  .sync()
                                                                                   .every(value.getDelayTicks())
-                                                                                  .run(() -> Events.call(ServerUpdateEvent.of(value)))
+                                                                                  .run(() -> Events.callSync(ServerUpdateEvent.of(value)))
                                                                                   .bindWith(terminableRegistry));
         Schedulers.builder()
                   .async()
@@ -137,7 +138,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         return listener;
     }
 
-    public final <T extends CommandExecutor> T registerCommand(@NonNull T command, @NonNull String... aliases) {
+    public final <T extends CommandExecutor> @NotNull T registerCommand(@NonNull T command, @NonNull String... aliases) {
         return registerCommand(command, null, null, null, aliases);
     }
 

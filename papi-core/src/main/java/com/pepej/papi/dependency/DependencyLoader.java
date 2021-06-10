@@ -49,7 +49,7 @@ public final class DependencyLoader {
     }
 
     public static void load(String groupId, String artifactId, String version) {
-        load(groupId, artifactId, version, "https://repo1.maven.org/maven2");
+        load(groupId, artifactId, version, Repository.DEFAULT_MAVEN_REPOSITORY);
     }
 
     public static void load(String groupId, String artifactId, String version, String repoUrl) {

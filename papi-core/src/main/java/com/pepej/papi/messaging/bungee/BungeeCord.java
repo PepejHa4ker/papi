@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.pepej.papi.promise.Promise;
 import com.pepej.papi.services.Implementor;
+import lombok.Value;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -232,24 +233,10 @@ public interface BungeeCord {
 
 
 
+    @Value
     class IpMessageCallback {
-
-        private final String ip;
-        private final int port;
-
-        IpMessageCallback(final String ip, final int port) {
-            this.ip = ip;
-            this.port = port;
-        }
-
-        @NonNull
-        public String getIp() {
-            return ip;
-        }
-
-        public int getPort() {
-            return port;
-        }
+        String ip;
+        int port;
     }
 
 }

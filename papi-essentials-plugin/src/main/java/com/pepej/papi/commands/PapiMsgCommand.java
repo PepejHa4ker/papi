@@ -21,27 +21,27 @@ import static java.lang.String.format;
 public class PapiMsgCommand implements TerminableModule {
 
     public void setup(@NonNull TerminableConsumer consumer) {
-        LuckPerms luckPerms = Services.load(LuckPerms.class);
-        Commands.create()
-                .assertUsage("<player> <message>")
-                .assertPlayer()
-                .assertPermission("papi.essentials.commands.msg")
-                .handler(context -> {
-                    Player other = context.arg(0).parseOrFail(Player.class);
-                    Player sender = context.sender();
-                    String message = String.join(" ", context.args().subList(1, context.args().size()));
-                    String otherPrefix = luckPerms.getUserManager().getUser(other.getUniqueId()).getCachedData().getMetaData().getPrefix();
-                    otherPrefix = otherPrefix == null ? "" : otherPrefix;
-                    String otherSuffix = luckPerms.getUserManager().getUser(other.getUniqueId()).getCachedData().getMetaData().getSuffix();
-                    otherSuffix = otherSuffix == null ? "" : otherSuffix;
-                    String senderPrefix = luckPerms.getUserManager().getUser(sender.getUniqueId()).getCachedData().getMetaData().getPrefix();
-                    senderPrefix = senderPrefix == null ? "" : senderPrefix;
-                    String senderSuffix = luckPerms.getUserManager().getUser(sender.getUniqueId()).getCachedData().getMetaData().getSuffix();
-                    senderSuffix = senderSuffix == null ? "" : senderSuffix;
-
-                    other.sendMessage(colorize(format("&7[%s%s%s --> Вам&8:&r&e ", senderPrefix, sender.getName(), senderSuffix)) + message + colorize("&7]"));
-                    other.sendMessage(colorize(format("&7[Вы --> %s%s%s&8:&r&e ", otherPrefix, other.getName(), otherSuffix)) + message + colorize("&7]"));
-                })
-                .registerAndBind(consumer, "msg", "m", "w", "t", "tell");
+//        LuckPerms luckPerms = Services.load(LuckPerms.class);
+//        Commands.create()
+//                .assertUsage("<player> <message>")
+//                .assertPlayer()
+//                .assertPermission("papi.essentials.commands.msg")
+//                .handler(context -> {
+//                    Player other = context.arg(0).parseOrFail(Player.class);
+//                    Player sender = context.sender();
+//                    String message = String.join(" ", context.args().subList(1, context.args().size()));
+//                    String otherPrefix = luckPerms.getUserManager().getUser(other.getUniqueId()).getCachedData().getMetaData().getPrefix();
+//                    otherPrefix = otherPrefix == null ? "" : otherPrefix;
+//                    String otherSuffix = luckPerms.getUserManager().getUser(other.getUniqueId()).getCachedData().getMetaData().getSuffix();
+//                    otherSuffix = otherSuffix == null ? "" : otherSuffix;
+//                    String senderPrefix = luckPerms.getUserManager().getUser(sender.getUniqueId()).getCachedData().getMetaData().getPrefix();
+//                    senderPrefix = senderPrefix == null ? "" : senderPrefix;
+//                    String senderSuffix = luckPerms.getUserManager().getUser(sender.getUniqueId()).getCachedData().getMetaData().getSuffix();
+//                    senderSuffix = senderSuffix == null ? "" : senderSuffix;
+//
+//                    other.sendMessage(colorize(format("&7[%s%s%s --> Вам&8:&r&e ", senderPrefix, sender.getName(), senderSuffix)) + message + colorize("&7]"));
+//                    other.sendMessage(colorize(format("&7[Вы --> %s%s%s&8:&r&e ", otherPrefix, other.getName(), otherSuffix)) + message + colorize("&7]"));
+//                })
+//                .registerAndBind(consumer, "msg", "m", "w", "t", "tell");
     }
 }

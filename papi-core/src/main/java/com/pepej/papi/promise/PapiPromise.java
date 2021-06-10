@@ -5,6 +5,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.pepej.papi.interfaces.Delegate;
 import com.pepej.papi.internal.LoaderUtils;
+import com.pepej.papi.messaging.bungee.BungeeCord;
 import com.pepej.papi.scheduler.PapiExecutors;
 import com.pepej.papi.scheduler.Ticks;
 import com.pepej.papi.utils.Log;

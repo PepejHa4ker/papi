@@ -38,7 +38,6 @@ public class Token {
     }
 
     private Token(Kind kind, Object content) {
-        super();
         if ((kind.equals(Kind.OPERATOR) && !(content instanceof Operator)) ||
                 (kind.equals(Kind.FUNCTION) && !(content instanceof Function)) ||
                 (kind.equals(Kind.LITERAL) && !(content instanceof String))) {

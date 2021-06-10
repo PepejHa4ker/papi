@@ -8,6 +8,7 @@ import com.pepej.papi.metadata.MetadataMap;
 import com.pepej.papi.reflect.MinecraftVersion;
 import com.pepej.papi.reflect.MinecraftVersions;
 import com.pepej.papi.scheduler.Schedulers;
+import com.pepej.papi.terminable.Terminable;
 import com.pepej.papi.terminable.TerminableConsumer;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.text.Text;
@@ -35,7 +36,7 @@ import java.util.function.Function;
 /**
  * A simple GUI abstraction
  */
-public abstract class Menu implements TerminableConsumer {
+public abstract class Menu implements TerminableConsumer, Terminable {
     public static final MetadataKey<Menu> OPEN_MENU_KEY = MetadataKey.create("open-menu", Menu.class);
 
     /**
@@ -271,8 +272,10 @@ public abstract class Menu implements TerminableConsumer {
         valid = true;
     }
 
+    @Override
     public void close() {
-        this.player.closeInventory();
+        this.invalidate();
+        compositeTerminable.closeAndReportException();
     }
 
     private void invalidate() {
@@ -286,7 +289,6 @@ public abstract class Menu implements TerminableConsumer {
         }
 
         // stop listening
-        compositeTerminable.closeAndReportException();
 
         // clear all items from the menu, just in case the menu didn't close properly.
         clearItems();

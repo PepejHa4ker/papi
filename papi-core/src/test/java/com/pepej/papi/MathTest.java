@@ -5,11 +5,17 @@ import com.pepej.papi.math.geom.twodim.Circle;
 import com.pepej.papi.math.geom.twodim.Square;
 import com.pepej.papi.math.geom.twodim.Triangle.RightTriangle;
 import com.pepej.papi.math.vector.Vector2d;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MathTest {
+
+
+    @BeforeAll
+    static void v() {}
 
 
 

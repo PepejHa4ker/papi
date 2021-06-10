@@ -101,7 +101,7 @@ public class AbstractMessenger implements Messenger {
             }
         } while ((rawType = rawType.getSuperclass()) != null);
 
-        return new GsonCodec<>(GsonProvider.standard(),type);
+        return new GsonCodec<>(GsonProvider.standard(), type);
     }
 
     private static class AbstractChannel<T> implements Channel<T> {

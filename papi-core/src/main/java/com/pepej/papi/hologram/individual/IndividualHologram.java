@@ -23,7 +23,7 @@ public interface IndividualHologram extends BaseHologram {
      */
     @NonNull
     static IndividualHologram create(@NonNull Position position, @NonNull List<HologramLine> lines) {
-        final IndividualHologramFactory individualHologramFactory = Services.load(IndividualHologramFactory.class);
+        final IndividualHologramFactory individualHologramFactory = Services.getNullable(IndividualHologramFactory.class);
         return individualHologramFactory.newHologram(position, lines);
     }
 

@@ -20,8 +20,6 @@ class SingleSubscriptionBuilderImpl<T extends Event> implements SingleSubscripti
 
     BiConsumer<? super T, Exception> exceptionConsumer = DEFAULT_EXCEPTION_CONSUMER;
     boolean handleSubclasses = false;
-    boolean ignoreCancelled = false;
-
     final List<Predicate<T>> filters = new ArrayList<>(3);
     final List<BiPredicate<SingleSubscription<T>, T>> preExpiryTests = new ArrayList<>(0);
     final List<BiPredicate<SingleSubscription<T>, T>> midExpiryTests = new ArrayList<>(0);
@@ -53,11 +51,6 @@ class SingleSubscriptionBuilderImpl<T extends Event> implements SingleSubscripti
         return this;
     }
 
-    @Override
-    public @NonNull SingleSubscriptionBuilder<T> ignoreCancelled(final boolean state) {
-        this.ignoreCancelled = state;
-        return this;
-    }
 
     @NonNull
     @Override

@@ -12,6 +12,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Repository {
 
+    String DEFAULT_MAVEN_REPOSITORY = "https://repo1.maven.org/maven2";
+
     /**
      * Gets the base url of the repository.
      *

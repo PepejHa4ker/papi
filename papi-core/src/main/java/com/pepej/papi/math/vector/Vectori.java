@@ -40,7 +40,6 @@ public interface Vectori {
      */
     Vectori negate();
 
-
     /**
      * Returns the magnitude of a vector
      *
