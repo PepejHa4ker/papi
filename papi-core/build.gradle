@@ -9,7 +9,27 @@ buildscript {
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
+apply plugin: "maven-publish"
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.pepej'
+            artifactId = 'papi-core'
+            version = '2.5.0'
+
+            from components.java
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}
 
 repositories {
     maven { url = "https://repo.dmulloy2.net/nexus/repository/public/" }
@@ -73,8 +93,8 @@ shadowJar {
     relocate("org.spongepowered.configurate", "com.pepej.papi.config")
     archiveName = "Papi-Core-2.5.0.jar"
     mergeServiceFiles()
-
-
 }
+
+
 
 
