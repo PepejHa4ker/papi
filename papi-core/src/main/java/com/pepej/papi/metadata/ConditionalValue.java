@@ -5,8 +5,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * Represents a value which will expire if condition will return true
+ *
+ * @param <T> the wrapped value type
+ */
 public class ConditionalValue<T> implements TransientValue<T> {
-
 
     private final Predicate<? super T> expireCondition;
     private final T value;

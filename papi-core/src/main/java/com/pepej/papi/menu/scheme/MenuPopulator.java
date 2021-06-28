@@ -76,6 +76,7 @@ public interface MenuPopulator {
         action.accept(getHandledMenu().getSlot(slot));
         return true;
     }
+
     /**
      * Places an item onto the {@link Menu} using the next available slot in the populator
      *
