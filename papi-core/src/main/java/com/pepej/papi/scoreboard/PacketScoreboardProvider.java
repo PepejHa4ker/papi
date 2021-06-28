@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public final class PacketScoreboardProvider implements ScoreboardProvider {
     private final PapiPlugin plugin;
-    private PacketScoreboard scoreboard = null;
+    private volatile PacketScoreboard scoreboard = null;
 
     public PacketScoreboardProvider() {
         this.plugin = LoaderUtils.getPlugin();
@@ -21,9 +21,13 @@ public final class PacketScoreboardProvider implements ScoreboardProvider {
 
     @NonNull
     @Override
-    public synchronized PacketScoreboard getScoreboard() {
+    public Scoreboard getScoreboard() {
         if (this.scoreboard == null) {
-            this.scoreboard = new PacketScoreboard(this.plugin);
+            synchronized (this) {
+                if (this.scoreboard == null) {
+                    this.scoreboard = new PacketScoreboard(this.plugin);
+                }
+            }
         }
         return this.scoreboard;
     }

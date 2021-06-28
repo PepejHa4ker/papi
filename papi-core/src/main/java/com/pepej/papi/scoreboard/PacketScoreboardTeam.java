@@ -296,6 +296,14 @@ public class PacketScoreboardTeam implements ScoreboardTeam {
         Protocol.sendPacket(player, newRemovePacket());
     }
 
+    /**
+     * Unsubscribes all players from the team.
+     */
+    @Override
+    public void close() throws Exception {
+        this.unsubscribeAll();
+    }
+
     @Override
     public void unsubscribeAll() {
         Protocol.broadcastPacket(this.subscribed, newRemovePacket());

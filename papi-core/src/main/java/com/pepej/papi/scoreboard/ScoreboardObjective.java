@@ -1,5 +1,6 @@
 package com.pepej.papi.scoreboard;
 
+import com.pepej.papi.terminable.Terminable;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -10,7 +11,7 @@ import java.util.Map;
 /**
  * Represents a specific objective on a {@link Scoreboard}.
  */
-public interface ScoreboardObjective {
+public interface ScoreboardObjective extends Terminable {
 
     /**
      * Gets the id of this objective
@@ -153,4 +154,10 @@ public interface ScoreboardObjective {
      * Unsubscribes all players from this objective
      */
     void unsubscribeAll();
+
+    /**
+     * Unsubscribes all players from the objective.
+     */
+    @Override
+    void close() throws Exception;
 }

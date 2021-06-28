@@ -246,6 +246,14 @@ public class PacketScoreboardObjective implements ScoreboardObjective {
         this.subscribed.clear();
     }
 
+    /**
+     * Unsubscribes all players from the objective.
+     */
+    @Override
+    public void close() throws Exception {
+        this.unsubscribeAll();
+    }
+
     private PacketContainer newObjectivePacket(UpdateType mode) {
         // http://wiki.vg/Protocol#Scoreboard_Objective
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.SCOREBOARD_OBJECTIVE);

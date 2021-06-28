@@ -28,12 +28,12 @@ public class PacketScoreboard implements Scoreboard {
 
     // teams & objectives shared by all players.
     // these are automatically subscribed to when players join
-    private final Map<String, PacketScoreboardTeam> teams = Collections.synchronizedMap(new HashMap<>());
-    private final Map<String, PacketScoreboardObjective> objectives = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, ScoreboardTeam> teams = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, ScoreboardObjective> objectives = Collections.synchronizedMap(new HashMap<>());
 
     // per-player teams & objectives.
-    private final Map<UUID, Map<String, PacketScoreboardTeam>> playerTeams = Collections.synchronizedMap(new HashMap<>());
-    private final Map<UUID, Map<String, PacketScoreboardObjective>> playerObjectives = Collections.synchronizedMap(new HashMap<>());
+    private final Map<UUID, Map<String, ScoreboardTeam>> playerTeams = Collections.synchronizedMap(new HashMap<>());
+    private final Map<UUID, Map<String, ScoreboardObjective>> playerObjectives = Collections.synchronizedMap(new HashMap<>());
 
     public PacketScoreboard(@NonNull PapiPlugin plugin) {
         Events.subscribe(PlayerJoinEvent.class)
@@ -48,14 +48,14 @@ public class PacketScoreboard implements Scoreboard {
         Player player = event.getPlayer();
 
         // auto subscribe to teams
-        for (PacketScoreboardTeam t : this.teams.values()) {
+        for (ScoreboardTeam t : this.teams.values()) {
             if (t.shouldAutoSubscribe()) {
                 t.subscribe(player);
             }
         }
 
         // auto subscribe to objectives
-        for (PacketScoreboardObjective o : this.objectives.values()) {
+        for (ScoreboardObjective o : this.objectives.values()) {
             if (o.shouldAutoSubscribe()) {
                 o.subscribe(player);
             }
@@ -65,21 +65,21 @@ public class PacketScoreboard implements Scoreboard {
     private void handlePlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        for (PacketScoreboardTeam packetScoreboardTeam : this.teams.values()) {
-            packetScoreboardTeam.unsubscribe(player, true);
-            packetScoreboardTeam.removePlayer(player);
+        for (ScoreboardTeam team : this.teams.values()) {
+            team.unsubscribe(player, true);
+            team.removePlayer(player);
         }
 
-        for (PacketScoreboardObjective packetScoreboardObjective : this.objectives.values()) {
-            packetScoreboardObjective.unsubscribe(player, true);
+        for (ScoreboardObjective objective : this.objectives.values()) {
+            objective.unsubscribe(player, true);
         }
 
-        Map<String, PacketScoreboardObjective> playerObjectives = this.playerObjectives.remove(player.getUniqueId());
+        Map<String, ScoreboardObjective> playerObjectives = this.playerObjectives.remove(player.getUniqueId());
         if (playerObjectives != null) playerObjectives.values().forEach(o -> o.unsubscribe(player, true));
 
-        Map<String, PacketScoreboardTeam> playerTeams = this.playerTeams.remove(player.getUniqueId());
+        Map<String, ScoreboardTeam> playerTeams = this.playerTeams.remove(player.getUniqueId());
         if (playerTeams != null) {
-            for (PacketScoreboardTeam t : playerTeams.values()) {
+            for (ScoreboardTeam t : playerTeams.values()) {
                 t.unsubscribe(player, true);
                 t.removePlayer(player);
             }
@@ -104,13 +104,13 @@ public class PacketScoreboard implements Scoreboard {
 
     @Override
     @Nullable
-    public PacketScoreboardTeam getTeam(String id) {
+    public ScoreboardTeam getTeam(String id) {
         return this.teams.get(id);
     }
 
     @Override
     public boolean removeTeam(String id) {
-        PacketScoreboardTeam team = this.teams.remove(id);
+        ScoreboardTeam team = this.teams.remove(id);
         if (team == null) {
             return false;
         }
@@ -120,11 +120,11 @@ public class PacketScoreboard implements Scoreboard {
     }
 
     @Override
-    public PacketScoreboardObjective createObjective(String id, String title, DisplaySlot displaySlot, boolean autoSubscribe) {
+    public ScoreboardObjective createObjective(String id, String title, DisplaySlot displaySlot, boolean autoSubscribe) {
         Preconditions.checkArgument(id.length() <= 16, "id cannot be longer than 16 characters");
         Preconditions.checkState(!this.objectives.containsKey(id), "id already exists");
 
-        PacketScoreboardObjective objective = new PacketScoreboardObjective(id, title, displaySlot, autoSubscribe);
+        ScoreboardObjective objective = new PacketScoreboardObjective(id, title, displaySlot, autoSubscribe);
         if (autoSubscribe) {
             for (Player player : Players.all()) {
                 objective.subscribe(player);
@@ -137,13 +137,13 @@ public class PacketScoreboard implements Scoreboard {
 
     @Override
     @Nullable
-    public PacketScoreboardObjective getObjective(String id) {
+    public ScoreboardObjective getObjective(String id) {
         return this.objectives.get(id);
     }
 
     @Override
     public boolean removeObjective(String id) {
-        PacketScoreboardObjective objective = this.objectives.remove(id);
+        ScoreboardObjective objective = this.objectives.remove(id);
         if (objective == null) {
             return false;
         }
@@ -153,12 +153,12 @@ public class PacketScoreboard implements Scoreboard {
     }
 
     @Override
-    public PacketScoreboardTeam createPlayerTeam(Player player, String id, String title, boolean autoSubscribe) {
+    public ScoreboardTeam createPlayerTeam(Player player, String id, String title, boolean autoSubscribe) {
         Preconditions.checkArgument(id.length() <= 16, "id cannot be longer than 16 characters");
-        Map<String, PacketScoreboardTeam> teams = this.playerTeams.computeIfAbsent(player.getUniqueId(), p -> new HashMap<>());
+        Map<String, ScoreboardTeam> teams = this.playerTeams.computeIfAbsent(player.getUniqueId(), p -> new HashMap<>());
         Preconditions.checkState(!teams.containsKey(id), "id already exists");
 
-        PacketScoreboardTeam team = new PacketScoreboardTeam(id, title, autoSubscribe);
+        ScoreboardTeam team = new PacketScoreboardTeam(id, title, autoSubscribe);
         if (autoSubscribe) {
             team.subscribe(player);
         }
@@ -169,8 +169,8 @@ public class PacketScoreboard implements Scoreboard {
 
     @Override
     @Nullable
-    public PacketScoreboardTeam getPlayerTeam(Player player, String id) {
-        Map<String, PacketScoreboardTeam> map = this.playerTeams.get(player.getUniqueId());
+    public ScoreboardTeam getPlayerTeam(Player player, String id) {
+        Map<String, ScoreboardTeam> map = this.playerTeams.get(player.getUniqueId());
         if (map == null) {
             return null;
         }
@@ -180,12 +180,12 @@ public class PacketScoreboard implements Scoreboard {
 
     @Override
     public boolean removePlayerTeam(Player player, String id) {
-        Map<String, PacketScoreboardTeam> map = this.playerTeams.get(player.getUniqueId());
+        Map<String, ScoreboardTeam> map = this.playerTeams.get(player.getUniqueId());
         if (map == null) {
             return false;
         }
 
-        PacketScoreboardTeam team = map.remove(id);
+        ScoreboardTeam team = map.remove(id);
         if (team == null) {
             return false;
         }
@@ -195,12 +195,12 @@ public class PacketScoreboard implements Scoreboard {
     }
 
     @Override
-    public PacketScoreboardObjective createPlayerObjective(Player player, String id, String title, DisplaySlot displaySlot, boolean autoSubscribe) {
+    public ScoreboardObjective createPlayerObjective(Player player, String id, String title, DisplaySlot displaySlot, boolean autoSubscribe) {
         Preconditions.checkArgument(id.length() <= 16, "id cannot be longer than 16 characters");
-        Map<String, PacketScoreboardObjective> objectives = this.playerObjectives.computeIfAbsent(player.getUniqueId(), p -> new HashMap<>());
+        Map<String, ScoreboardObjective> objectives = this.playerObjectives.computeIfAbsent(player.getUniqueId(), p -> new HashMap<>());
         Preconditions.checkState(!objectives.containsKey(id), "id already exists");
 
-        PacketScoreboardObjective objective = new PacketScoreboardObjective(id, title, displaySlot, autoSubscribe);
+        ScoreboardObjective objective = new PacketScoreboardObjective(id, title, displaySlot, autoSubscribe);
         if (autoSubscribe) {
             objective.subscribe(player);
         }
@@ -211,8 +211,8 @@ public class PacketScoreboard implements Scoreboard {
 
     @Override
     @Nullable
-    public PacketScoreboardObjective getPlayerObjective(Player player, String id) {
-        Map<String, PacketScoreboardObjective> map = this.playerObjectives.get(player.getUniqueId());
+    public ScoreboardObjective getPlayerObjective(Player player, String id) {
+        Map<String, ScoreboardObjective> map = this.playerObjectives.get(player.getUniqueId());
         if (map == null) {
             return null;
         }
@@ -222,12 +222,12 @@ public class PacketScoreboard implements Scoreboard {
 
     @Override
     public boolean removePlayerObjective(Player player, String id) {
-        Map<String, PacketScoreboardObjective> map = this.playerObjectives.get(player.getUniqueId());
+        Map<String, ScoreboardObjective> map = this.playerObjectives.get(player.getUniqueId());
         if (map == null) {
             return false;
         }
 
-        PacketScoreboardObjective objective = map.remove(id);
+        ScoreboardObjective objective = map.remove(id);
         if (objective == null) {
             return false;
         }

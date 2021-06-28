@@ -1,5 +1,6 @@
 package com.pepej.papi.scoreboard;
 
+import com.pepej.papi.terminable.Terminable;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -9,7 +10,7 @@ import java.util.Set;
 /**
  * Represents a specific team on a {@link Scoreboard}.
  */
-public interface ScoreboardTeam {
+public interface ScoreboardTeam extends Terminable {
 
     /**
      * Gets the id of this team
@@ -231,6 +232,12 @@ public interface ScoreboardTeam {
      * Unsubscribes all players from this team
      */
     void unsubscribeAll();
+
+    /**
+     * Unsubscribes all players from the team.
+     */
+    @Override
+    void close() throws Exception;
 
     enum CollisionRule {
         ALWAYS("always"),
