@@ -21,7 +21,6 @@ class PapiMenuSchemeMaskInspection : BaseInspection() {
                     val projectScope = GlobalSearchScope.allScope(expression.project)
                     if (method.containingClass == javaPsiFacade.findClass(SCHEME_CLASS, projectScope)) {
                         if (MASK_METHOD_NAME == method.name) {
-
                             if (expression.argumentList.expressions[0].text.length != 11 || !expression.argumentList.expressions[0].text.replace("\"\"", "").matches("(0)(1)*".toRegex())) {
                                 registerMethodCallError(expression, expression)
                             }

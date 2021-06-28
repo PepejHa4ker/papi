@@ -1,4 +1,4 @@
-package com.pepej.papi.spigot
+package com.pepej.papi.inspection.implicit.spigot
 
 import com.intellij.codeInsight.AnnotationUtil
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider
