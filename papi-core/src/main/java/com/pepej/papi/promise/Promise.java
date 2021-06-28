@@ -848,7 +848,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAccept(@NonNull ThreadContext context, @NonNull Consumer<? super V> action) {
+    default Promise<V> thenAccept(@NonNull ThreadContext context, @NonNull Consumer<? super V> action) {
         switch (context) {
             case SYNC:
                 return thenAcceptSync(action);
@@ -868,7 +868,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAcceptSync(@NonNull Consumer<? super V> action) {
+    default Promise<V> thenAcceptSync(@NonNull Consumer<? super V> action) {
         return thenApplySync(Delegates.consumerToFunction(action));
     }
 
@@ -881,7 +881,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAcceptAsync(@NonNull Consumer<? super V> action) {
+    default Promise<V> thenAcceptAsync(@NonNull Consumer<? super V> action) {
         return thenApplyAsync(Delegates.consumerToFunction(action));
     }
 
@@ -896,7 +896,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAcceptDelayed(@NonNull ThreadContext context, @NonNull Consumer<? super V> action, long delayTicks) {
+    default Promise<V> thenAcceptDelayed(@NonNull ThreadContext context, @NonNull Consumer<? super V> action, long delayTicks) {
         switch (context) {
             case SYNC:
                 return thenAcceptDelayedSync(action, delayTicks);
@@ -919,7 +919,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAcceptDelayed(@NonNull ThreadContext context, @NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
+    default Promise<V> thenAcceptDelayed(@NonNull ThreadContext context, @NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return thenAcceptDelayedSync(action, delay, unit);
@@ -940,7 +940,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAcceptDelayedSync(@NonNull Consumer<? super V> action, long delayTicks) {
+    default Promise<V> thenAcceptDelayedSync(@NonNull Consumer<? super V> action, long delayTicks) {
         return thenApplyDelayedSync(Delegates.consumerToFunction(action), delayTicks);
     }
 
@@ -955,7 +955,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAcceptDelayedSync(@NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
+    default Promise<V> thenAcceptDelayedSync(@NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
         return thenApplyDelayedSync(Delegates.consumerToFunction(action), delay, unit);
     }
 
@@ -969,7 +969,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAcceptDelayedAsync(@NonNull Consumer<? super V> action, long delayTicks) {
+    default Promise<V> thenAcceptDelayedAsync(@NonNull Consumer<? super V> action, long delayTicks) {
         return thenApplyDelayedAsync(Delegates.consumerToFunction(action), delayTicks);
     }
 
@@ -984,7 +984,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenAcceptDelayedAsync(@NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
+    default Promise<V> thenAcceptDelayedAsync(@NonNull Consumer<? super V> action, long delay, @NonNull TimeUnit unit) {
         return thenApplyDelayedAsync(Delegates.consumerToFunction(action), delay, unit);
     }
 
@@ -997,7 +997,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRun(@NonNull ThreadContext context, @NonNull Runnable action) {
+    default Promise<V> thenRun(@NonNull ThreadContext context, @NonNull Runnable action) {
         switch (context) {
             case SYNC:
                 return thenRunSync(action);
@@ -1016,7 +1016,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRunSync(@NonNull Runnable action) {
+    default Promise<V> thenRunSync(@NonNull Runnable action) {
         return thenApplySync(Delegates.runnableToFunction(action));
     }
 
@@ -1028,7 +1028,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRunAsync(@NonNull Runnable action) {
+    default Promise<V> thenRunAsync(@NonNull Runnable action) {
         return thenApplyAsync(Delegates.runnableToFunction(action));
     }
 
@@ -1042,7 +1042,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRunDelayed(@NonNull ThreadContext context, @NonNull Runnable action, long delayTicks) {
+    default Promise<V> thenRunDelayed(@NonNull ThreadContext context, @NonNull Runnable action, long delayTicks) {
         switch (context) {
             case SYNC:
                 return thenRunDelayedSync(action, delayTicks);
@@ -1064,7 +1064,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRunDelayed(@NonNull ThreadContext context, @NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
+    default Promise<V> thenRunDelayed(@NonNull ThreadContext context, @NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
         switch (context) {
             case SYNC:
                 return thenRunDelayedSync(action, delay, unit);
@@ -1084,7 +1084,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRunDelayedSync(@NonNull Runnable action, long delayTicks) {
+    default Promise<V> thenRunDelayedSync(@NonNull Runnable action, long delayTicks) {
         return thenApplyDelayedSync(Delegates.runnableToFunction(action), delayTicks);
     }
 
@@ -1098,7 +1098,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRunDelayedSync(@NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
+    default Promise<V> thenRunDelayedSync(@NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
         return thenApplyDelayedSync(Delegates.runnableToFunction(action), delay, unit);
     }
 
@@ -1111,7 +1111,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRunDelayedAsync(@NonNull Runnable action, long delayTicks) {
+    default Promise<V> thenRunDelayedAsync(@NonNull Runnable action, long delayTicks) {
         return thenApplyDelayedAsync(Delegates.runnableToFunction(action), delayTicks);
     }
 
@@ -1125,7 +1125,7 @@ public interface Promise<V> extends Future<V>, Terminable {
      * @return the new promise
      */
     @NonNull
-    default Promise<Void> thenRunDelayedAsync(@NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
+    default Promise<V> thenRunDelayedAsync(@NonNull Runnable action, long delay, @NonNull TimeUnit unit) {
         return thenApplyDelayedAsync(Delegates.runnableToFunction(action), delay, unit);
     }
 
