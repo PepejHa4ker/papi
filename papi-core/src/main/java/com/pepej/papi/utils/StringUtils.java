@@ -31,13 +31,13 @@ public final class StringUtils {
 
     public static String plural(int count, String single, String pluralA, String pluralB) {
         final int declination = getDeclination(count);
-        switch (declination) {
-            case 1:
-                return single;
-            case 2:
-                return pluralA;
-            default: return pluralB;
+        if (declination == 1) {
+            return single;
+        } else if (declination == 2) {
+            return pluralA;
         }
+        return pluralB;
+
     }
 
     public static String getRandomString() {
@@ -115,7 +115,8 @@ public final class StringUtils {
                 || s.equalsIgnoreCase("on")) {
             return true;
 
-        } else if (s.equalsIgnoreCase("false")
+        }
+        else if (s.equalsIgnoreCase("false")
                 || s.equalsIgnoreCase("disable")
                 || s.equalsIgnoreCase("off")) {
             return false;
