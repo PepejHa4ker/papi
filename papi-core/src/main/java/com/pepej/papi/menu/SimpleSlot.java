@@ -20,6 +20,7 @@ public class SimpleSlot implements Slot {
 
     // the id of this slot
     private final int id;
+    private boolean cancelClicks;
 
     // the click handlers for this slot
     protected final Map<ClickType, Set<Consumer<InventoryClickEvent>>> handlers;
@@ -27,9 +28,11 @@ public class SimpleSlot implements Slot {
     public SimpleSlot(@NonNull Menu menu, int id) {
         this.menu = menu;
         this.id = id;
+        this.cancelClicks = true;
         this.handlers = Collections.synchronizedMap(new EnumMap<>(ClickType.class));
     }
 
+    @Override
     public void handle(@NonNull InventoryClickEvent event) {
         Set<Consumer<InventoryClickEvent>> handlers = this.handlers.get(event.getClick());
         if (handlers == null) {
@@ -110,6 +113,24 @@ public class SimpleSlot implements Slot {
         Objects.requireNonNull(item, "item");
         this.menu.getHandle().setItem(this.id, item);
         return this;
+    }
+
+    /**
+     * Allows players to click and move items in the slot
+     */
+    @Override
+    public void dontCancelClicks() {
+        this.cancelClicks = false;
+    }
+
+    /**
+     * Gets if players are allowed to click and move items in the slot
+     *
+     * @return if players are allowed to click and move items in the slot
+     */
+    @Override
+    public boolean isClicksCancelled() {
+        return this.cancelClicks;
     }
 
     /**

@@ -16,6 +16,8 @@ import java.util.function.Consumer;
  */
 public interface Slot {
 
+    void handle(@NonNull InventoryClickEvent event);
+
     /**
      * Gets the GUI this slot references
      *
@@ -64,6 +66,17 @@ public interface Slot {
     Slot setItem(@NonNull ItemStack item);
 
     /**
+     * Allows players to click and move items in the slot
+     */
+    void dontCancelClicks();
+
+    /**
+     * Gets if players are allowed to click and move items in the slot
+     * @return if players are allowed to click and move items in the slot
+     */
+    boolean isClicksCancelled();
+
+    /**
      * Clears all attributes of the slot.
      *
      * @return this slot
@@ -85,6 +98,7 @@ public interface Slot {
      */
     @NonNull
     Slot clearBindings();
+
 
     /**
      * Clears all bindings on this slot for a given click type.

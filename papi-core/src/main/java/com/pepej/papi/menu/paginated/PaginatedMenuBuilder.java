@@ -21,50 +21,50 @@ public class PaginatedMenuBuilder {
     public static final int DEFAULT_LINES = 6;
 
     public static final int DEFAULT_NEXT_PAGE_SLOT = MenuScheme.create()
-            .maskEmpty(5)
-            .mask("000000010")
-            .getMaskedIndexes()
-            .get(0);
+                                                               .maskEmpty(5)
+                                                               .mask("000000010")
+                                                               .getMaskedIndexes()
+                                                               .get(0);
 
     public static final int DEFAULT_PREVIOUS_PAGE_SLOT = MenuScheme.create()
-            .maskEmpty(5)
-            .mask("010000000")
-            .getMaskedIndexes()
-            .get(0);
+                                                                   .maskEmpty(5)
+                                                                   .mask("010000000")
+                                                                   .getMaskedIndexes()
+                                                                   .get(0);
 
     public static final List<Integer> DEFAULT_ITEM_SLOTS = MenuScheme.create()
-            .mask("011111110")
-            .mask("011111110")
-            .mask("011111110")
-            .mask("011111110")
-            .mask("011111110")
-            .getMaskedIndexesImmutable();
+                                                                     .mask("011111110")
+                                                                     .mask("011111110")
+                                                                     .mask("011111110")
+                                                                     .mask("011111110")
+                                                                     .mask("011111110")
+                                                                     .getMaskedIndexesImmutable();
 
     public static final MenuScheme DEFAULT_SCHEME = MenuScheme.create(StandardSchemeMappings.STAINED_GLASS)
-            .mask("100000001")
-            .mask("100000001")
-            .mask("100000001")
-            .mask("100000001")
-            .mask("100000001")
-            .mask("100000001")
-            .scheme(7, 7)
-            .scheme(7, 7)
-            .scheme(7, 7)
-            .scheme(7, 7)
-            .scheme(7, 7)
-            .scheme(7, 7);
+                                                              .mask("100000001")
+                                                              .mask("100000001")
+                                                              .mask("100000001")
+                                                              .mask("100000001")
+                                                              .mask("100000001")
+                                                              .mask("100000001")
+                                                              .scheme(7, 7)
+                                                              .scheme(7, 7)
+                                                              .scheme(7, 7)
+                                                              .scheme(7, 7)
+                                                              .scheme(7, 7)
+                                                              .scheme(7, 7);
 
 
     public static final Function<PageInfo, ItemStack> DEFAULT_NEXT_PAGE_ITEM = pageInfo -> ItemStackBuilder.of(Material.ARROW)
                                                                                                            .name("&b&m--&b>")
-                                                                                                           .lore("&fПереключиться на следующую страницу.")
+                                                                                                           .lore("&fПереключиться на &aследующую &fстраницу.")
                                                                                                            .lore("")
                                                                                                            .lore(String.format("&7Текущая страница &b%s&7/&b%s", pageInfo.getCurrent(), pageInfo.getSize()))
                                                                                                            .build();
 
     public static final Function<PageInfo, ItemStack> DEFAULT_PREVIOUS_PAGE_ITEM = pageInfo -> ItemStackBuilder.of(Material.ARROW)
                                                                                                                .name("&b<&b&m--")
-                                                                                                               .lore("&fПереключиться на предыдушую страницу..")
+                                                                                                               .lore("&fПереключиться на &cпредыдушую &fстраницу..")
                                                                                                                .lore("")
                                                                                                                .lore(String.format("&7Текущая страница &b%s&7/&b%s", pageInfo.getCurrent(), pageInfo.getSize()))
                                                                                                                .build();

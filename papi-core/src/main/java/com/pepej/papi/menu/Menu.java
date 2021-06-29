@@ -12,6 +12,7 @@ import com.pepej.papi.terminable.Terminable;
 import com.pepej.papi.terminable.TerminableConsumer;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.text.Text;
+import com.pepej.papi.utils.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -37,7 +38,7 @@ import java.util.function.Function;
  * A simple GUI abstraction
  */
 public abstract class Menu implements TerminableConsumer, Terminable {
-    public static final MetadataKey<Menu> OPEN_MENU_KEY = MetadataKey.create("open-menu", Menu.class);
+    public static final MetadataKey<Menu> OPEN_MENU_KEY = MetadataKey.create("opened-menu", Menu.class);
 
     /**
      * Utility method to get the number of lines needed for x items
@@ -84,8 +85,11 @@ public abstract class Menu implements TerminableConsumer, Terminable {
     private boolean invalidated = false;
 
     public Menu(Player player, int lines, String title) {
-        this.player = Objects.requireNonNull(player, "player");
-        this.initialTitle = Text.colorize(Objects.requireNonNull(title, "title"));
+        Objects.requireNonNull(player, "player");
+        Objects.requireNonNull(title, "title");
+        Preconditions.checkArgument(lines <= 6, "Lines count can't be greater than 6!");
+        this.player = player;
+        this.initialTitle = Text.colorize(title);
         this.inventory = Bukkit.createInventory(player, lines * 9, this.initialTitle);
         this.slots = new HashMap<>();
     }
@@ -202,7 +206,7 @@ public abstract class Menu implements TerminableConsumer, Terminable {
     }
 
     public void fillNullableWith(Item item) {
-        Objects.requireNonNull(item);
+        Objects.requireNonNull(item, "item");
         for (int i = 0; i < inventory.getSize(); i++) {
             addItem(item);
         }
@@ -330,8 +334,9 @@ public abstract class Menu implements TerminableConsumer, Terminable {
               .filter(e -> e.getInventory().getHolder() != null)
               .filter(e -> e.getInventory().getHolder().equals(this.player))
               .handler(e -> {
-                  e.setCancelled(true);
-
+                  int slotId = e.getRawSlot();
+                  Slot slot = getSlot(e.getRawSlot());
+                  e.setCancelled(slot.isClicksCancelled());
                   if (!isValid()) {
                       close();
                       return;
@@ -341,17 +346,12 @@ public abstract class Menu implements TerminableConsumer, Terminable {
                       return;
                   }
 
-                  int slotId = e.getRawSlot();
-
                   // check if the click was in the top inventory
                   if (slotId != e.getSlot()) {
                       return;
                   }
 
-                  SimpleSlot slot = this.slots.get(slotId);
-                  if (slot != null) {
-                      slot.handle(e);
-                  }
+                  slot.handle(e);
               })
               .bindWith(this);
 
@@ -385,10 +385,12 @@ public abstract class Menu implements TerminableConsumer, Terminable {
                       }
                       Menu fallbackMenu = fallback.apply(player);
                       if (fallbackMenu == null) {
-                          throw new IllegalStateException("Fallback function " + fallback + " returned null");
+                          Log.severe("Fallback function %s returned null", fallback);
+                          return;
                       }
                       if (fallbackMenu.valid) {
-                          throw new IllegalStateException("Fallback function " + fallback + " produced a menu " + fallbackMenu + " which is already open");
+                          Log.severe("Fallback function %s produced a menu %s which is already open", fallback, fallbackMenu);
+                          return;
                       }
                       fallbackMenu.open();
 

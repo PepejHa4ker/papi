@@ -25,6 +25,11 @@ public class DummySlot implements Slot {
         this.id = id;
     }
 
+    @Override
+    public void handle(@NonNull final InventoryClickEvent event) {
+
+    }
+
     @NonNull
     @Override
     public Menu menu() {
@@ -56,6 +61,16 @@ public class DummySlot implements Slot {
     @Override
     public Slot setItem(@NonNull ItemStack item) {
         return this;
+    }
+
+    @Override
+    public void dontCancelClicks() {
+
+    }
+
+    @Override
+    public boolean isClicksCancelled() {
+        return false;
     }
 
     @Override
