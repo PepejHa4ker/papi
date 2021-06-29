@@ -8,6 +8,7 @@ import com.pepej.papi.metadata.MetadataMap;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.terminable.composite.CompositeTerminable;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.DespawnReason;
 import net.citizensnpcs.api.event.NPCClickEvent;
 import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
@@ -297,6 +298,13 @@ public class CitizensNpcFactory implements NpcFactory {
         @Override
         public Location getInitialSpawn() {
             return this.initialSpawn;
+        }
+
+
+        @Override
+        public void close() throws Exception {
+            this.npc.destroy();
+            this.npc.despawn(DespawnReason.PLUGIN);
         }
 
         @NonNull

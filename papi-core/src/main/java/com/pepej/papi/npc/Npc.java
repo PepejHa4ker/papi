@@ -2,6 +2,7 @@ package com.pepej.papi.npc;
 
 
 import com.pepej.papi.metadata.MetadataMap;
+import com.pepej.papi.terminable.Terminable;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -12,7 +13,7 @@ import java.util.function.Consumer;
 /**
  * Represents a NPC (non-player character)
  */
-public interface Npc {
+public interface Npc extends Terminable {
 
     /**
      * Applies a click callback listener to this NPC.
@@ -69,4 +70,9 @@ public interface Npc {
     @NonNull
     Location getInitialSpawn();
 
+    /**
+     * Removes npc from a world
+     */
+    @Override
+    void close() throws Exception;
 }
