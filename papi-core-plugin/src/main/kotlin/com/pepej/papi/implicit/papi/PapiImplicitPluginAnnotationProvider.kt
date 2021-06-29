@@ -1,4 +1,4 @@
-package com.pepej.papi.inspection.implicit.papi
+package com.pepej.papi.implicit.papi
 
 import com.intellij.codeInsight.AnnotationUtil
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider

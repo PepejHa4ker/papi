@@ -34,17 +34,6 @@ public final class Effects {
 
     }
 
-    public static ImmutableList<Vector3d> getWingsEffect(Vector3d base, double yaw, double pitch) {
-        final ImmutableList.Builder<Vector3d> points = ImmutableList.builder();
-        getCirclePoint(TWO_PI / 92).forEach(circlePoint -> {
-            double offset = (Math.pow(E, cos(circlePoint)) - 2 * cos(circlePoint * 4)) - Math.pow(sin(circlePoint / 12), 5) / 2;
-            double dx = sin(circlePoint) * offset;
-            double dy = cos(circlePoint) * offset;
-            Vector3d newPoint = new Vector3d(dx, dy, -0.3).rotateDeg(pitch, -yaw, 0);
-            points.add(base.add(newPoint));
-        });
-        return points.build();
-    }
 
     public static Task spawnQuadHelixSyncTask(Player player, int maxStepX, int maxStepY, int orbs, Color color) {
 

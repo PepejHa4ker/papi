@@ -1,12 +1,7 @@
 package com.pepej.papi;
 
-import com.pepej.papi.ap.Plugin;
-import com.pepej.papi.ap.PluginDependency;
 import com.pepej.papi.commands.*;
-import com.pepej.papi.internal.PapiImplementationPlugin;
 import com.pepej.papi.plugin.PapiJavaPlugin;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 
 @PapiImplementationPlugin(moduleName = PapiEssentials.MODULE_ID)
 @Plugin(name = "papi-essentials", version = "1.0", description = "Essential spigot plugin powered by papi library", softDepends = {"papi"})

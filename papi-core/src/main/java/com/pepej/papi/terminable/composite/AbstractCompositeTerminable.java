@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class AbstractCompositeTerminable implements CompositeTerminable {
-    private final Deque<AutoCloseable> closeables = new ConcurrentLinkedDeque<>();
+    private final Deque<AutoCloseable> closeables = new ConcurrentLinkedDeque<>(); // closeables stack
 
     protected AbstractCompositeTerminable() {
 

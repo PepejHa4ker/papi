@@ -71,7 +71,8 @@ public final class DependencyLoader {
         }
 
         if (!saveLocation.exists()) {
-            throw new RuntimeException("Unable to download dependency: " + d.toString());
+            Log.severe("Unable to download dependency: %s", d);
+            return;
         }
 
         URLClassLoader classLoader = (URLClassLoader) LoaderUtils.getPlugin().getClass().getClassLoader();
@@ -80,18 +81,16 @@ public final class DependencyLoader {
         try {
             shadow.addURL(saveLocation.toURI().toURL());
         } catch (Exception e) {
-            throw new RuntimeException("Unable to load dependency: " + saveLocation.toString(), e);
+            Log.severe("Something went wrong while loading dependency %s", saveLocation.toURI().toURL());
+            return;
         }
 
-        Log.info("Loaded dependency &d'%s'&a successfully.", name);
+        Log.info("Dependency &d'%s'&a successfully loaded.", name);
     }
 
     private static File getLibFolder() {
         File pluginDataFolder = LoaderUtils.getPlugin().getDataFolder();
-        File pluginsDir = pluginDataFolder.getParentFile();
-
-        File papiDir = new File(pluginsDir, "papi");
-        File libs = new File(papiDir, "libraries");
+        File libs = new File(pluginDataFolder, "libraries");
         libs.mkdirs();
         return libs;
     }

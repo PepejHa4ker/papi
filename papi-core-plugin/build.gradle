@@ -1,11 +1,11 @@
 plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '0.7.2'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.30'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
 }
 
 group 'com.pepej'
-version '1.0.2'
+version '1.0.5'
 
 
 dependencies {
@@ -21,7 +21,7 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      Added menu scheme check inspection
+      Added @Implementor inspections
       """
 }
 

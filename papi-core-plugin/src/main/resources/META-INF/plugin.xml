@@ -3,7 +3,7 @@
     <name>Papi</name>
     <vendor email="gamzan127@gmail.com" url="https://github.com/PepejHa4ker">Pepej</vendor>
 
-    <description>Intellij plugin for spigot library papi.</description>
+    <description>Intellij-based plugin for spigot library papi. It helps to develop papi-based minecraft plugins and much more! </description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -13,8 +13,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <postStartupActivity implementation="com.pepej.papi.CheckAnnotationProcessorsStartupActivity"/>
-        <implicitUsageProvider implementation="com.pepej.papi.inspection.implicit.spigot.SpigotImplicitUsageProvider"/>
-        <implicitUsageProvider implementation="com.pepej.papi.inspection.implicit.papi.PapiImplicitPluginAnnotationProvider"/>
+        <implicitUsageProvider implementation="com.pepej.papi.implicit.spigot.SpigotImplicitUsageProvider"/>
+        <implicitUsageProvider implementation="com.pepej.papi.implicit.papi.PapiImplicitPluginAnnotationProvider"/>
 
         <localInspection displayName="Papi MenuScheme#mask invalid mask"
                          groupName="Papi"
