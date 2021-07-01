@@ -6,7 +6,6 @@ import com.pepej.papi.config.validate.Range;
 import com.pepej.papi.config.validate.Time;
 import com.pepej.papi.datatree.DataTree;
 import com.pepej.papi.gson.GsonSerializable;
-import lombok.SneakyThrows;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.configurate.*;
@@ -14,7 +13,6 @@ import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.AbstractConfigurationLoader;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
-import org.spongepowered.configurate.objectmapping.meta.NodeResolver;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import org.spongepowered.configurate.xml.XmlConfigurationLoader;
 import org.spongepowered.configurate.yaml.NodeStyle;
@@ -26,6 +24,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+
+import static org.spongepowered.configurate.kotlin.ObjectMappingKt.dataClassFieldDiscoverer;
 
 /**
  * Misc utilities for working with Configurate
@@ -106,6 +106,7 @@ public abstract class ConfigFactory<N extends ScopedConfigurationNode<N>, L exte
                                                    .registerAnnotatedObjects(ObjectMapper.factoryBuilder()
                                                                                          .addConstraint(Time.class, String.class, Constraints.time())
                                                                                          .addConstraint(Range.class, Integer.class, Constraints.range())
+                                                                                         .addDiscoverer(dataClassFieldDiscoverer())
                                                                                          .build())
                                                    .build();
 

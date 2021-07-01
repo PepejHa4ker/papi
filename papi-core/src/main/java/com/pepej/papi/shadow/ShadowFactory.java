@@ -29,7 +29,7 @@ public class ShadowFactory {
     /**
      * Constructs a new shadow factory.
      */
-    public ShadowFactory() {
+    private ShadowFactory() {
 
     }
 
