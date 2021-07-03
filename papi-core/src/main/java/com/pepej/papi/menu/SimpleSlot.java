@@ -1,7 +1,7 @@
 package com.pepej.papi.menu;
 
+import com.pepej.papi.events.player.PlayerInventoryClickEvent;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -23,7 +23,7 @@ public class SimpleSlot implements Slot {
     private boolean cancelClicks;
 
     // the click handlers for this slot
-    protected final Map<ClickType, Set<Consumer<InventoryClickEvent>>> handlers;
+    protected final Map<ClickType, Set<Consumer<PlayerInventoryClickEvent>>> handlers;
 
     public SimpleSlot(@NonNull Menu menu, int id) {
         this.menu = menu;
@@ -33,13 +33,13 @@ public class SimpleSlot implements Slot {
     }
 
     @Override
-    public void handle(@NonNull InventoryClickEvent event) {
-        Set<Consumer<InventoryClickEvent>> handlers = this.handlers.get(event.getClick());
+    public void handle(@NonNull PlayerInventoryClickEvent event) {
+        Set<Consumer<PlayerInventoryClickEvent>> handlers = this.handlers.get(event.getClick());
         if (handlers == null) {
             return;
         }
 
-        for (Consumer<InventoryClickEvent> handler : handlers) {
+        for (Consumer<PlayerInventoryClickEvent> handler : handlers) {
             handler.accept(event);
         }
     }
@@ -183,7 +183,7 @@ public class SimpleSlot implements Slot {
 
     @NonNull
     @Override
-    public Slot bind(@NonNull ClickType type, @NonNull Consumer<InventoryClickEvent> handler) {
+    public Slot bind(@NonNull ClickType type, @NonNull Consumer<PlayerInventoryClickEvent> handler) {
         Objects.requireNonNull(type, "type");
         Objects.requireNonNull(handler, "handler");
         this.handlers.computeIfAbsent(type, t -> ConcurrentHashMap.newKeySet()).add(handler);
@@ -201,7 +201,7 @@ public class SimpleSlot implements Slot {
 
     @NonNull
     @Override
-    public Slot bind(@NonNull Consumer<InventoryClickEvent> handler, @NonNull ClickType... types) {
+    public Slot bind(@NonNull Consumer<PlayerInventoryClickEvent> handler, @NonNull ClickType... types) {
         for (ClickType type : types) {
             bind(type, handler);
         }
@@ -229,7 +229,7 @@ public class SimpleSlot implements Slot {
 
     @NonNull
     @Override
-    public <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers) {
+    public <T extends Consumer<PlayerInventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers) {
         Objects.requireNonNull(handlers, "handlers");
         for (Map.Entry<ClickType, T> handler : handlers) {
             bind(handler.getKey(), handler.getValue());

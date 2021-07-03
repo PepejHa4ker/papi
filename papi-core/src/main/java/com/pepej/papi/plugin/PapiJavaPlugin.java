@@ -1,12 +1,12 @@
 package com.pepej.papi.plugin;
 
 import com.pepej.papi.config.ConfigFactory;
+import com.pepej.papi.dependency.DependencyLoader;
 import com.pepej.papi.events.Events;
 import com.pepej.papi.events.player.AsyncPlayerFirstJoinEvent;
 import com.pepej.papi.events.server.ServerUpdateEvent;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.internal.PapiImplementationPlugin;
-import com.pepej.papi.dependency.DependencyLoader;
 import com.pepej.papi.scheduler.PapiExecutors;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.services.ServicePriority;
@@ -21,7 +21,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -38,7 +37,7 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
     private CompositeTerminable terminableRegistry;
 
     @Override
-    public final @NonNull ClassLoader getClassloader() {
+    public final @NotNull ClassLoader getClassloader() {
         return super.getClassLoader();
     }
 
@@ -118,90 +117,88 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         }
     }
 
-    @NonNull
+    @NotNull
     @Override
-    public <T extends AutoCloseable> T bind(@NonNull T terminable) {
+    public <T extends AutoCloseable> T bind(@NotNull T terminable) {
         return terminableRegistry.bind(terminable);
     }
 
-    @NonNull
+    @NotNull
     @Override
-    public <T extends TerminableModule> T bindModule(@NonNull T module) {
+    public <T extends TerminableModule> T bindModule(@NotNull T module) {
         return terminableRegistry.bindModule(module);
     }
 
-    @NonNull
+    @NotNull
     @Override
-    public final <T extends Listener> T registerListener(@NonNull T listener) {
+    public final <T extends Listener> T registerListener(@NotNull T listener) {
         Objects.requireNonNull(listener, "listener");
         getServer().getPluginManager().registerEvents(listener, this);
         return listener;
     }
 
-    public final <T extends CommandExecutor> @NotNull T registerCommand(@NonNull T command, @NonNull String... aliases) {
+    public final <T extends CommandExecutor> @NotNull T registerCommand(@NotNull T command, @NotNull String... aliases) {
         return registerCommand(command, null, null, null, aliases);
     }
 
-    @NonNull
+    @NotNull
     @Override
-    public final <T extends CommandExecutor> T registerCommand(@NonNull T command, String permission, String permissionMessage, String description, @NonNull String... aliases) {
+    public final <T extends CommandExecutor> T registerCommand(@NotNull T command, String permission, String permissionMessage, String description, @NotNull String... aliases) {
         return CommandMapUtil.registerCommand(this, command, permission, permissionMessage, description, aliases);
     }
 
-    @NonNull
+    @Nullable
     @Override
-    public final <T> T getService(@NonNull Class<T> service) {
-        return Services.load(service);
+    public final <T> T getService(@NotNull Class<T> service) {
+        return Services.getNullable(service);
     }
 
     @Override
-    public final <T> void provideService(@NonNull Class<T> clazz, @NonNull T instance, @NonNull ServicePriority priority) {
+    public final <T> void provideService(@NotNull Class<T> clazz, @NotNull T instance, @NotNull ServicePriority priority) {
         Services.provide(clazz, instance, priority);
     }
 
     @Override
-    public final <T> void provideService(@NonNull Class<T> clazz, @NonNull T instance) {
+    public final <T> void provideService(@NotNull Class<T> clazz, @NotNull T instance) {
         provideService(clazz, instance, ServicePriority.NORMAL);
     }
 
     @Override
-    public <T> void provideService(@NonNull Class<T> service) {
+    public <T> void provideService(@NotNull Class<T> service) {
         Services.provide(service);
     }
 
     @Override
-    public final boolean isPluginPresent(@NonNull String name) {
+    public final boolean isPluginPresent(@NotNull String name) {
         return getServer().getPluginManager().getPlugin(name) != null;
     }
 
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
-    public final <T extends Plugin> T getPluginNullable(@NonNull String name, @NonNull Class<T> pluginClass) {
+    public final <T extends Plugin> T getPluginNullable(@NotNull String name, @NotNull Class<T> pluginClass) {
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(pluginClass, "pluginClass");
         return (T) getServer().getPluginManager().getPlugin(name);
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull
     @Override
-    public final <T extends Plugin> Optional<T> getPlugin(@NonNull String name, @NonNull Class<T> pluginClass) {
+    public final <T extends Plugin> @NotNull Optional<T> getPlugin(@NotNull String name, @NotNull Class<T> pluginClass) {
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(pluginClass, "pluginClass");
         return Optional.of((T) getServer().getPluginManager().getPlugin(name));
     }
 
 
-    private File getRelativeFile(@NonNull String name) {
+    private File getRelativeFile(@NotNull String name) {
         //noinspection ResultOfMethodCallIgnored
         getDataFolder().mkdirs();
         return new File(getDataFolder(), name);
     }
 
-    @NonNull
     @Override
-    public final File getBundledFile(@NonNull String name) {
+    public final @NotNull File getBundledFile(@NotNull String name) {
         Objects.requireNonNull(name, "name");
         File file = getRelativeFile(name);
         if (!file.exists()) {
@@ -210,20 +207,17 @@ public abstract class PapiJavaPlugin extends JavaPlugin implements PapiPlugin {
         return file;
     }
 
-    @NonNull
     @Override
-    public final YamlConfiguration loadConfig(@NonNull String file) {
+    public final @NotNull YamlConfiguration loadConfig(@NotNull String file) {
         Objects.requireNonNull(file, "file");
         return YamlConfiguration.loadConfiguration(getBundledFile(file));
     }
 
-    @NonNull
+    @NotNull
     @Override
-    public final ConfigurationNode loadConfigNode(@NonNull String file) {
+    public final ConfigurationNode loadConfigNode(@NotNull String file) {
         Objects.requireNonNull(file, "file");
         return ConfigFactory.gson().load(getBundledFile(file));
     }
-
-
 
 }

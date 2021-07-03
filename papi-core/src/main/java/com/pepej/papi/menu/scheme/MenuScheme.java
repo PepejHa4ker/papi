@@ -37,7 +37,7 @@ public interface MenuScheme {
         return ImmutableList.copyOf(getMaskedIndexes());
     }
 
-    default MenuPopulatorImpl newPopulator(Menu menu) {
+    default MenuPopulator newPopulator(Menu menu) {
         return new MenuPopulatorImpl(menu, this);
     }
 

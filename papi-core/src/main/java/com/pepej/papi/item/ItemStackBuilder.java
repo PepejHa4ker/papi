@@ -2,15 +2,14 @@ package com.pepej.papi.item;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.pepej.papi.events.player.PlayerInventoryClickEvent;
 import com.pepej.papi.menu.Item;
-import com.pepej.papi.random.VariableAmount;
 import com.pepej.papi.text.Text;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -200,8 +199,7 @@ public final class ItemStackBuilder {
 
     public ItemStackBuilder color(Color color) {
         return transform(itemStack -> {
-            Material type = itemStack.getType();
-            if (type == Material.LEATHER_BOOTS || type == Material.LEATHER_CHESTPLATE || type == Material.LEATHER_HELMET || type == Material.LEATHER_LEGGINGS) {
+            if (itemStack.getItemMeta() instanceof LeatherArmorMeta) {
                 this.<LeatherArmorMeta>transformMeta(m -> m.setColor(color));
             }
         });
@@ -240,19 +238,19 @@ public final class ItemStackBuilder {
         return buildItem().bindAllRunnables(handlers.entrySet()).build();
     }
 
-    public Item buildConsumer(@Nullable Consumer<InventoryClickEvent> handler) {
+    public Item buildConsumer(@Nullable Consumer<PlayerInventoryClickEvent> handler) {
         return buildItem().bind(handler, ClickType.RIGHT, ClickType.LEFT).build();
     }
 
-    public Item buildConsumer(ClickType type, @Nullable Consumer<InventoryClickEvent> handler) {
+    public Item buildConsumer(ClickType type, @Nullable Consumer<PlayerInventoryClickEvent> handler) {
         return buildItem().bind(type, handler).build();
     }
 
-    public Item buildConsumer(@Nullable Consumer<InventoryClickEvent> rightClick, @Nullable Consumer<InventoryClickEvent> leftClick) {
+    public Item buildConsumer(@Nullable Consumer<PlayerInventoryClickEvent> rightClick, @Nullable Consumer<PlayerInventoryClickEvent> leftClick) {
         return buildItem().bind(ClickType.RIGHT, rightClick).bind(ClickType.LEFT, leftClick).build();
     }
 
-    public Item buildFromConsumerMap(Map<ClickType, Consumer<InventoryClickEvent>> handlers) {
+    public Item buildFromConsumerMap(Map<ClickType, Consumer<PlayerInventoryClickEvent>> handlers) {
         return buildItem().bindAllConsumers(handlers.entrySet()).build();
     }
 

@@ -2,6 +2,7 @@ package com.pepej.papi.menu;
 
 import com.google.common.base.Preconditions;
 import com.pepej.papi.events.Events;
+import com.pepej.papi.events.player.PlayerInventoryClickEvent;
 import com.pepej.papi.metadata.Metadata;
 import com.pepej.papi.metadata.MetadataKey;
 import com.pepej.papi.metadata.MetadataMap;
@@ -331,6 +332,11 @@ public abstract class Menu implements TerminableConsumer, Terminable {
               }).bindWith(this);
 
         Events.subscribe(InventoryClickEvent.class)
+              .filter(e -> e.getInventory().getHolder() != null)
+              .filter(e -> e.getInventory().getHolder().equals(this.player))
+              .handler(e -> Events.call(new PlayerInventoryClickEvent(e.getView(), e.getSlotType(), e.getSlot(), e.getClick(), e.getAction(), e.getHotbarButton())))
+              .bindWith(this);
+        Events.subscribe(PlayerInventoryClickEvent.class)
               .filter(e -> e.getInventory().getHolder() != null)
               .filter(e -> e.getInventory().getHolder().equals(this.player))
               .handler(e -> {

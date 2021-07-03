@@ -1,5 +1,6 @@
 package com.pepej.papi.menu;
 
+import com.pepej.papi.events.player.PlayerInventoryClickEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +27,7 @@ public class DummySlot implements Slot {
     }
 
     @Override
-    public void handle(@NonNull final InventoryClickEvent event) {
+    public void handle(@NonNull final PlayerInventoryClickEvent event) {
 
     }
 
@@ -98,7 +99,7 @@ public class DummySlot implements Slot {
 
     @NonNull
     @Override
-    public Slot bind(@NonNull ClickType type, @NonNull Consumer<InventoryClickEvent> handler) {
+    public Slot bind(@NonNull ClickType type, @NonNull Consumer<PlayerInventoryClickEvent> handler) {
         return this;
     }
 
@@ -110,7 +111,7 @@ public class DummySlot implements Slot {
 
     @NonNull
     @Override
-    public Slot bind(@NonNull Consumer<InventoryClickEvent> handler, @NonNull ClickType... types) {
+    public Slot bind(@NonNull Consumer<PlayerInventoryClickEvent> handler, @NonNull ClickType... types) {
         return this;
     }
 
@@ -128,7 +129,7 @@ public class DummySlot implements Slot {
 
     @NonNull
     @Override
-    public <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers) {
+    public <T extends Consumer<PlayerInventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers) {
         return this;
     }
 }

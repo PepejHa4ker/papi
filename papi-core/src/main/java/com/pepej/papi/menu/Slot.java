@@ -1,7 +1,7 @@
 package com.pepej.papi.menu;
 
+import com.pepej.papi.events.player.PlayerInventoryClickEvent;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  */
 public interface Slot {
 
-    void handle(@NonNull InventoryClickEvent event);
+    void handle(@NonNull PlayerInventoryClickEvent event);
 
     /**
      * Gets the GUI this slot references
@@ -109,13 +109,13 @@ public interface Slot {
     Slot clearBindings(ClickType type);
 
     @NonNull
-    Slot bind(@NonNull ClickType type, @NonNull Consumer<InventoryClickEvent> handler);
+    Slot bind(@NonNull ClickType type, @NonNull Consumer<PlayerInventoryClickEvent> handler);
 
     @NonNull
     Slot bind(@NonNull ClickType type, @NonNull Runnable handler);
 
     @NonNull
-    Slot bind(@NonNull Consumer<InventoryClickEvent> handler, @NonNull ClickType... types);
+    Slot bind(@NonNull Consumer<PlayerInventoryClickEvent> handler, @NonNull ClickType... types);
 
     @NonNull
     Slot bind(@NonNull Runnable handler, @NonNull ClickType... types);
@@ -124,6 +124,6 @@ public interface Slot {
     <T extends Runnable> Slot bindAllRunnables(@NonNull Iterable<Map.Entry<ClickType, T>> handlers);
 
     @NonNull
-    <T extends Consumer<InventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers);
+    <T extends Consumer<PlayerInventoryClickEvent>> Slot bindAllConsumers(@NonNull Iterable<Map.Entry<ClickType, T>> handlers);
 
 }

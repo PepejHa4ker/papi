@@ -76,7 +76,7 @@ public interface PapiPlugin extends Plugin, TerminableConsumer {
      * @param <T> the class type
      * @return the service
      */
-    @NotNull
+    @Nullable
     <T> T getService(@NotNull Class<T> service);
 
     /**

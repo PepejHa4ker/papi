@@ -27,13 +27,6 @@ public class ShadowFactory {
     private final @NonNull TargetLookup targetLookup = new TargetLookup();
 
     /**
-     * Constructs a new shadow factory.
-     */
-    private ShadowFactory() {
-
-    }
-
-    /**
      * Creates a shadow for the given object.
      *
      * @param shadowClass the class of the shadow definition
