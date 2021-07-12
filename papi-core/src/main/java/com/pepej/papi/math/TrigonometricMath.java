@@ -12,7 +12,7 @@ public final class TrigonometricMath {
     private static final int SIN_BITS = 22;
     private static final int SIN_SIZE = 1 << SIN_BITS;
     private static final int SIN_MASK = SIN_SIZE - 1;
-    private static final double[] SIN_TABLE = new double[SIN_SIZE];
+    private static final float[] SIN_TABLE = new float[SIN_SIZE];
     private static final double SIN_CONVERSION_FACTOR = (SIN_SIZE / TWO_PI);
     private static final int COS_OFFSET = SIN_SIZE / 4;
     // Arc trig
@@ -30,9 +30,9 @@ public final class TrigonometricMath {
     private static final double q0 = 0.89678597403663861962481162E3;
 
     static {
-        //cache sinuses
+        //cache sinus
         for (int i = 0; i < SIN_SIZE; i++) {
-            SIN_TABLE[i] = Math.sin((i * TWO_PI) / SIN_SIZE);
+            SIN_TABLE[i] = (float) Math.sin((i * TWO_PI) / SIN_SIZE);
         }
     }
 
@@ -43,7 +43,7 @@ public final class TrigonometricMath {
      * @param angle the angle in radians
      * @return the sine of the angle
      */
-    public static double sin(double angle) {
+    public static float sin(double angle) {
         return sinRaw(GenericMath.floor(angle * SIN_CONVERSION_FACTOR));
     }
 
@@ -53,7 +53,7 @@ public final class TrigonometricMath {
      * @param angle the angle in radians
      * @return the cosine of the angle
      */
-    public static double cos(double angle) {
+    public static float cos(double angle) {
         return cosRaw(GenericMath.floor(angle * SIN_CONVERSION_FACTOR));
     }
 
@@ -63,7 +63,7 @@ public final class TrigonometricMath {
      * @param angle in radians
      * @return the tangent of the angle
      */
-    public static double tan(double angle) {
+    public static float tan(double angle) {
         int idx = GenericMath.floor(angle * SIN_CONVERSION_FACTOR);
         return sinRaw(idx) / cosRaw(idx);
     }
@@ -74,7 +74,7 @@ public final class TrigonometricMath {
      * @param angle the angle in radians
      * @return the cosecant of the angle
      */
-    public static double csc(double angle) {
+    public static float csc(double angle) {
         return 1 / sin(angle);
     }
 
@@ -84,7 +84,7 @@ public final class TrigonometricMath {
      * @param angle the angle in radians
      * @return the secant of the angle
      */
-    public static double sec(double angle) {
+    public static float sec(double angle) {
         return 1 / cos(angle);
     }
 
@@ -94,7 +94,7 @@ public final class TrigonometricMath {
      * @param angle in radians
      * @return the cotangent of the angle
      */
-    public static double cot(double angle) {
+    public static float cot(double angle) {
         int idx = GenericMath.floor(angle * SIN_CONVERSION_FACTOR);
         return cosRaw(idx) / sinRaw(idx);
     }
@@ -219,11 +219,11 @@ public final class TrigonometricMath {
         }
     }
 
-    private static double sinRaw(int idx) {
+    private static float sinRaw(int idx) {
         return SIN_TABLE[idx & SIN_MASK];
     }
 
-    private static double cosRaw(int idx) {
+    private static float cosRaw(int idx) {
         return SIN_TABLE[(idx + COS_OFFSET) & SIN_MASK];
     }
 

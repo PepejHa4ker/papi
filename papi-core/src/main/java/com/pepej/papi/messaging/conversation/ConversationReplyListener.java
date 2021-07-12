@@ -3,6 +3,7 @@ package com.pepej.papi.messaging.conversation;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -23,6 +24,21 @@ public interface ConversationReplyListener<R extends ConversationMessage> {
             @Override
             public void onTimeout(@NonNull List<R> replies) {
 
+            }
+        };
+    }
+
+    static <R extends ConversationMessage> ConversationReplyListener<R> ofWithTimeout(Function<? super R, RegistrationAction> onReply, Consumer<? super List<R>> repliesConsumer) {
+        return new ConversationReplyListener<R>() {
+            @NonNull
+            @Override
+            public RegistrationAction onReply(@NonNull R reply) {
+                return onReply.apply(reply);
+            }
+
+            @Override
+            public void onTimeout(@NonNull List<R> replies) {
+                repliesConsumer.accept(replies);
             }
         };
     }

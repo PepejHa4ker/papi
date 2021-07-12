@@ -9,7 +9,6 @@ import com.google.common.collect.Maps;
 import com.google.common.reflect.TypeToken;
 import com.pepej.papi.gson.GsonProvider;
 import com.pepej.papi.messaging.codec.Codec;
-import com.pepej.papi.messaging.codec.GZipCodec;
 import com.pepej.papi.messaging.codec.GsonCodec;
 import com.pepej.papi.messaging.codec.Message;
 import com.pepej.papi.promise.Promise;
@@ -117,7 +116,7 @@ public class AbstractMessenger implements Messenger {
             this.messenger = messenger;
             this.name = name;
             this.type = type;
-            this.codec = new GZipCodec<>(AbstractMessenger.getCodec(type));
+            this.codec = AbstractMessenger.getCodec(type);
         }
 
         private void onIncomingMessage(byte[] message) {
