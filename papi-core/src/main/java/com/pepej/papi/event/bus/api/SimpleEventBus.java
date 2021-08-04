@@ -124,7 +124,7 @@ public class SimpleEventBus<E> implements EventBus<E> {
         Preconditions.checkArgument(this.type.isAssignableFrom(clazz), "clazz " + clazz + " cannot be casted to event type " + this.type);
         return !this.registry.subscribers(clazz).isEmpty();
     }
-    @NonNull
+//    @NonNull
     @Override
     public SetMultimap<Class<?>, EventSubscriber<?>> subscribers() {
         return this.registry.subscribers();

@@ -91,7 +91,7 @@ public final class ASMEventExecutorFactory<E, L> implements EventExecutor.Factor
         if(!Modifier.isPublic(method.getModifiers())) {
             throw new IllegalArgumentException(String.format("Subscriber method '%s' must be public", method));
         }
-        return this.cache.getUnchecked(method).newInstance();
+        return this.cache.getUnchecked(method).getDeclaredConstructor().newInstance();
     }
 
     // A class loader with a method exposed to define a class.

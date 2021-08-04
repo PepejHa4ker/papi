@@ -3,6 +3,10 @@ package com.pepej.papi.network;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonElement;
+import com.pepej.papi.event.bus.method.EventExecutor;
+import com.pepej.papi.event.bus.method.MethodHandleEventExecutorFactory;
+import com.pepej.papi.event.bus.method.MethodSubscriptionAdapter;
+import com.pepej.papi.event.bus.method.SimpleMethodSubscriptionAdapter;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.cooldown.Cooldown;
 import com.pepej.papi.event.bus.api.EventBus;
@@ -37,8 +41,8 @@ public class AbstractNetwork implements Network {
 
     protected final Messenger messenger;
     protected final InstanceData instanceData;
-
     private final EventBus<NetworkEvent> eventBus = new SimpleEventBus<>(NetworkEvent.class);
+    private final NetworkEventExecutor<?> eventExecutor = new NetworkEventExecutor<>(eventBus);
     private final List<ServerMetadataProvider> metadataProviders = new CopyOnWriteArrayList<>();
     private final Map<String, ServerImpl> servers = new ConcurrentHashMap<>();
 
@@ -67,7 +71,7 @@ public class AbstractNetwork implements Network {
         }).bindWith(this.compositeTerminable);
 
         // outgoing (disconnect)
-        EventSubscriber<ServerDisconnectEvent> disconnectListener = new EventSubscriber<ServerDisconnectEvent>() {
+        EventSubscriber<ServerDisconnectEvent> disconnectListener = new EventSubscriber<>() {
             @Override
             public void invoke(@NonNull ServerDisconnectEvent event) {
                 if (!event.getId().equals(instanceData.getId())) {
@@ -179,6 +183,10 @@ public class AbstractNetwork implements Network {
     @Override
     public int getOverallPlayerCount() {
         return this.servers.values().stream().mapToInt(s -> s.getOnlinePlayers().size()).sum();
+    }
+
+    public <L> NetworkEventExecutor<L> getEventExecutor(L listener) {
+        return new NetworkEventExecutor<>(eventBus);
     }
 
     @Override
