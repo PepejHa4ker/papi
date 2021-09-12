@@ -1,11 +1,15 @@
 package com.pepej.papi.dependency;
 
+import com.google.common.base.Suppliers;
+import com.pepej.papi.dependency.loader.PapiURLClassLoader;
 import com.pepej.papi.internal.LoaderUtils;
 import com.pepej.papi.shadow.ClassTarget;
 import com.pepej.papi.shadow.Shadow;
 import com.pepej.papi.shadow.ShadowFactory;
+import com.pepej.papi.shadow.Target;
 import com.pepej.papi.utils.Log;
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.InputStream;
@@ -13,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.util.function.Supplier;
 
 
 /**
@@ -21,6 +26,8 @@ import java.nio.file.Files;
  */
 public final class DependencyLoader {
 
+    private static final Supplier<PapiURLClassLoader> URL_INJECTOR = Suppliers.memoize(() -> PapiURLClassLoader.create((URLClassLoader) LoaderUtils.getPlugin().getClass().getClassLoader()));
+
     /**
      * Resolves all {@link Dependency} annotations on the given object.
      *
@@ -28,6 +35,15 @@ public final class DependencyLoader {
      */
     public static void loadAll(Object object) {
         loadAll(object.getClass());
+    }
+
+    /**
+     * Resolves all {@link Dependency} annotations
+     */
+    public static void loadAll() {
+        for (Class<?> annotatedClass : LoaderUtils.getPlugin().getScanner().getTypesAnnotatedWith(Dependency.class)) {
+            loadAll(annotatedClass);
+        }
     }
 
     /**
@@ -63,11 +79,11 @@ public final class DependencyLoader {
 
         File saveLocation = new File(getLibFolder(), name + ".jar");
         if (!saveLocation.exists()) {
-            Log.info("DependencyValue &d'%s'&a is not already in the libraries folder. Attempting to download...", name);
+            Log.info("Dependency &d'%s'&a is not already in the libraries folder. Attempting to download...", name);
             URL url = d.getUrl();
             @Cleanup InputStream is = url.openStream();
             Files.copy(is, saveLocation.toPath());
-            Log.info("DependencyValue &d'%s'&a successfully downloaded.", name);
+            Log.info("Dependency &d'%s'&a successfully downloaded.", name);
         }
 
         if (!saveLocation.exists()) {
@@ -75,16 +91,13 @@ public final class DependencyLoader {
             return;
         }
 
-        URLClassLoader classLoader = (URLClassLoader) LoaderUtils.getPlugin().getClass().getClassLoader();
-        final URLClassLoaderShadow shadow = ShadowFactory.global().shadow(URLClassLoaderShadow.class, classLoader);
 
         try {
-            shadow.addURL(saveLocation.toURI().toURL());
+            URL_INJECTOR.get().addURL(saveLocation.toURI().toURL());
         } catch (Exception e) {
             Log.severe("Something went wrong while loading dependency %s", saveLocation.toURI().toURL());
             return;
         }
-
         Log.info("Dependency &d'%s'&a successfully loaded.", name);
     }
 
@@ -114,13 +127,6 @@ public final class DependencyLoader {
             String url = String.format(repo, this.groupId.replace(".", "/"), this.artifactId, this.version, this.artifactId, this.version);
             return new URL(url);
         }
-
-    }
-
-    @ClassTarget(URLClassLoader.class)
-    private interface URLClassLoaderShadow extends Shadow {
-
-        void addURL(URL url);
 
     }
 
