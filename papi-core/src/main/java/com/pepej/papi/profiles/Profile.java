@@ -1,8 +1,11 @@
 package com.pepej.papi.profiles;
 
+import com.mojang.authlib.GameProfile;
+import com.pepej.papi.shadow.bukkit.player.CraftPlayerShadow;
 import org.bukkit.entity.HumanEntity;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,8 +22,8 @@ public interface Profile {
      * @param name the username
      * @return the profile
      */
-    @NonNull
-    static Profile create(@NonNull UUID uniqueId, @Nullable String name) {
+    @NotNull
+    static Profile create(@NotNull UUID uniqueId, @Nullable String name) {
         return new SimpleProfile(uniqueId, name);
     }
 
@@ -30,8 +33,8 @@ public interface Profile {
      * @param player the player to create a profile for
      * @return the profile
      */
-    @NonNull
-    static Profile create(HumanEntity player) {
+    @NotNull
+    static Profile create(Player player) {
         return new SimpleProfile(player.getUniqueId(), player.getName());
     }
 
@@ -40,15 +43,16 @@ public interface Profile {
      *
      * @return the unique id
      */
-    @NonNull
+    @NotNull
     UUID getUniqueId();
+
 
     /**
      * Gets the username associated with this profile
      *
      * @return the username
      */
-    @NonNull
+    @NotNull
     Optional<String> getName();
 
     /**

@@ -3,9 +3,11 @@ package com.pepej.papi.bucket;
 import com.pepej.papi.bucket.partitioning.BucketPartition;
 import com.pepej.papi.bucket.partitioning.PartitioningStrategy;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * A bucket is an extension of {@link Set}, which allows contained elements
@@ -55,7 +57,6 @@ public interface Bucket<E> extends Set<E> {
      *
      * @return a cycle of partitions
      */
-
     @NonNull
     Cycle<BucketPartition<E>> asCycle();
 

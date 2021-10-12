@@ -8,6 +8,7 @@ import com.pepej.papi.network.event.NetworkEvent;
 import com.pepej.papi.network.metadata.ServerMetadataProvider;
 import com.pepej.papi.profiles.Profile;
 import com.pepej.papi.terminable.Terminable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -51,6 +52,13 @@ public interface Network extends Terminable {
      * @return the known servers
      */
     Map<String, Server> getServers();
+
+    /**
+     * Returns the server by id
+     * @return the server by id
+     */
+    @Nullable
+    Server getServer(String id);
 
     /**
      * Gets the players known to be online in the network.

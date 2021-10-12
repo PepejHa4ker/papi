@@ -36,6 +36,12 @@ public interface Server extends InstanceData {
     Map<UUID, Profile> getOnlinePlayers();
 
     /**
+     * Sends message to all players, connected to this server
+     * @param message the message to send
+     */
+    void broadcast(String message);
+
+    /**
      * Gets the maximum amount of players allowed on this server.
      *
      * @return the max players

@@ -1,6 +1,7 @@
 package com.pepej.papi.random;
 
 import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -57,7 +58,7 @@ final class RandomSelectorImpl<E> implements RandomSelector<E> {
     }
 
     @Override
-    public E pick(Random random) {
+    public @NotNull E pick(Random random) {
         return this.elements[this.selection.pickIndex(random)];
     }
 

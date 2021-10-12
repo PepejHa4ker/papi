@@ -29,12 +29,16 @@ import com.pepej.papi.terminable.composite.CompositeTerminable;
 import com.pepej.papi.utils.Log;
 import com.pepej.papi.utils.Players;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
+
+import static com.pepej.papi.text.Text.colorize;
 
 public class AbstractNetwork implements Network {
     protected final CompositeTerminable compositeTerminable = CompositeTerminable.create();
@@ -42,7 +46,6 @@ public class AbstractNetwork implements Network {
     protected final Messenger messenger;
     protected final InstanceData instanceData;
     private final EventBus<NetworkEvent> eventBus = new SimpleEventBus<>(NetworkEvent.class);
-    private final NetworkEventExecutor<?> eventExecutor = new NetworkEventExecutor<>(eventBus);
     private final List<ServerMetadataProvider> metadataProviders = new CopyOnWriteArrayList<>();
     private final Map<String, ServerImpl> servers = new ConcurrentHashMap<>();
 
@@ -71,7 +74,7 @@ public class AbstractNetwork implements Network {
         }).bindWith(this.compositeTerminable);
 
         // outgoing (disconnect)
-        EventSubscriber<ServerDisconnectEvent> disconnectListener = new EventSubscriber<>() {
+        EventSubscriber<ServerDisconnectEvent> disconnectListener = new EventSubscriber<ServerDisconnectEvent>() {
             @Override
             public void invoke(@NonNull ServerDisconnectEvent event) {
                 if (!event.getId().equals(instanceData.getId())) {
@@ -110,13 +113,13 @@ public class AbstractNetwork implements Network {
         statusChannel.newAgent((agent, message) -> handleIncomingStatusMessage(message)).bindWith(this.compositeTerminable);
         // outgoing
         Schedulers.builder()
-                  .async()
-                  .afterAndEvery(3, TimeUnit.SECONDS)
-                  .run(() -> {
-                      StatusMessage msg = produceStatusMessage();
-                      statusChannel.sendMessage(msg);
-                  })
-                  .bindWith(this.compositeTerminable);
+                .async()
+                .afterAndEvery(3, TimeUnit.SECONDS)
+                .run(() -> {
+                    StatusMessage msg = produceStatusMessage();
+                    statusChannel.sendMessage(msg);
+                })
+                .bindWith(this.compositeTerminable);
     }
 
     protected void registerMetadataProviders() {
@@ -172,6 +175,11 @@ public class AbstractNetwork implements Network {
     }
 
     @Override
+    public @Nullable Server getServer(String id) {
+        return this.servers.get(id);
+    }
+
+    @Override
     public Map<UUID, Profile> getOnlinePlayers() {
         Map<UUID, Profile> players = new HashMap<>();
         for (Server server : this.servers.values()) {
@@ -183,10 +191,6 @@ public class AbstractNetwork implements Network {
     @Override
     public int getOverallPlayerCount() {
         return this.servers.values().stream().mapToInt(s -> s.getOnlinePlayers().size()).sum();
-    }
-
-    public <L> NetworkEventExecutor<L> getEventExecutor(L listener) {
-        return new NetworkEventExecutor<>(eventBus);
     }
 
     @Override
@@ -273,6 +277,11 @@ public class AbstractNetwork implements Network {
         @Override
         public long getLastPing() {
             return this.lastPing;
+        }
+
+        @Override
+        public void broadcast(String message) {
+            Players.forEach(p -> p.sendMessage(colorize(message)));
         }
 
         @Override

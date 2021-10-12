@@ -1,10 +1,7 @@
 package com.pepej.papi.metadata;
 
 import com.google.common.collect.ImmutableMap;
-import com.pepej.papi.metadata.type.BlockMetadataRegistry;
-import com.pepej.papi.metadata.type.EntityMetadataRegistry;
-import com.pepej.papi.metadata.type.PlayerMetadataRegistry;
-import com.pepej.papi.metadata.type.WorldMetadataRegistry;
+import com.pepej.papi.metadata.type.*;
 import com.pepej.papi.serialize.BlockPosition;
 import com.pepej.papi.utils.Players;
 import org.bukkit.Bukkit;
@@ -14,6 +11,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,20 +22,47 @@ import java.util.UUID;
 
 /**
  * The Metadata registries provided by papi.
- *
+ * <p>
  * These instances can be accessed through {@link Metadata}.
  */
 final class StandardMetadataRegistries {
 
+    public static final UUIDMetadataRegistry UUID = new UUIDRegistry();
     public static final PlayerMetadataRegistry PLAYER = new PlayerRegistry();
     public static final EntityMetadataRegistry ENTITY = new EntityRegistry();
     public static final BlockMetadataRegistry BLOCK = new BlockRegistry();
     public static final WorldMetadataRegistry WORLD = new WorldRegistry();
 
-    private static final MetadataRegistry<?>[] VALUES = new MetadataRegistry[]{PLAYER, ENTITY, BLOCK, WORLD};
+    private static final MetadataRegistry<?>[] VALUES = new MetadataRegistry[]{UUID, PLAYER, ENTITY, BLOCK, WORLD};
 
     public static MetadataRegistry<?>[] values() {
         return VALUES;
+    }
+
+    private static final class UUIDRegistry extends AbstractMetadataRegistry<UUID> implements UUIDMetadataRegistry {
+
+        @NonNull
+        @Override
+        public MetadataMap provide(@NonNull UUID uuid) {
+            Objects.requireNonNull(uuid, "uuid");
+            return provide(uuid);
+        }
+
+        @NonNull
+        @Override
+        public Optional<MetadataMap> get(@NonNull UUID uuid) {
+            Objects.requireNonNull(uuid, "uuid");
+            return get(uuid);
+        }
+
+        @NonNull
+        @Override
+        public <K> Map<UUID, K> getAllWithKey(@NonNull MetadataKey<K> key) {
+            Objects.requireNonNull(key, "key");
+            ImmutableMap.Builder<UUID, K> ret = ImmutableMap.builder();
+            this.cache.asMap().forEach((uuid, map) -> map.get(key).ifPresent(t -> ret.put(uuid, t)));
+            return ret.build();
+        }
     }
 
     private static final class PlayerRegistry extends AbstractMetadataRegistry<UUID> implements PlayerMetadataRegistry {

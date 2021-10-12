@@ -2,6 +2,7 @@ package com.pepej.papi.network.modules;
 
 import com.pepej.papi.command.Commands;
 import com.pepej.papi.events.Events;
+import com.pepej.papi.network.Server;
 import com.pepej.papi.scheduler.Schedulers;
 import com.pepej.papi.event.filter.EventFilters;
 import com.pepej.papi.messaging.InstanceData;
@@ -18,7 +19,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.Map;
+
+import static com.pepej.papi.utils.Players.MessageType.NONE;
 
 public class NetworkSummaryModule implements TerminableModule {
     private final Network network;
@@ -43,37 +47,30 @@ public class NetworkSummaryModule implements TerminableModule {
                 .registerAndBind(consumer, this.commandAliases);
 
         Events.subscribe(PlayerJoinEvent.class, EventPriority.MONITOR)
-              .filter(EventFilters.playerHasPermission("papi.networksummary.onjoin"))
-              .handler(e -> Schedulers.sync().runLater(() -> sendSummary(e.getPlayer()), 1))
-              .bindWith(consumer);
+                .filter(EventFilters.playerHasPermission("papi.networksummary.onjoin"))
+                .handler(e -> Schedulers.sync().runLater(() -> sendSummary(e.getPlayer()), 1))
+                .bindWith(consumer);
     }
 
     public void sendSummary(CommandSender sender) {
-        Players.msg(sender, "&7[&anetwork&7] &f< Network summary >.");
-        Players.msg(sender, "&7[&anetwork&7] &7" + this.network.getOverallPlayerCount() + " total players online.");
-        Players.msg(sender, "&7[&anetwork&7]");
+        Players.msg(sender, NONE, "&7[&anetwork&7] &f< Network summary >.");
+        Players.msg(sender, NONE,"&7[&anetwork&7] &7" + this.network.getOverallPlayerCount() + " total players online.");
+        Players.msg(sender, NONE,"&7[&anetwork&7]");
 
-        this.network.getServers().entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .map(Map.Entry::getValue)
-                    .forEach(server -> {
-                        String id = (server.getId().equals(this.instanceData.getId()) ? "&a" : "&b") + server.getId();
-                        if (!server.isOnline()) {
-                            long lastPing = server.getLastPing();
-                            if (lastPing == 0) {
-                                return;
-                            }
-
-                            String lastSeen = DurationFormatter.CONCISE.format(Time.diffToNow(Instant.ofEpochMilli(lastPing)));
-                            Players.msg(sender, "&7[&anetwork&7] " + id + " &7- last online " + lastSeen + " ago");
-                        } else {
-                            Tps tps = server.getMetadata("tps", Tps.class);
-                            String tpsInfo = "";
-                            if (tps != null) {
-                                tpsInfo = " &7- " + tps.toFormattedString();
-                            }
-                            Players.msg(sender, "&7[&anetwork&7] " + id + " &7- &b" + server.getOnlinePlayers().size() + "&7/" + server.getMaxPlayers() + tpsInfo);
+        this.network.getServers().values().stream()
+                .sorted(Comparator.comparingInt(value -> value.getOnlinePlayers().size()))
+                .forEach(server -> {
+                    String id = (server.getId().equals(this.instanceData.getId()) ? "&a" : "&b") + server.getId();
+                    if (!server.isOnline()) {
+                        long lastPing = server.getLastPing();
+                        if (lastPing == 0) {
+                            return;
                         }
-                    });
+                        String lastSeen = DurationFormatter.CONCISE.format(Time.diffToNow(Instant.ofEpochMilli(lastPing)));
+                        Players.msg(sender, NONE,"&7[&anetwork&7] " + id + " &7- last online " + lastSeen + " ago");
+                    } else {
+                        Players.msg(sender, NONE,"&7[&anetwork&7] " + id + " &7- &b" + server.getOnlinePlayers().size() + "&7/" + server.getMaxPlayers());
+                    }
+                });
     }
 }
